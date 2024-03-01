@@ -104,7 +104,7 @@
 
                 @php
                     $show = true;
-                    if(subscription()->plan->settings->hide_branding){
+                    if(subscription($post->user)->plan->settings->hide_branding){
                         $show = (@$postOptions->bio_credit) ? true : false;
                     }
                 @endphp

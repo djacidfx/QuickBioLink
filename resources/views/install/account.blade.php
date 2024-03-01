@@ -22,6 +22,18 @@
                 @endif
 
                 <div class="mb-3">
+                    <label class="form-label" for="purchase_code">{{ lang('Purchase Code') }}</label>
+                    <input id="purchase_code" type="text"
+                           class="form-control{{ $errors->has('purchase_code') ? ' is-invalid' : '' }}" name="purchase_code"
+                           value="{{ old('purchase_code') }}" autofocus required>
+                    @if ($errors->has('purchase_code'))
+                        <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('purchase_code') }}</strong>
+                    </span>
+                    @endif
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label" for="firstname">{{ lang('Admin First Name') }}</label>
                     <input id="firstname" type="text"
                            class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" name="firstname"

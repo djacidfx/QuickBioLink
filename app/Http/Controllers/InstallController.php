@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Settings;
 use App\Models\User;
-use GuzzleHttp\Client as HttpClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class InstallController extends Controller
@@ -164,6 +165,7 @@ class InstallController extends Controller
     {
         $request->validate(
             [
+                'purchase_code' => ['required', 'string', 'max:50'],
                 'firstname' => ['required', 'string', 'max:50'],
                 'lastname' => ['required', 'string', 'max:50'],
                 'username' => ['required', 'string', 'min:2', 'max:50'],
@@ -172,10 +174,18 @@ class InstallController extends Controller
             ]
         );
 
+        $result = $this->validatePurchase($request);
+        if ($result !== true) {
+            $result = !empty($result) ? $result : lang('Connection error, please try again later.');
+            return back()->with('error', $result)->withInput();
+        }
+
         $migrateDatabase = $this->migrateDatabase();
         if ($migrateDatabase !== true) {
             return back()->with('error', lang('Failed to migrate the database. ') . $migrateDatabase)->withInput();
         }
+
+        Settings::updateSettings('purchase_code', $request->input('purchase_code'));
 
         $createDefaultUser = $this->createDefaultUser($request);
         if ($createDefaultUser !== true) {
@@ -310,5 +320,41 @@ class InstallController extends Controller
         }
 
         return true;
+    }
+
+
+    /**
+     * Validate Purchase
+     *
+     * @param $request
+     * @return bool|\Illuminate\Http\RedirectResponse
+     */
+    private function validatePurchase($request)
+    {
+        try {
+            $response = Http::get('https://bylancer.com/api/api.php', [
+                "verify-purchase" => $request->input('purchase_code'),
+                "ip" => $_SERVER["SERVER_ADDR"],
+                "site_url" => route('home'),
+                "version" => env('APP_VERSION'),
+                "script" => "quickbiolink",
+                "email" => $request->input('email')
+            ]);
+
+            if($response->ok()) {
+                $result = $response->json();
+
+                if ($result['success']) {
+                    return true;
+                } else {
+                    return $result['error'];
+                }
+
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

@@ -280,13 +280,13 @@ class SettingsController extends Controller
             }
             try {
                 $email = $request->email;
-                Mail::raw('Hi, This is a test mail to ' . $email, function ($message) use ($email) {
+                \Mail::raw('Hi, This is a test mail to ' . $email, function ($message) use ($email) {
                     $message->to($email)
                         ->subject('Test mail to ' . $email);
                 });
                 $result = array('success' => true, 'message' => admin_lang('Sent Successfully'));
                 return response()->json($result, 200);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $result = array('success' => false, 'message' => admin_lang('Error in sending, please try again.'));
                 return response()->json($result, 200);
             }

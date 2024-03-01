@@ -26,6 +26,9 @@ use Vinkla\Hashids\Facades\Hashids;
  */
 function demo_mode()
 {
+    if (Auth::user() && Auth::user()->id == 1) {
+        return false;
+    }
     if (env('DEMO_MODE')) {
         return true;
     }

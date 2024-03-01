@@ -42,7 +42,7 @@
                             <li class="nav-item" role="presentation">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#quick_custom_code"><i class="fas fa-code me-2"></i> {{ admin_lang('Custom CSS') }}</button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <li class="nav-item d-none" role="presentation">
                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#quick_purchase_code"><i class="fas fa-key me-2"></i> {{ admin_lang('Purchase Code') }}</button>
                             </li>
                         </ul>
