@@ -1,0 +1,25 @@
+<?php
+
+return array (
+  'monthly' => 'Mensuel',
+  'yearly' => 'Annuel',
+  'free' => 'Gratuit',
+  'generate_total_images_images' => 'Générer {total_images} images',
+  'max_images_images_per_request' => '{max_images} images par demande',
+  'images_available_for_day_day' => 'Images disponibles pour {day} jour',
+  'images_available_for_days_days' => 'Images disponibles pendant {days} jours',
+  'images_available_for_unlimited_time' => 'Images disponibles pour une durée illimitée',
+  'sizes_sizes' => 'Tailles: {tailles}',
+  'no_advertisements' => 'Aucune publicité',
+  'subscribe' => 'S\'abonner',
+  'upgrade' => 'Mise à niveau',
+  'renew' => 'Renouveler',
+  'downgrade' => 'Rétrograder',
+  'get_the_following_deal_without_any_risk_and_fees' => 'Obtenez l’offre suivante sans aucun risque ni frais.',
+  'bio_pages_limit_bio_pages_limit' => 'Limite des pages bio {bio_pages_limit}',
+  'add_link_limit_bio_link_limit' => 'Ajouter une limite de liens {bio_link_limit}',
+  'hide_branding' => 'Masquer la marque',
+  'per_bio_link_pages' => 'par pages de liens bio',
+  'ability_to_remove_the_branding_from_the_bio_link_pages' => 'Possibilité de supprimer la marque des pages de liens Bio',
+  'active' => 'Active',
+);

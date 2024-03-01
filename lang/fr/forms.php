@@ -1,0 +1,27 @@
+<?php
+
+return array (
+    'first_name' => 'Prénom',
+    'last_name' => 'Nom de famille',
+    'username' => 'Nom d\'utilisateur',
+    'email_address' => 'Adresse e-mail',
+    'phone_number' => 'Numéro de téléphone',
+    'password' => 'Mot de passe',
+    'confirm_password' => 'Confirmez le mot de passe',
+    'new_password' => 'nouveau mot de passe',
+    'confirm_new_password' => 'Confirmer le nouveau mot de passe',
+    'address_line_1' => 'Adresse Ligne 1',
+    'address_line_2' => 'Adresse Ligne 2',
+    'city' => 'Ville',
+    'state' => 'État',
+    'postal_code' => 'Code Postal',
+    'country' => 'Pays',
+    'otp_code' => 'Code OTP',
+    'name' => 'Nom',
+    'subject' => 'Sujet',
+    'message' => 'Message',
+    'select_country' => 'Choisissez le pays',
+    'enter_your_message_here' => 'Entrez votre message ici',
+    'address' => 'Adresse',
+    'choose' => 'Choisir',
+);

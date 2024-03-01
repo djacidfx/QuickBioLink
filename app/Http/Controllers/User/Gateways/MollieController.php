@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers\User\Gateways;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\CheckoutController;
+use App\Models\PaymentGateway;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Mollie\Laravel\Facades\Mollie;
+
+class MollieController extends Controller
+{
+
+    public static function process($trx)
+    {
+        if ($trx->status != 0) {
+            $data['error'] = true;
+            $data['msg'] = lang('Invalid or expired transaction', 'checkout');
+            return json_encode($data);
+        }
+
+        $paymentGateway = PaymentGateway::where('key', 'mollie')->first();
+
+        $planInterval = ($trx->plan->interval == 1) ? '(Monthly)' : '(Yearly)';
+        config(['mollie.key' => trim($paymentGateway->credentials->api_key)]);
+        $paymentName = "Payment for subscription " . $trx->plan->name . " Plan " . $planInterval;
+        $gatewayFees = ($trx->total * $paymentGateway->fees) / 100;
+        $totalPrice = price_format(($trx->total + $gatewayFees));
+
+        try {
+            $payment = Mollie::api()->payments->create([
+                "amount" => [
+                    "currency" => settings('currency')->code,
+                    "value" => $totalPrice,
+                ],
+                "description" => $paymentName,
+                "redirectUrl" => route('ipn.mollie') . '?checkoutId=' . $trx->checkout_id,
+                "metadata" => [
+                    "order_id" => $trx->id,
+                ],
+            ]);
+
+            $payment = Mollie::api()->payments()->get($payment->id);
+            $trx->update(['fees' => $gatewayFees, 'payment_id' => $payment->id]);
+            $data['error'] = false;
+            $data['redirectUrl'] = $payment->getCheckoutUrl();
+            return json_encode($data);
+        } catch (\Exception$e) {
+            $data['error'] = true;
+            $data['msg'] = $e->getMessage();
+            return json_encode($data);
+        }
+    }
+
+    public function ipn(Request $request)
+    {
+        $checkoutId = $request->checkoutId;
+        try {
+            $trx = Transaction::where([['user_id', user_auth_info()->id], ['checkout_id', $checkoutId], ['payment_id', '!=', null]])->pending()->first();
+            if (is_null($trx)) {
+                quick_alert_error(lang('Invalid or expired transaction', 'checkout'));
+                return redirect()->route('subscription');
+            }
+
+            $paymentGateway = PaymentGateway::where('key', 'mollie')->first();
+
+            config(['mollie.key' => trim($paymentGateway->credentials->api_key)]);
+            $payment = Mollie::api()->payments()->get($trx->payment_id);
+            if ($payment->metadata->order_id != $trx->id) {
+                quick_alert_error(lang('Invalid or expired transaction', 'checkout'));
+                return redirect()->route('subscription');
+            }
+            if ($payment->status == "paid") {
+                $total = ($trx->total + $trx->fees);
+                $payment_gateway_id = $paymentGateway->id;
+                $payment_id = $payment->id;
+                $updateTrx = $trx->update([
+                    'total' => $total,
+                    'payment_gateway_id' => $payment_gateway_id,
+                    'payment_id' => $payment_id,
+                    'status' => \App\Models\Transaction::STATUS_PAID,
+                ]);
+                if ($updateTrx) {
+                    CheckoutController::updateSubscription($trx);
+                    quick_alert_success(lang('Payment made successfully', 'checkout'));
+                    return redirect()->route('subscription');
+                }
+            } else {
+                quick_alert_error(lang('Payment failed', 'checkout'));
+                return redirect()->route('subscription');
+            }
+        } catch (\Exception$e) {
+            quick_alert_error(lang('Payment failed', 'checkout'));
+            return redirect()->route('subscription');
+        }
+    }
+}

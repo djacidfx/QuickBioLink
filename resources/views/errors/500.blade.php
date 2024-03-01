@@ -1,0 +1,5 @@
+@extends('errors.layout')
+@section('title', lang('Server Error', 'errors'))
+@section('code', '500')
+@section('message', lang('Server Error', 'errors'))
+@section('description', lang("Sorry for the inconvenience, but we're working on it.", 'errors'))
