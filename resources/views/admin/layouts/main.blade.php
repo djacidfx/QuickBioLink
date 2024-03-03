@@ -30,7 +30,7 @@
                             <div class="page-header">
                                 <div class="main-header">
                                     <h2 class="mb-2">@yield('title')</h2>
-                                    <h6 class="mb-0">{{admin_lang('admin panel')}}</h6>
+                                    <h6 class="mb-0">{{lang('admin panel')}}</h6>
                                 </div>
                             </div>
                         </div>
@@ -50,10 +50,10 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6 footer-copyright">
-                                <p class="mb-0">{{admin_lang('Copyright')}} © {{date("Y")}} <a href="https://bylancer.com" target="_blank">Bylancer</a>. {{admin_lang('All rights reserved.')}} </p>
+                                <p class="mb-0">{{lang('Copyright')}} © {{date("Y")}} <a href="https://bylancer.com" target="_blank">Bylancer</a>. {{lang('All rights reserved.')}} </p>
                             </div>
                             <div class="col-md-6">
-                                <p class="float-end mb-0">{{admin_lang('Hand-crafted & made with')}} <i class="icon-feather-heart"></i></p>
+                                <p class="float-end mb-0">{{lang('Hand-crafted & made with')}} <i class="icon-feather-heart"></i></p>
                             </div>
                         </div>
                     </div>

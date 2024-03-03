@@ -22,6 +22,9 @@ class ForgotPasswordController extends Controller
 
     use SendsPasswordResetEmails;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();

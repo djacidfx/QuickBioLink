@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('blog_comments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->nullable()->index('blog_comments_user_id_foreign');
-            $table->unsignedBigInteger('article_id')->index('blog_comments_article_id_foreign');
+            $table->unsignedBigInteger('user_id')->nullable()->index('user_id');
+            $table->unsignedBigInteger('article_id')->index('article_id');
             $table->text('comment');
             $table->boolean('status')->default(false);
             $table->timestamps();

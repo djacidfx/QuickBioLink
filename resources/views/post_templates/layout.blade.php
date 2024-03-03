@@ -40,7 +40,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title flex-grow-1 text-center" id="shareModalLable">{{ lang('Share Bio Link', 'dashboard') }}</h5>
+                <h5 class="modal-title flex-grow-1 text-center" id="shareModalLable">{{ lang('Share Bio Link') }}</h5>
                 <button type="button" class="icon-group -close"  data-bs-dismiss="modal" aria-label="Close">
                     <i class="fa-regular fa-xmark"></i>
                 </button>
@@ -55,7 +55,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="fa-brands fa-twitter text-twitter font-20"></i>
                                 <div class="ml-8">
-                                    {{ lang('Share on Twitter', 'dashboard') }}
+                                    {{ lang('Share on Twitter') }}
                                 </div>
                             </div>
                             <div class="mx-10">
@@ -66,7 +66,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="fa-brands fa-facebook text-facebook font-20"></i>
                                 <div class="ml-8">
-                                    {{ lang('Share on Facebook', 'dashboard') }}
+                                    {{ lang('Share on Facebook') }}
                                 </div>
                             </div>
                             <div class="mx-10">
@@ -77,7 +77,7 @@
                             <div class="d-flex align-items-center">
                                 <i class="fa-brands fa-whatsapp text-whatsapp font-20"></i>
                                 <div class="ml-8">
-                                    {{ lang('Share on Whatsapp', 'dashboard') }}
+                                    {{ lang('Share on Whatsapp') }}
                                 </div>
                             </div>
                             <div class="mx-10">
@@ -90,7 +90,7 @@
                 <div class="copy-link-input d-flex position-relative w-100 mt-32">
                     <span class="position-absolute copy-input-icon fa-regular fa-link"></span>
                     <input class="w-100 copy-input font-14" type="text" value="{{ url('/') }}/{{ $post->slug }}" readonly>
-                    <button class="copy-input-button font-weight-700 text-14" id="share-copy">  {{ lang('Copy', 'dashboard') }}</button>
+                    <button class="copy-input-button font-weight-700 text-14" id="share-copy">  {{ lang('Copy') }}</button>
                 </div>
             </div>
         </div>

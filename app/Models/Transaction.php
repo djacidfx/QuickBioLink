@@ -14,6 +14,49 @@ class Transaction extends Model
     const STATUS_PAID = 2;
     const STATUS_CANCELLED = 3;
 
+    const TYPE_SUBSCRIBE = 1;
+    const TYPE_RENEW = 2;
+    const TYPE_UPGRADE = 3;
+    const TYPE_DOWNGRADE = 4;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'checkout_id',
+        'user_id',
+        'plan_id',
+        'coupon_id',
+        'billing_address',
+        'details_before_discount',
+        'details_after_discount',
+        'price',
+        'tax',
+        'fees',
+        'total',
+        'payment_gateway_id',
+        'payment_id',
+        'payer_id',
+        'payer_email',
+        'type',
+        'status',
+        'is_viewed'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'billing_address' => 'object',
+        'details_before_discount' => 'object',
+        'details_after_discount' => 'object',
+    ];
+
+
     public function scopeUnpaid($query)
     {
         return $query->where('status', self::STATUS_UNPAID);
@@ -53,43 +96,6 @@ class Transaction extends Model
     {
         return $this->status == self::STATUS_CANCELLED;
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'checkout_id',
-        'user_id',
-        'plan_id',
-        'coupon_id',
-        'billing_address',
-        'details_before_discount',
-        'details_after_discount',
-        'price',
-        'tax',
-        'fees',
-        'total',
-        'payment_gateway_id',
-        'payment_id',
-        'payer_id',
-        'payer_email',
-        'type',
-        'status',
-        'is_viewed'
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'billing_address' => 'object',
-        'details_before_discount' => 'object',
-        'details_after_discount' => 'object',
-    ];
 
     /**
      * Relationships

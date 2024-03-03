@@ -2,7 +2,7 @@
 <script>
     "use strict";
     const lang = {
-        are_you_sure: @json(lang('Are you sure?', 'dashboard')),
+        are_you_sure: @json(lang('Are you sure?')),
     };
 </script>
 <script src="{{ asset('global/js/jquery.min.js') }}"></script>

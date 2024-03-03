@@ -2,7 +2,7 @@
     <form method="post" class="ajax_submit_form" data-action="{{ route('admin.settings.update') }}" data-ajax-sidepanel="true">
         <div class="quick-card card">
             <div class="card-header">
-                <h5>{{ admin_lang('Custom CSS') }}</h5>
+                <h5>{{ lang('Custom CSS') }}</h5>
             </div>
             <div class="card-body">
                 <div>
@@ -11,7 +11,7 @@
             </div>
             <div class="card-footer">
                 <input type="hidden" name="custom_code_setting" value="1">
-                <button name="submit" type="submit" class="btn btn-primary">{{ admin_lang('Save Changes') }}</button>
+                <button name="submit" type="submit" class="btn btn-primary">{{ lang('Save Changes') }}</button>
             </div>
         </div>
     </form>

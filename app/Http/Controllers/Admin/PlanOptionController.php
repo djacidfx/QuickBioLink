@@ -46,17 +46,17 @@ class PlanOptionController extends Controller
                 $rows = array();
 
                 if($row->active == 1){
-                    $status_badge = '<span class="badge bg-success">'.admin_lang('Enabled').'</span>';
+                    $status_badge = '<span class="badge bg-success">'.lang('Enabled').'</span>';
                 } else{
-                    $status_badge = '<span class="badge bg-danger">'.admin_lang('Disabled').'</span>';
+                    $status_badge = '<span class="badge bg-danger">'.lang('Disabled').'</span>';
                 }
                 $rows[] = '<td><i class="icon-feather-menu quick-reorder-icon"
-                                       title="' . admin_lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
+                                       title="' . lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
                 $rows[] = '<td>'.$row->title.'</td>';
                 $rows[] = '<td>'.$status_badge.'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="#" data-url="'.route('admin.planoption.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="'.route('admin.planoption.edit', $row->id).'" data-toggle="slidePanel" title="'.lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>';
                 $rows[] = '<td>
@@ -121,7 +121,7 @@ class PlanOptionController extends Controller
         ]);
 
         if ($create) {
-            $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
+            $result = array('success' => true, 'message' => lang('Created Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -130,11 +130,10 @@ class PlanOptionController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\PlanOption  $planoption
-     * @return \Illuminate\Http\Response
      */
     public function show(PlanOption $planoption)
     {
-        return abort(404);
+        abort(404);
     }
 
     /**
@@ -146,7 +145,7 @@ class PlanOptionController extends Controller
      */
     public function edit(PlanOption $planoption)
     {
-        return view('admin.planoption.edit', ['planoption' => $planoption]);
+        return view('admin.planoption.edit', compact('planoption'));
     }
 
     /**
@@ -177,9 +176,8 @@ class PlanOptionController extends Controller
             'translations' => $request->translations,
         ]);
 
-
         if ($update) {
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -203,12 +201,12 @@ class PlanOptionController extends Controller
                 $count++;
             }
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             }
         }
 
-        $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+        $result = array('success' => true, 'message' => lang('Updated Successfully'));
         return response()->json($result, 200);
     }
 
@@ -222,7 +220,7 @@ class PlanOptionController extends Controller
     {
         $ids = array_map('intval', $request->ids);
         PlanOption::whereIn('id',$ids)->delete();
-        $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+        $result = array('success' => true, 'message' => lang('Deleted Successfully'));
         return response()->json($result, 200);
     }
 }

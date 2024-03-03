@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Templates'))
+@section('title', lang('Templates'))
 @section('content')
     <div class="row">
 
@@ -10,11 +10,11 @@
                     <div class="card-body">
                         <img src="{{ $temp['image'] }}" class="w-100 mb-4 border-label-secondary rounded border-1">
                         @if(active_theme_name() == $temp['name'])
-                            <button type="submit" name="name" value="{{ $temp['name'] }}" class="btn btn-label-secondary" disabled>{{admin_lang('Activated')}}</button>
+                            <button type="submit" name="name" value="{{ $temp['name'] }}" class="btn btn-label-secondary" disabled>{{lang('Activated')}}</button>
                         @else
                             <form action="" method="post">
                                 @csrf
-                                <button type="submit" name="name" value="{{$temp['name']}}" class="btn btn-primary">{{admin_lang('Active Me')}}</button>
+                                <button type="submit" name="name" value="{{$temp['name']}}" class="btn btn-primary">{{lang('Active Me')}}</button>
                             </form>
                         @endif
                     </div>
@@ -29,7 +29,7 @@
                         <div class="card-header"><h5>{{ ucfirst($temp['name']) }}</h5></div>
                         <div class="card-body">
                             <img src="{{ $temp['image'] }}" class="w-100 mb-4 border-label-secondary rounded border-1">
-                            <a href="{{$temp['url']}}" target="_blank" class="btn btn-primary">{{admin_lang('Get This')}}</a>
+                            <a href="{{$temp['url']}}" target="_blank" class="btn btn-primary">{{lang('Get This')}}</a>
                         </div>
                     </div>
                 </div>

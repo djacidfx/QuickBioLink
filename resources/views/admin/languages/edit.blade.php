@@ -2,13 +2,13 @@
     <header class="slidePanel-header">
         <div class="slidePanel-overlay-panel">
             <div class="slidePanel-heading">
-                <h2>{{ admin_lang('Edit Language') }}</h2>
+                <h2>{{ lang('Edit Language') }}</h2>
             </div>
             <div class="slidePanel-actions">
-                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{ admin_lang('Save') }}">
+                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{ lang('Save') }}">
                     <i class="icon-feather-check"></i>
                 </button>
-                <button class="btn btn-default btn-icon slidePanel-close" title="{{ admin_lang('Close') }}">
+                <button class="btn btn-default btn-icon slidePanel-close" title="{{ lang('Close') }}">
                     <i class="icon-feather-x"></i>
                 </button>
             </div>
@@ -22,33 +22,33 @@
                 <div>
                     <label for="upload" class="btn btn-primary mb-2" tabindex="0">
                         <i class="fas fa-upload"></i>
-                        <span class="d-none d-sm-block ms-2">{{ admin_lang('Upload Flag') }}</span>
+                        <span class="d-none d-sm-block ms-2">{{ lang('Upload Flag') }}</span>
                         <input name="flag" type="file" id="upload" hidden
                                onchange="readURL(this,'uploadedFlag')"
                                accept="image/png, image/jpeg">
                     </label>
-                    <p class="form-text mb-0">{{ admin_lang('Allowed JPG, JPEG or PNG.') }}</p>
+                    <p class="form-text mb-0">{{ lang('Allowed JPG, JPEG or PNG.') }}</p>
                 </div>
                 <img src="{{ asset('storage/flags/'.$language->flag) }}" alt="{{ $language->name }}"
                      class="d-block rounded" height="50" id="uploadedFlag">
             </div>
             <hr>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Name') }} : <span class="red">*</span></label>
+                <label class="form-label">{{ lang('Name') }} : <span class="red">*</span></label>
                 <input type="text" name="name" class="form-control" value="{{ $language->name }}" required>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Direction') }} : <span class="red">*</span></label>
+                <label class="form-label">{{ lang('Direction') }} : <span class="red">*</span></label>
                 <select name="direction" class="form-select">
-                    <option value="1" {{ $language->direction == 1 ? 'selected' : '' }}>{{ admin_lang('LTR') }}</option>
-                    <option value="2" {{ $language->direction == 2 ? 'selected' : '' }}>{{ admin_lang('RTL') }}</option>
+                    <option value="1" {{ $language->direction == 1 ? 'selected' : '' }}>{{ lang('LTR') }}</option>
+                    <option value="2" {{ $language->direction == 2 ? 'selected' : '' }}>{{ lang('RTL') }}</option>
                 </select>
             </div>
             <div class="mb-3">
-                {{quick_switch(admin_lang('Active'), 'active', $language->active == '1')}}
+                {{quick_switch(lang('Active'), 'active', $language->active == '1')}}
             </div>
             <div class="mb-3">
-                {{quick_switch(admin_lang('Set Default language'), 'is_default', env('DEFAULT_LANGUAGE') == $language->code )}}
+                {{quick_switch(lang('Set Default language'), 'is_default', env('DEFAULT_LANGUAGE') == $language->code )}}
             </div>
         </form>
     </div>

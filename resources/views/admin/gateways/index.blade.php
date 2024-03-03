@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Payment Gateways'))
+@section('title', lang('Payment Gateways'))
 @section('content')
 
     <div class="quick-card card">
@@ -8,10 +8,10 @@
                 <table id="basic_datatable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>{{ admin_lang('Logo') }}</th>
-                            <th>{{ admin_lang('name') }}</th>
-                            <th>{{ admin_lang('Fees') }}</th>
-                            <th>{{ admin_lang('Status') }}</th>
+                            <th>{{ lang('Logo') }}</th>
+                            <th>{{ lang('name') }}</th>
+                            <th>{{ lang('Fees') }}</th>
+                            <th>{{ lang('Status') }}</th>
                             <th width="20" class="no-sort" data-priority="1"></th>
                         </tr>
                     </thead>
@@ -28,17 +28,17 @@
                                         {{ $gateway->name }}
                                     </a>
                                 </td>
-                                <td><span class="badge bg-dark">{{ $gateway->fees }}%</span></td>
+                                <td>{{ $gateway->fees }}%</td>
                                 <td>
                                     @if ($gateway->status)
-                                        <span class="badge bg-success">{{ admin_lang('Active') }}</span>
+                                        <span class="badge bg-success">{{ lang('Active') }}</span>
                                     @else
-                                        <span class="badge bg-danger">{{ admin_lang('Disabled') }}</span>
+                                        <span class="badge bg-danger">{{ lang('Disabled') }}</span>
                                     @endif
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                    <a href="#" data-url="{{ route('admin.gateways.edit', $gateway->id) }}" data-toggle="slidePanel" title="{{admin_lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="{{ route('admin.gateways.edit', $gateway->id) }}" data-toggle="slidePanel" title="{{lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon"><i class="icon-feather-edit"></i></a>
                                     </div>
                                 </td>
                             </tr>

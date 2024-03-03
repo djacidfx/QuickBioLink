@@ -6,14 +6,10 @@ use App\Models\AdminNotification;
 use App\Models\BlogArticle;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
-use App\Models\Faq;
-use App\Models\FooterMenu;
-use App\Models\GeneratedImage;
 use App\Models\Language;
 use App\Models\NavbarMenu;
 use App\Models\SeoConfiguration;
 use App\Models\Subscription;
-use App\Models\Testimonial;
 use App\Models\Transaction;
 use App\Models\User;
 use Config;
@@ -68,11 +64,6 @@ class AppServiceProvider extends ServiceProvider
                 view()->composer('*', function ($view) {
                     $languages = Language::where('active',1)->orderBy('position', 'asc')->get();
                     $view->with('languages', $languages);
-                });
-
-                view()->composer([$activeTheme.'layouts.includes.head', $activeTheme.'home.index'], function ($view) {
-                    $SeoConfiguration = SeoConfiguration::where('lang', get_lang())->with('language')->first();
-                    $view->with('SeoConfiguration', $SeoConfiguration);
                 });
 
                 view()->composer($activeTheme.'layouts.includes.nav-menu', function ($view) {

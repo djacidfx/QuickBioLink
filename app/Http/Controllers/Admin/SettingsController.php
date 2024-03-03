@@ -26,7 +26,7 @@ class SettingsController extends Controller
                 'terms_of_service_link' => 'nullable|url',
                 'cookie_policy_link' => 'nullable|url',
                 'date_format' => 'required|in:' . implode(',', array_keys(date_formats_array())),
-                'timezone' => 'required|in:' . implode(',', array_keys(timezones_array()))
+                'timezone' => 'required|in:' . implode(',', array_keys(config('timezones')))
             ]);
             $errors = [];
             if ($validator->fails()) {
@@ -37,18 +37,21 @@ class SettingsController extends Controller
                 return response()->json($result, 200);
             }
 
-            $requestData = $request->except('general_setting');
+            $requestData = $request->except('general_setting', 'enable_debug');
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
 
             set_env('APP_TIMEZONE', $requestData['timezone'], true);
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            set_env('APP_DEBUG', $request->enable_debug);
+
+
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -112,12 +115,12 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -141,12 +144,12 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -172,12 +175,12 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -200,7 +203,7 @@ class SettingsController extends Controller
             }
 
             if ($request->input('subscription.delete_expired') < $request->input('subscription.expired_reminder')) {
-                $result = array('success' => false, 'message' => admin_lang('Subscription Expired reminder should be less than delete expired subscriptions period'));
+                $result = array('success' => false, 'message' => lang('Subscription Expired reminder can not be more than subscription delete time.'));
                 return response()->json($result, 200);
             }
 
@@ -208,12 +211,12 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -251,12 +254,12 @@ class SettingsController extends Controller
                 set_env('MAIL_PASSWORD', $data['password']);
                 set_env('MAIL_ENCRYPTION', $data['encryption']);
                 set_env('MAIL_FROM_ADDRESS', $data['from_email']);
-                set_env('MAIL_FROM_NAME', $data['from_name']);
+                set_env('MAIL_FROM_NAME', $data['from_name'], true);
 
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             } else {
-                $result = array('success' => false, 'message' => admin_lang('Error in updating, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in updating, please try again.'));
                 return response()->json($result, 200);
             }
         }
@@ -275,7 +278,7 @@ class SettingsController extends Controller
                 return response()->json($result, 200);
             }
             if (!settings('smtp')->status) {
-                $result = array('success' => false, 'message' => admin_lang('SMTP is not enabled'));
+                $result = array('success' => false, 'message' => lang('SMTP is not enabled'));
                 return response()->json($result, 200);
             }
             try {
@@ -284,10 +287,10 @@ class SettingsController extends Controller
                     $message->to($email)
                         ->subject('Test mail to ' . $email);
                 });
-                $result = array('success' => true, 'message' => admin_lang('Sent Successfully'));
+                $result = array('success' => true, 'message' => lang('Sent Successfully'));
                 return response()->json($result, 200);
             } catch (\Exception $e) {
-                $result = array('success' => false, 'message' => admin_lang('Error in sending, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in sending, please try again.'));
                 return response()->json($result, 200);
             }
         }
@@ -299,10 +302,10 @@ class SettingsController extends Controller
 
             $update = Settings::updateSettings('invoice_billing', $request->invoice_billing);
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             } else {
-                $result = array('success' => false, 'message' => admin_lang('Error in updating, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in updating, please try again.'));
                 return response()->json($result, 200);
             }
         }
@@ -316,7 +319,7 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
@@ -327,7 +330,7 @@ class SettingsController extends Controller
             set_env('GOOGLE_CLIENT_ID', $requestData['google_login']['client_id']);
             set_env('GOOGLE_CLIENT_SECRET', $requestData['google_login']['client_secret']);
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -340,7 +343,7 @@ class SettingsController extends Controller
             foreach ($requestData as $key => $value) {
                 $update = Settings::updateSettings($key, $value);
                 if (!$update) {
-                    $result = array('success' => false, 'message' => admin_lang(ucfirst($key) . ' ' . 'Updated Error'));
+                    $result = array('success' => false, 'message' => lang(ucfirst($key) . ' ' . 'Updated Error'));
                     return response()->json($result, 200);
                 }
             }
@@ -348,7 +351,7 @@ class SettingsController extends Controller
             set_env('NOCAPTCHA_SITEKEY', $requestData['google_recaptcha']['site_key']);
             set_env('NOCAPTCHA_SECRET', $requestData['google_recaptcha']['secret_key']);
 
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
 
@@ -359,10 +362,10 @@ class SettingsController extends Controller
 
             $update = Settings::updateSettings('blog', $request->blog);
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             } else {
-                $result = array('success' => false, 'message' => admin_lang('Error in updating, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in updating, please try again.'));
                 return response()->json($result, 200);
             }
         }
@@ -374,10 +377,10 @@ class SettingsController extends Controller
 
             $update = Settings::updateSettings('testimonials', $request->testimonials);
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             } else {
-                $result = array('success' => false, 'message' => admin_lang('Error in updating, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in updating, please try again.'));
                 return response()->json($result, 200);
             }
         }
@@ -389,10 +392,10 @@ class SettingsController extends Controller
 
             $update = Settings::updateSettings('custom_css', $request->custom_css);
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             } else {
-                $result = array('success' => false, 'message' => admin_lang('Error in updating, please try again.'));
+                $result = array('success' => false, 'message' => lang('Error in updating, please try again.'));
                 return response()->json($result, 200);
             }
         }

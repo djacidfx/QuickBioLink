@@ -2,13 +2,13 @@
     <header class="slidePanel-header">
         <div class="slidePanel-overlay-panel">
             <div class="slidePanel-heading">
-                <h2>{{admin_lang('Edit Plan Option')}}</h2>
+                <h2>{{lang('Edit Plan Option')}}</h2>
             </div>
             <div class="slidePanel-actions">
-                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{admin_lang('Save')}}">
+                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{lang('Save')}}">
                     <i class="icon-feather-check"></i>
                 </button>
-                <button class="btn btn-icon btn-default slidePanel-close" title="{{admin_lang('Close')}}">
+                <button class="btn btn-icon btn-default slidePanel-close" title="{{lang('Close')}}">
                     <i class="icon-feather-x"></i>
                 </button>
             </div>
@@ -21,11 +21,11 @@
 
             <div class="mb-3 form-group">
                 <label class="d-flex align-items-end m-b-5" for="name">
-                    {{ admin_lang('Title') }} *
+                    {{ lang('Title') }} *
                     <div class="d-flex align-items-center translate-picker">
                         <i class="fa fa-language"></i>
                         <select class="custom-select custom-select-sm ml-1">
-                            <option value="default">{{ admin_lang('Default') }}</option>
+                            <option value="default">{{ lang('Default') }}</option>
                             @foreach ($adminLanguages as $language)
                                 <option value="{{ $language->code }}">{{ $language->name }}</option>
                             @endforeach
@@ -34,11 +34,11 @@
                 </label>
                 <div class="translate-fields translate-fields-default">
                     <input name="title" id="title" type="text" class="form-control" required value="{{ $planoption->title }}"
-                           placeholder="{{ admin_lang('Enter plan option title') }}" autofocus>
+                           placeholder="{{ lang('Enter plan option title') }}" autofocus>
                 </div>
                 @foreach ($adminLanguages as $language)
                     <div class="translate-fields translate-fields-{{ $language->code }}" style="display: none">
-                        <input type="text" class="form-control" name="translations[{{ $language->code }}][title]" placeholder="{{ admin_lang('Enter plan option title') }}" value="{{ !empty($planoption->translations->{$language->code}->title)
+                        <input type="text" class="form-control" name="translations[{{ $language->code }}][title]" placeholder="{{ lang('Enter plan option title') }}" value="{{ !empty($planoption->translations->{$language->code}->title)
                         ? $planoption->translations->{$language->code}->title
                         : $planoption->title }}">
                     </div>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="mb-3">
-                {{ quick_switch(admin_lang('Enable/Disable'), 'active', $planoption->active == 1) }}
+                {{ quick_switch(lang('Enable/Disable'), 'active', $planoption->active == 1) }}
             </div>
 
         </form>

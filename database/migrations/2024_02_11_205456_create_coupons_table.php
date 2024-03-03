@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('code', 20)->unique();
             $table->bigInteger('percentage')->default(1);
-            $table->unsignedBigInteger('plan_id')->nullable()->index('coupons_plan_id_foreign');
+            $table->unsignedBigInteger('plan_id')->nullable()->index('plan_id');
             $table->tinyInteger('action_type');
             $table->bigInteger('limit')->default(1);
             $table->timestamp('expiry_at')->nullable();

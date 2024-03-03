@@ -1,5 +1,5 @@
 @extends($activeTheme.'layouts.app')
-@section('title', lang('Edit Biolink', 'dashboard'))
+@section('title', lang('Edit Biolink'))
 @section('content')
     <section class="our-bio-link mt-24">
         <div class="row">
@@ -12,13 +12,13 @@
             <div class="col-sm-8 col-12">
                 <ul class="nav nav-tabs" id="bioLinkTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="links-tab" data-bs-toggle="tab" data-bs-target="#links" type="button" role="tab" aria-controls="links" aria-selected="true">{{ lang('Links', 'dashboard') }}</button>
+                        <button class="nav-link active" id="links-tab" data-bs-toggle="tab" data-bs-target="#links" type="button" role="tab" aria-controls="links" aria-selected="true">{{ lang('Links') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#design" type="button" role="tab" aria-controls="stats" aria-selected="false">{{ lang('Design', 'dashboard') }}</button>
+                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#design" type="button" role="tab" aria-controls="stats" aria-selected="false">{{ lang('Design') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="stats" aria-selected="false">{{ lang('Settings', 'dashboard') }}</button>
+                        <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="stats" aria-selected="false">{{ lang('Settings') }}</button>
                     </li>
                 </ul>
                 <div class="tab-content mt-32" id="bioLinkTabContent">
@@ -27,11 +27,11 @@
                         <div class="add-link">
                             <button class="button -primary-l border-dashed rounded-3 push-left w-100 h-48-px mb-24"
                                     type="button" data-bs-toggle="modal" data-bs-target="#add_link">
-                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Link', 'dashboard') }}
+                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Link') }}
                             </button>
                             <button class="button -info-l border-dashed rounded-3 push-left w-100 h-48-px"
                                     type="button" data-bs-toggle="modal" data-bs-target="#add_header">
-                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Header', 'dashboard') }}
+                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Header') }}
                             </button>
                         </div>
 
@@ -107,7 +107,7 @@
                         </div>
                         <!--SOCIALS-->
                         <div class="add-social-link mt-32">
-                            <h2 class="mb-16 font-20">{{ lang('Socials', 'dashboard') }}</h2>
+                            <h2 class="mb-16 font-20">{{ lang('Socials') }}</h2>
                             <div id="quick-blocks-social">
                                 <div class="quick-reorder-body" data-action="{{ route('biolinks.reorder', $post->id) }}">
                                     @foreach ($bioLinks as $bioLink)
@@ -153,7 +153,7 @@
                             </div>
                             <button class="button -info-l border-dashed rounded-3 push-left w-100 h-48-px"
                                     type="button" data-bs-toggle="modal" data-bs-target="#social_link">
-                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Socials', 'dashboard') }}
+                                <i class="fa-regular fa-plus push-this mr-5"></i> {{ lang('Add Socials') }}
                             </button>
                         </div>
                     </div>
@@ -164,7 +164,7 @@
                             @csrf
                             @method('PUT')
                             <div class="bg-white px-30 py-30 shadow-3 rounded-3">
-                                <h3 class="fw-bold font-20 mb-16">{{ lang('Themes', 'dashboard') }}</h3>
+                                <h3 class="fw-bold font-20 mb-16">{{ lang('Themes') }}</h3>
                                 <div class="row g-3">
                                     @foreach($templates as $template)
                                     <div class="col-md-4 col-6">
@@ -182,9 +182,9 @@
                             <div class="bg-white px-30 py-30 shadow-3 rounded-3 mt-30">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h3 class="fw-bold text-dark-1 font-18 mb-0">
-                                        {{ lang('Show Quick Bio Credit', 'dashboard') }}
+                                        {{ lang('Show Quick Bio Credit') }}
                                         @if(subscription() && !subscription()->plan->settings->hide_branding)
-                                            <small class="badge bg-danger text-white font-10">{{ lang('Premium', 'dashboard') }}</small>
+                                            <small class="badge bg-danger text-white font-10">{{ lang('Premium') }}</small>
                                         @endif
                                     </h3>
                                     @php
@@ -199,18 +199,18 @@
                                         <input class="form-check-input cursor-pointer" name="bio_credit" type="checkbox" role="switch" {{ $checked }} {{ $disabled }}>
                                     </div>
                                 </div>
-                                <p class="mt-8">{{ lang('We appreciate you showing our logo credit in the footer, but feel free to hide it.', 'dashboard') }}</p>
+                                <p class="mt-8">{{ lang('We appreciate you showing our logo credit in the footer, but feel free to hide it.') }}</p>
                                 <div class="separator-1px-op-l my-32"></div>
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h3 class="fw-bold text-dark-1 font-18 mb-0">{{ lang('Display Share button', 'dashboard') }}</h3>
+                                    <h3 class="fw-bold text-dark-1 font-18 mb-0">{{ lang('Display Share button') }}</h3>
                                     <div class="form-check form-switch">
                                         <input class="form-check-input cursor-pointer" name="bio_share" type="checkbox" role="switch" {{ (@$postOptions->bio_share) ? "checked" : "" }}>
                                     </div>
                                 </div>
-                                <p class="mt-8">{{ lang('We appreciate you showing our logo credit in the footer, but feel free to hide it.', 'dashboard') }}</p>
+                                <p class="mt-8">{{ lang('We appreciate you showing our logo credit in the footer, but feel free to hide it.') }}</p>
                             </div>
                             <input type="hidden" name="type" value="design">
-                            <button type="submit" class="button -lg -primary rounded-pill w-100 mt-32">{{ lang('Save', 'dashboard') }}</button>
+                            <button type="submit" class="button -lg -primary rounded-pill w-100 mt-32">{{ lang('Save') }}</button>
                         </form>
                     </div>
 
@@ -220,7 +220,7 @@
                             @csrf
                             @method('PUT')
                             <div class="bg-white px-30 py-30 shadow-3 rounded-3">
-                                <h2 class="font-20 mb-16">{{ lang('Profile', 'dashboard') }}</h2>
+                                <h2 class="font-20 mb-16">{{ lang('Profile') }}</h2>
                                 <div class="bio-link-upload-img mb-16">
                                     <div class="avatar-upload my-0 mw-100">
                                         <div class="avatar-edit">
@@ -241,8 +241,8 @@
                                 </div>
                                 <div class="d-flex flex-wrap-reverse flex-sm-nowrap justify-content-between align-items-center">
                                     <div class="d-flex flex-wrap justify-content-between flex-column w-100">
-                                        <input class="form-control text-field mb-16 h-40-px" type="text" name="name" placeholder="{{ lang('Title', 'dashboard') }}" value="{{ $post->title }}">
-                                        <input class="form-control text-field h-40-px" type="text" name="bio" placeholder="{{ lang('Content', 'dashboard') }}" value="{{ $post->content }}">
+                                        <input class="form-control text-field mb-16 h-40-px" type="text" name="name" placeholder="{{ lang('Title') }}" value="{{ $post->title }}">
+                                        <input class="form-control text-field h-40-px" type="text" name="bio" placeholder="{{ lang('Content') }}" value="{{ $post->content }}">
                                     </div>
                                     <div class="mx-auto sm-mb-32">
                                         <div class="bio-link-upload-img ml-24">
@@ -268,19 +268,19 @@
                             </div>
                             <div class="bg-white px-30 py-30 shadow-3 rounded-3 mt-30">
                                 <div class="position-relative">
-                                    <h3 class="fw-bold text-dark-1 font-18 mb-16">{{ lang('Username', 'dashboard') }}</h3>
-                                    <input type="text" name="slug" class="form-control text-field overflow-hidden" placeholder="{{ lang('Slug', 'dashboard') }}" value="{{ $post->slug }}">
+                                    <h3 class="fw-bold text-dark-1 font-18 mb-16">{{ lang('Username') }}</h3>
+                                    <input type="text" name="slug" class="form-control text-field overflow-hidden" placeholder="{{ lang('Slug') }}" value="{{ $post->slug }}">
                                 </div>
                                 <div class="separator-1px-op-l my-32"></div>
                                 <div class="d-flex flex-column">
-                                    <h3 class="fw-bold text-dark-1 font-18">{{ lang('SEO', 'dashboard') }}</h3>
-                                    <span class="mb-16 text-muted">{{ lang('Choose the title and description to appear on search engines and social posts.', 'dashboard') }}</span>
-                                    <input type="text" class="form-control text-field mb-16" name="seo_title" placeholder="{{ lang('Title', 'dashboard') }}" value="{{ @$postOptions->seo_title }}">
-                                    <input type="text" class="form-control text-field" name="seo_desc" placeholder="{{ lang('Short Description', 'dashboard') }}" value="{{ @$postOptions->seo_desc }}">
+                                    <h3 class="fw-bold text-dark-1 font-18">{{ lang('SEO') }}</h3>
+                                    <span class="mb-16 text-muted">{{ lang('Choose the title and description to appear on search engines and social posts.') }}</span>
+                                    <input type="text" class="form-control text-field mb-16" name="seo_title" placeholder="{{ lang('Title') }}" value="{{ @$postOptions->seo_title }}">
+                                    <input type="text" class="form-control text-field" name="seo_desc" placeholder="{{ lang('Short Description') }}" value="{{ @$postOptions->seo_desc }}">
                                 </div>
                             </div>
                             <input type="hidden" name="type" value="settings">
-                            <button type="submit" class="button -lg -primary rounded-pill w-100 mt-32">{{ lang('Save', 'dashboard') }}</button>
+                            <button type="submit" class="button -lg -primary rounded-pill w-100 mt-32">{{ lang('Save') }}</button>
                         </form>
                     </div>
 
@@ -294,7 +294,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addHeaderModalLable">{{ lang('Add header', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="addHeaderModalLable">{{ lang('Add header') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -303,11 +303,11 @@
                     <form class="add_block_form" action="{{ route('biolinks.addheader', $post->id) }}" method="POST">
                         <div class="d-flex flex-wrap-reverse flex-sm-nowrap justify-content-between align-items-center my-32 ">
                             <div class="d-flex flex-wrap justify-content-between flex-column w-100">
-                                <input class="form-control text-field" type="text" name="title" placeholder="{{ lang('Title', 'dashboard') }}">
+                                <input class="form-control text-field" type="text" name="title" placeholder="{{ lang('Title') }}">
                             </div>
                         </div>
                         <div class="position-relative">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -321,7 +321,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editHeaderModalLable">{{ lang('Edit header', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="editHeaderModalLable">{{ lang('Edit header') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -330,16 +330,16 @@
                     <form class="edit_block_form" action="{{ route('biolinks.editHeader', $post->id) }}" method="POST">
                         <input type="hidden" name="id" value="">
                         <div class="d-flex flex-wrap justify-content-between w-100 my-32">
-                            <input class="form-control text-field" type="text" name="title" placeholder="{{ lang('Title', 'dashboard') }}">
+                            <input class="form-control text-field" type="text" name="title" placeholder="{{ lang('Title') }}">
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-16">
-                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide', 'dashboard') }}</p>
+                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide') }}</p>
                             <div class="form-check form-switch">
                                 <input class="form-check-input cursor-pointer" name="active" type="checkbox" role="switch" id="HideSwitch">
                             </div>
                         </div>
                         <div class="position-relative mt-32">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -353,7 +353,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addLinkModalLable">{{ lang('Add Link', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="addLinkModalLable">{{ lang('Add Link') }}</h5>
                     <button type="button" class="icon-group -close"  data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -363,8 +363,8 @@
                         <div class="d-flex flex-wrap-reverse flex-sm-nowrap justify-content-between align-items-center my-32">
 
                             <div class="d-flex flex-wrap justify-content-between flex-column w-100">
-                                <input class="form-control text-field mb-16" type="text" name="title" placeholder="{{ lang('Title', 'dashboard') }}">
-                                <input class="form-control text-field" type="text" name="url"  placeholder="{{ lang('URL', 'dashboard') }}">
+                                <input class="form-control text-field mb-16" type="text" name="title" placeholder="{{ lang('Title') }}">
+                                <input class="form-control text-field" type="text" name="url"  placeholder="{{ lang('URL') }}">
                             </div>
                             <div class="mx-auto sm-mb-32">
                                 <div class="bio-link-upload-img ml-24">
@@ -382,13 +382,13 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="fw-semibold font-16 mb-0">{{ lang('Highlight this link', 'dashboard') }}</p>
+                            <p class="fw-semibold font-16 mb-0">{{ lang('Highlight this link') }}</p>
                             <div class="form-check form-switch">
                                 <input class="form-check-input cursor-pointer" type="checkbox" name="highlight" role="switch">
                             </div>
                         </div>
                         <div class="position-relative mt-32">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -402,7 +402,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editLinkModalLable">{{ lang('Edit Link', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="editLinkModalLable">{{ lang('Edit Link') }}</h5>
                     <button type="button" class="icon-group -close"  data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -412,8 +412,8 @@
                         <input type="hidden" name="id" value="">
                         <div class="d-flex flex-wrap-reverse flex-sm-nowrap justify-content-between align-items-center my-32 ">
                             <div class="d-flex flex-wrap justify-content-between flex-column w-100">
-                                <input class="form-control text-field mb-16" type="text" name="title" placeholder="{{ lang('Title', 'dashboard') }}">
-                                <input class="form-control text-field" type="text" name="url"  placeholder="{{ lang('URL', 'dashboard') }}">
+                                <input class="form-control text-field mb-16" type="text" name="title" placeholder="{{ lang('Title') }}">
+                                <input class="form-control text-field" type="text" name="url"  placeholder="{{ lang('URL') }}">
                             </div>
                             <div class="mx-auto sm-mb-32">
                                 <div class="bio-link-upload-img ml-24">
@@ -431,19 +431,19 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="fw-semibold font-16 mb-0">{{ lang('Highlight this link', 'dashboard') }}</p>
+                            <p class="fw-semibold font-16 mb-0">{{ lang('Highlight this link') }}</p>
                             <div class="form-check form-switch">
                                 <input class="form-check-input cursor-pointer" name="highlight" type="checkbox" role="switch" id="highlightSwitch">
                             </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-16">
-                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide', 'dashboard') }}</p>
+                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide') }}</p>
                             <div class="form-check form-switch">
                                 <input class="form-check-input cursor-pointer" name="active" type="checkbox" role="switch" id="HideSwitch">
                             </div>
                         </div>
                         <div class="position-relative mt-32">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -458,7 +458,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="socialLinkModalLable">{{ lang('Social Link', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="socialLinkModalLable">{{ lang('Social Link') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -470,32 +470,32 @@
                              data-title="Email"
                              data-placeholder="your@domain.com">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-regular fa-envelope"></span>{{ lang('Email', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-regular fa-envelope"></span>{{ lang('Email') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="instagram"
                              data-title="Instagram"
                              data-placeholder="https://instagram.com/username">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-instagram text-instagram"></span>{{ lang('Instagram', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-instagram text-instagram"></span>{{ lang('Instagram') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="facebook"
                              data-title="Facebook"
                              data-placeholder="https://facebook.com/pageurl">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-facebook text-facebook"></span>{{ lang('Facebook', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-facebook text-facebook"></span>{{ lang('Facebook') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="youtube"
                              data-title="Youtube"
                              data-placeholder="https://youtube.com/channel/channelurl">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-youtube text-youtube"></span>{{ lang('Youtube', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-youtube text-youtube"></span>{{ lang('Youtube') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
 
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
@@ -503,40 +503,40 @@
                              data-title="Twitter"
                              data-placeholder="https://twitter.com/username">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-twitter text-twitter"></span>{{ lang('Twitter', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-twitter text-twitter"></span>{{ lang('Twitter') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="phone"
                              data-title="Phone"
                              data-placeholder="+00000000000">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-regular fa-phone text-success"></span>{{ lang('Phone', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-regular fa-phone text-success"></span>{{ lang('Phone') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="dribbble"
                              data-title="Dribbble"
                              data-placeholder="https://dribbble.com/username">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-dribbble text-dribble"></span>{{ lang('Dribbble', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-dribbble text-dribble"></span>{{ lang('Dribbble') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="pinterest"
                              data-title="Pinterest"
                              data-placeholder="https://pinterest.com/username">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-pinterest text-danger"></span>{{ lang('Pinterest', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-pinterest text-danger"></span>{{ lang('Pinterest') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                         <div class="social-link-item d-flex border text-border-1 rounded px-16 py-10 mb-8 justify-content-between cursor-pointer" data-bs-target="#addSocialModal" data-bs-toggle="modal"
                              data-type="github"
                              data-title="Github"
                              data-placeholder="https://github.com/username">
                             <div class="d-flex align-items-center justify-content-center h-20-px">
-                                <span class="pr-16 fa-brands fa-github text-dark-2"></span>{{ lang('Github', 'dashboard') }}</div>
-                            <a class="text-decoration -underline text-primary">{{ lang('Add', 'dashboard') }}</a>
+                                <span class="pr-16 fa-brands fa-github text-dark-2"></span>{{ lang('Github') }}</div>
+                            <a class="text-decoration -underline text-primary">{{ lang('Add') }}</a>
                         </div>
                     </div>
                 </div>
@@ -552,7 +552,7 @@
                     <button type="button" class="icon-group -close" data-bs-target="#social_link" data-bs-toggle="modal">
                         <i class="fa-regular fa-arrow-left"></i>
                     </button>
-                    <h5 class="modal-title" id="addSocialHeaderLable">{{ lang('Heading', 'dashboard') }}</h5>
+                    <h5 class="modal-title" id="addSocialHeaderLable">{{ lang('Heading') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -561,12 +561,12 @@
                     <form class="add_block_form" action="{{ route('biolinks.addsocial', $post->id) }}" method="POST">
                         <div class="d-flex flex-wrap-reverse flex-sm-nowrap justify-content-between align-items-center my-32 ">
                             <div class="d-flex flex-wrap justify-content-between flex-column w-100">
-                                <input class="form-control text-field" name="url" type="text" placeholder="{{ lang('URL', 'dashboard') }}">
+                                <input class="form-control text-field" name="url" type="text" placeholder="{{ lang('URL') }}">
                                 <input class="form-control text-field" name="title" type="hidden" value="">
                             </div>
                         </div>
                         <div class="position-relative">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>
@@ -585,7 +585,7 @@
                             data-bs-toggle="modal">
                         <i class="fa-regular fa-arrow-left"></i>
                     </button>
-                    <h5 class="modal-title text-capitalize" id="editSocialHeaderLable">{{ lang('Heading', 'dashboard') }}</h5>
+                    <h5 class="modal-title text-capitalize" id="editSocialHeaderLable">{{ lang('Heading') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -594,17 +594,17 @@
                     <form class="edit_block_form" action="{{ route('biolinks.editSocial', $post->id) }}" method="POST">
                         <input type="hidden" name="id" value="">
                         <div class="d-flex flex-wrap justify-content-between flex-column w-100 my-32">
-                            <input class="form-control text-field" name="url" type="text" placeholder="{{ lang('URL', 'dashboard') }}">
+                            <input class="form-control text-field" name="url" type="text" placeholder="{{ lang('URL') }}">
                             <input class="form-control text-field" name="title" type="hidden" value="">
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-16">
-                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide', 'dashboard') }}</p>
+                            <p class="fw-semibold font-16 mb-0">{{ lang('Hide') }}</p>
                             <div class="form-check form-switch">
                                 <input class="form-check-input cursor-pointer" name="active" type="checkbox" role="switch" id="HideSwitch">
                             </div>
                         </div>
                         <div class="position-relative mt-32">
-                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save', 'dashboard') }}</button>
+                            <button class="button -primary w-100 -lg" type="submit">{{ lang('Save') }}</button>
                         </div>
                     </form>
                 </div>

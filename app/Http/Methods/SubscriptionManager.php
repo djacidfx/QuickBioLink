@@ -3,11 +3,15 @@
 namespace App\Http\Methods;
 
 use App\Models\Plan;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 class SubscriptionManager
 {
+    /**
+     * Get subscription details
+     *
+     * @param $user
+     * @return mixed
+     */
     public static function subscription($user)
     {
         $subscription = self::users($user);
@@ -15,6 +19,12 @@ class SubscriptionManager
         return array_to_object($subscription);
     }
 
+    /**
+     * Get user's subscription details
+     *
+     * @param $user
+     * @return array
+     */
     private static function users($user)
     {
         if ($user && $user->isSubscribed()) {
@@ -28,6 +38,11 @@ class SubscriptionManager
         return self::free();
     }
 
+    /**
+     * Get free plan details
+     *
+     * @return array
+     */
     private static function free()
     {
         $subscription = null;

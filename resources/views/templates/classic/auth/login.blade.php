@@ -1,5 +1,5 @@
 @extends($activeTheme.'layouts.auth')
-@section('title', lang('Sign In', 'auth'))
+@section('title', lang('Sign In'))
 @section('content')
     <div class="row vh-100 g-0 login-wrapper">
         <!-- Left Side -->
@@ -20,28 +20,28 @@
                         </a>
                     </div>
 
-                    <h2 class="text-center font-30">{{ lang('Login Here!', 'auth') }}</h2>
+                    <h2 class="text-center font-30">{{ lang('Login Here!') }}</h2>
 
                     <form action="{{ route('login') }}" method="POST" class="mt-32">
                         @csrf
                         <div class="form-group mt-16">
-                            <label class="form-label">{{ lang('Email address', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Email address') }} *</label>
                             <input type="email" name="email" class="form-control input-with-br -h-48"
-                                   placeholder="{{ lang('Email address', 'forms') }}" value="{{ old('email') }}" required />
+                                   placeholder="{{ lang('Email address') }}" value="{{ old('email') }}" required />
                         </div>
 
                         <div class="form-group mt-16">
-                            <label class="form-label">{{ lang('Password', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Password') }} *</label>
                             <input type="password" name="password" class="form-control input-with-br -h-48"
-                                   placeholder="{{ lang('Password', 'forms') }}" required />
+                                   placeholder="{{ lang('Password') }}" required />
                         </div>
                         <div class="form-group mt-16 mb-16">
                             <div class="d-flex justify-content-between">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="rememberme" checked>
-                                    <label class="form-check-label" for="rememberme">{{ lang('Remember Me', 'auth') }}</label>
+                                    <label class="form-check-label" for="rememberme">{{ lang('Remember Me') }}</label>
                                 </div>
-                                <a href="{{ route('password.request') }}">{{ lang('Forgot Password?', 'auth') }}</a>
+                                <a href="{{ route('password.request') }}">{{ lang('Forgot Password?') }}</a>
                             </div>
                         </div>
 
@@ -50,7 +50,7 @@
                         <button type="submit" class="button bg-primary text-white w-100 rounded-pill -h-48">Login</button>
 
                         @if (@$settings->facebook_login->status || @$settings->google_login->status)
-                            <div class="block-bf-af position-relative d-flex align-items-center font-16 mt-32 mb-32 justify-content-center"> {{ lang('or Login with', 'auth') }} </div>
+                            <div class="block-bf-af position-relative d-flex align-items-center font-16 mt-32 mb-32 justify-content-center"> {{ lang('or Login with') }} </div>
 
                             @if (@$settings->google_login->status)
                                 <a href="{{route('social.login', 'google')}}" class="button -outlined -light -br-2 rounded-pill w-100 -h-48">
@@ -66,24 +66,24 @@
                                                 <rect width="49.0079" height="50" fill="white"/>
                                             </clipPath>
                                         </defs>
-                                    </svg> <span class="ml-16 fw-bold font-16">{{ lang("Login With Google", 'auth') }}</span></a>
+                                    </svg> <span class="ml-16 fw-bold font-16">{{ lang("Login With Google") }}</span></a>
                             @endif
 
                             @if (@$settings->facebook_login->status)
-                                <a href="{{route('social.login', 'facebook')}}" class="button -outlined -light -br-2 mt-16 rounded-pill w-100 -h-48 fw-bold font-16"><i class="fa-brands fa-facebook text-facebook mr-16 font-24"></i><span>{{ lang("Login With Facebook", 'auth') }}</span></a>
+                                <a href="{{route('social.login', 'facebook')}}" class="button -outlined -light -br-2 mt-16 rounded-pill w-100 -h-48 fw-bold font-16"><i class="fa-brands fa-facebook text-facebook mr-16 font-24"></i><span>{{ lang("Login With Facebook") }}</span></a>
                             @endif
                         @endif
                     </form>
                     <div class="text-center mt-32">
-                        <a class="text-decoration-underline" href="{{ route('register') }}">{{ lang("Don't have an account? Sign Up Now", 'auth') }}</a>
+                        <a class="text-decoration-underline" href="{{ route('register') }}">{{ lang("Don't have an account? Sign Up Now") }}</a>
                     </div>
 
                     @if(demo_mode())
                         <table class="table my-30 table-bordered">
                             <tr>
                                 <th></th>
-                                <th>{{ lang('Email address', 'forms') }}</th>
-                                <th>{{ lang('Password', 'forms') }}</th>
+                                <th>{{ lang('Email address') }}</th>
+                                <th>{{ lang('Password') }}</th>
                             </tr>
                             <tr>
                                 <th>Admin</th>

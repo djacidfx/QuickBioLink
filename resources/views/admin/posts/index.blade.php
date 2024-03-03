@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Bio Links'))
+@section('title', lang('Bio Links'))
 @section('content')
     <div class="quick-card card">
         <div class="card-body">
@@ -7,10 +7,10 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.posts.index') }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('Details') }}</th>
-                        <th>{{ admin_lang('Created By') }}</th>
-                        <th>{{ admin_lang('Added date') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('Details') }}</th>
+                        <th>{{ lang('Created By') }}</th>
+                        <th>{{ lang('Added date') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

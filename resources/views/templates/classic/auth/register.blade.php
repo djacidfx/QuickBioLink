@@ -1,5 +1,5 @@
 @extends($activeTheme.'layouts.auth')
-@section('title', lang('Sign Up', 'auth'))
+@section('title', lang('Sign Up'))
 @section('content')
     <div class="row vh-100 g-0 login-wrapper">
         <!-- Left Side -->
@@ -19,43 +19,43 @@
                         </a>
                     </div>
 
-                    <h2 class="text-center font-30">{{ lang("Sign up. It's Free!", "auth") }}</h2>
+                    <h2 class="text-center font-30">{{ lang("Sign up. It's Free!") }}</h2>
                     <form action="{{ route('register') }}" class="mt-32" method="POST">
                         @csrf
 
                         <div class="row row-cols-1 row-cols-md-2 g-3 mb-3">
                             <div class="col">
-                                <label class="form-label">{{ lang('First Name', 'forms') }} *</label>
+                                <label class="form-label">{{ lang('First Name') }} *</label>
                                 <input type="text" name="firstname" class="form-control input-with-br -h-48"
-                                       value="{{ old('firstname') }}" placeholder="{{ lang('First Name', 'forms') }}" maxlength="50"
+                                       value="{{ old('firstname') }}" placeholder="{{ lang('First Name') }}" maxlength="50"
                                        required>
                             </div>
                             <div class="col">
-                                <label class="form-label">{{ lang('Last Name', 'forms') }} *</label>
+                                <label class="form-label">{{ lang('Last Name') }} *</label>
                                 <input id="lastname" type="text" name="lastname" class="form-control input-with-br -h-48"
-                                       value="{{ old('lastname') }}" placeholder="{{ lang('Last Name', 'forms') }}" maxlength="50"
+                                       value="{{ old('lastname') }}" placeholder="{{ lang('Last Name') }}" maxlength="50"
                                        required>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{ lang('Username', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Username') }} *</label>
                             <input type="text" name="username" class="form-control input-with-br -h-48" value="{{ old('username') }}"
-                                   placeholder="{{ lang('Username', 'forms') }}" minlength="6" maxlength="50" required>
+                                   placeholder="{{ lang('Username') }}" minlength="6" maxlength="50" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{ lang('Email address', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Email address') }} *</label>
                             <input type="email" name="email" class="form-control input-with-br -h-48" value="{{ old('email') }}"
-                                   placeholder="{{ lang('Email address', 'forms') }}" required>
+                                   placeholder="{{ lang('Email address') }}" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{ lang('Password', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Password') }} *</label>
                             <input type="password" name="password" class="form-control input-with-br -h-48"
-                                   placeholder="{{ lang('Password', 'forms') }}" minlength="8" required>
+                                   placeholder="{{ lang('Password') }}" minlength="8" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{ lang('Confirm password', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Confirm password') }} *</label>
                             <input type="password" name="password_confirmation" class="form-control input-with-br -h-48"
-                                   placeholder="{{ lang('Confirm password', 'forms') }}" minlength="8" required>
+                                   placeholder="{{ lang('Confirm password') }}" minlength="8" required>
                         </div>
                         @if (@$settings->terms_of_service_link)
                             <div class="form-group mb-16">
@@ -63,8 +63,8 @@
                                     <input id="terms" name="terms" class="form-check-input" type="checkbox"
                                            {{ old('terms') ? 'checked' : '' }} required>
                                     <label class="form-check-label" for="terms">
-                                        {{ lang('By clicking on Register button you are agree to our', 'auth') }} <a href="{{ @$settings->terms_of_service_link }}"
-                                                                                                                     class="link link-primary">{{ lang('Terms & Condition', 'auth') }}</a>
+                                        {{ lang('By clicking on Register button you are agree to our') }} <a href="{{ @$settings->terms_of_service_link }}"
+                                                                                                                     class="link link-primary">{{ lang('Terms & Condition') }}</a>
                                     </label>
                                 </div>
                             </div>
@@ -72,11 +72,11 @@
 
                         {!! display_captcha() !!}
 
-                        <input type="submit" value="{{ lang('Sign Up', 'auth') }}" class="button bg-primary text-white mt-16 w-100 rounded-pill -h-48">
+                        <input type="submit" value="{{ lang('Sign Up') }}" class="button bg-primary text-white mt-16 w-100 rounded-pill -h-48">
                     </form>
 
                     @if (@$settings->facebook_login->status || @$settings->google_login->status)
-                        <div class="block-bf-af position-relative d-flex align-items-center font-16 mt-32 mb-32 justify-content-center"> {{ lang('or Login with', 'auth') }} </div>
+                        <div class="block-bf-af position-relative d-flex align-items-center font-16 mt-32 mb-32 justify-content-center"> {{ lang('or Login with') }} </div>
 
                         @if (@$settings->google_login->status)
                             <a href="{{route('social.login', 'google')}}" class="button -outlined -light -br-2 rounded-pill w-100 -h-48">
@@ -92,16 +92,16 @@
                                             <rect width="49.0079" height="50" fill="white"/>
                                         </clipPath>
                                     </defs>
-                                </svg> <span class="ml-16 fw-bold font-16">{{ lang("Login With Google", 'auth') }}</span></a>
+                                </svg> <span class="ml-16 fw-bold font-16">{{ lang("Login With Google") }}</span></a>
                         @endif
 
                         @if (@$settings->facebook_login->status)
-                            <a href="{{route('social.login', 'facebook')}}" class="button -outlined -light -br-2 mt-16 rounded-pill w-100 -h-48 fw-bold font-16"><i class="fa-brands fa-facebook text-facebook mr-16 font-24"></i><span>{{ lang("Login With Facebook", 'auth') }}</span></a>
+                            <a href="{{route('social.login', 'facebook')}}" class="button -outlined -light -br-2 mt-16 rounded-pill w-100 -h-48 fw-bold font-16"><i class="fa-brands fa-facebook text-facebook mr-16 font-24"></i><span>{{ lang("Login With Facebook") }}</span></a>
                         @endif
                     @endif
 
                     <div class="text-center mt-32">
-                        <a class="text-decoration-underline" href="{{ route('login') }}">{{ lang('Already have an account? Log In here', 'auth') }}</a>
+                        <a class="text-decoration-underline" href="{{ route('login') }}">{{ lang('Already have an account? Log In here') }}</a>
                     </div>
                 </div>
             </div>

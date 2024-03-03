@@ -52,21 +52,22 @@ class VerificationController extends Controller
      */
     public function show(Request $request)
     {
-        if (!settings('enable_email_verification')) {
-            return redirect()->route('home');
-        } else {
+        if (settings('enable_email_verification')) {
             return $request->user()->hasVerifiedEmail()
-            ? redirect($this->redirectPath())
-            : view($this->activeTheme.'auth.verify');
+                ? redirect($this->redirectPath())
+                : view($this->activeTheme . 'auth.verify');
+        } else {
+            return redirect()->route('home');
         }
     }
 
     /**
      * Change email address
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function changeEmail(Request $request)
+    public function changeEmailAddress(Request $request)
     {
         $user = user_auth_info();
         $validator = Validator::make($request->all(), [
@@ -80,11 +81,12 @@ class VerificationController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
+
         if ($user->email != $request->email) {
             $update = $user->update(['email' => $request->email]);
             if ($update) {
                 $user->sendEmailVerificationNotification();
-                quick_alert_success(lang('Email has been changed successfully', 'auth'));
+                quick_alert_success(lang('Email changed successfully'));
                 return back();
             }
         }

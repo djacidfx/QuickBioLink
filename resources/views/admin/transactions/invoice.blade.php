@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-    <title>{{ lang('Invoice', 'account') . ' #'. $transaction->id}}</title>
+    <title>{{ lang('Invoice') . ' #'. $transaction->id}}</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/brand/'.$settings->media->favicon) }}">
     <meta name="theme-color" content="{{ $settings->colors->primary_color }}">
     <style>
@@ -21,7 +21,7 @@
 <body>
 <!-- Print Button -->
 <div class="print-button-container">
-    <a href="javascript:window.print()" class="print-button">{{lang('Print this invoice', 'account')}}</a>
+    <a href="javascript:window.print()" class="print-button">{{lang('Print this invoice')}}</a>
 </div>
 <!-- Invoice -->
 <div id="invoice">
@@ -34,9 +34,9 @@
         </div>
         <div class="col-xl-6">
             <p id="details">
-                <strong>{{lang('Invoice', 'account')}}
+                <strong>{{lang('Invoice')}}
                     :</strong> {{$settings->invoice_billing->invoice_number_prefix ?? 'INV-'}}{{$transaction->id}} <br>
-                <strong>{{lang('Date', 'account')}}:</strong> {{ date_formating($transaction->created_at) }} </p>
+                <strong>{{lang('Date')}}:</strong> {{ date_formating($transaction->created_at) }} </p>
         </div>
     </div>
 
@@ -44,28 +44,28 @@
     <!-- Client & Supplier -->
     <div class="row">
         <div class="col-xl-12">
-            <h2>{{lang('Invoice', 'account')}}</h2>
+            <h2>{{lang('Invoice')}}</h2>
         </div>
         <div class="col-md-6">
-            <h3>{{lang('Supplier', 'account')}}</h3>
+            <h3>{{lang('Supplier')}}</h3>
             <p>
                 @if(!empty($settings->invoice_billing->name))
-                    <strong>{{lang('Name', 'account')}}</strong> {{$settings->invoice_billing->name}}<br>
+                    <strong>{{lang('Name')}}</strong> {{$settings->invoice_billing->name}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->address))
-                    <strong>{{lang('Address', 'account')}}</strong> {{$settings->invoice_billing->address}}<br>
+                    <strong>{{lang('Address')}}</strong> {{$settings->invoice_billing->address}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->city))
-                    <strong>{{lang('City', 'account')}}</strong> {{$settings->invoice_billing->city}}<br>
+                    <strong>{{lang('City')}}</strong> {{$settings->invoice_billing->city}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->state))
-                    <strong>{{lang('State', 'account')}}</strong> {{$settings->invoice_billing->state}}<br>
+                    <strong>{{lang('State')}}</strong> {{$settings->invoice_billing->state}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->zipcode))
-                    <strong>{{lang('Zip Code', 'account')}}</strong> {{$settings->invoice_billing->zipcode}}<br>
+                    <strong>{{lang('Zip Code')}}</strong> {{$settings->invoice_billing->zipcode}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->country))
-                    <strong>{{lang('Country', 'account')}}</strong> {{$settings->invoice_billing->country}}<br>
+                    <strong>{{lang('Country')}}</strong> {{$settings->invoice_billing->country}}<br>
                 @endif
                 @if(!empty($settings->invoice_billing->tax_type) && !empty($settings->invoice_billing->tax_id))
                     <strong>{{$settings->invoice_billing->tax_type}}</strong> {{$settings->invoice_billing->tax_id}}<br>
@@ -73,14 +73,14 @@
             </p>
         </div>
         <div class="col-md-6">
-            <h3>{{lang('Customer', 'account')}}</h3>
+            <h3>{{lang('Customer')}}</h3>
             <p>
-                <strong>{{lang('Name', 'account')}}</strong> {{ $transaction->user->name }}<br>
-                <strong>{{lang('Address', 'account')}}</strong> {{ $transaction->billing_address->address }}<br>
-                <strong>{{lang('City', 'account')}}</strong> {{ $transaction->billing_address->city }}<br>
-                <strong>{{lang('State', 'account')}}</strong> {{ $transaction->billing_address->state }}<br>
-                <strong>{{lang('Zip Code', 'account')}}</strong> {{ $transaction->billing_address->zip }}<br>
-                <strong>{{lang('Country', 'account')}}</strong> {{ $transaction->billing_address->country }}<br>
+                <strong>{{lang('Name')}}</strong> {{ $transaction->user->name }}<br>
+                <strong>{{lang('Address')}}</strong> {{ $transaction->billing_address->address }}<br>
+                <strong>{{lang('City')}}</strong> {{ $transaction->billing_address->city }}<br>
+                <strong>{{lang('State')}}</strong> {{ $transaction->billing_address->state }}<br>
+                <strong>{{lang('Zip Code')}}</strong> {{ $transaction->billing_address->zip }}<br>
+                <strong>{{lang('Country')}}</strong> {{ $transaction->billing_address->country }}<br>
             </p>
         </div>
     </div>
@@ -89,29 +89,29 @@
         <div class="col-xl-12">
             <table>
                 <tr>
-                    <th>{{lang('Item', 'account')}}</th>
-                    <th>{{lang('Amount', 'account')}}</th>
+                    <th>{{lang('Item')}}</th>
+                    <th>{{lang('Amount')}}</th>
                 </tr>
                 <tr>
-                    <td>{{ $transaction->plan->name }}<br><small>{{lang('Membership Plan', 'account')}}</small></td>
+                    <td>{{ $transaction->plan->name }}<br><small>{{lang('Membership Plan')}}</small></td>
                     <td>{{ price_symbol_format($transaction->details_before_discount->price) }}</td>
                 </tr>
                 @if ($transaction->coupon)
                     <tr>
                         <td>
-                            {{lang('Discount', 'account')}}({{ $transaction->coupon->percentage }}%)
-                            <br><small>{{lang('Coupon', 'account') }} <strong>{{$transaction->coupon->code}}</strong></small>
+                            {{lang('Discount')}}({{ $transaction->coupon->percentage }}%)
+                            <br><small>{{lang('Coupon') }} <strong>{{$transaction->coupon->code}}</strong></small>
                         </td>
                         <td>-{{ price_symbol_format($transaction->details_before_discount->price - $transaction->price) }}</td>
                     </tr>
                     <tr>
-                        <td>{{lang('Subtotal', 'account')}}</td>
+                        <td>{{lang('Subtotal')}}</td>
                         <td>{{ price_symbol_format($transaction->details_after_discount->price) }}</td>
                     </tr>
                 @endif
                 @if ($transaction->details_before_discount->tax != 0)
                     <tr>
-                        <td>{{lang('Taxes', 'account')}}</td>
+                        <td>{{lang('Taxes')}}</td>
                         <td>
                             @if ($transaction->coupon)
                                 +{{ price_symbol_format($transaction->details_after_discount->tax) }}
@@ -123,17 +123,17 @@
                 @endif
                 @if ($transaction->gateway)
                     <tr>
-                        <td>{{lang('Gateway Fees', 'account')}}</td>
+                        <td>{{lang('Gateway Fees')}}</td>
                         <td>+{{ price_symbol_format($transaction->fees) }}</td>
                     </tr>
                 @endif
             </table>
             <table id="totals">
                 <tr>
-                    <th>{{lang('Total', 'account')}}
+                    <th>{{lang('Total')}}
                         @if ($transaction->gateway)
                             <br>
-                            <small>{{lang('Paid via', 'account')}} {{ $transaction->gateway->name }}</small>
+                            <small>{{lang('Paid via')}} {{ $transaction->gateway->name }}</small>
                         @endif
                     </th>
                     <th><span>{{ price_symbol_format($transaction->total) }}</span></th>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', request()->ip . ' '. admin_lang('logs'))
+@section('title', request()->ip . ' '. lang('logs'))
 @section('content')
         <div class="card">
             <div class="card-body">
@@ -7,14 +7,14 @@
                     <table id="ajax_datatable" class="table table-striped" data-jsonfile="{{ route('admin.users.logsbyip', $ip) }}">
                         <thead>
                         <tr>
-                            <th>{{ admin_lang('IP') }}</th>
-                            <th class="no-sort">{{ admin_lang('User') }}</th>
-                            <th>{{ admin_lang('Browser') }}</th>
-                            <th>{{ admin_lang('OS') }}</th>
-                            <th>{{ admin_lang('Location') }}</th>
-                            <th>{{ admin_lang('Timezone') }}</th>
-                            <th>{{ admin_lang('Latitude') }}</th>
-                            <th>{{ admin_lang('Longitude') }}</th>
+                            <th>{{ lang('IP') }}</th>
+                            <th class="no-sort">{{ lang('User') }}</th>
+                            <th>{{ lang('Browser') }}</th>
+                            <th>{{ lang('OS') }}</th>
+                            <th>{{ lang('Location') }}</th>
+                            <th>{{ lang('Timezone') }}</th>
+                            <th>{{ lang('Latitude') }}</th>
+                            <th>{{ lang('Longitude') }}</th>
                         </tr>
                         </thead>
                         <tbody>

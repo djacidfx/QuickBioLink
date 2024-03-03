@@ -1,5 +1,5 @@
 @extends($activeTheme.'layouts.auth')
-@section('title', lang('Verify Your Email Address', 'auth'))
+@section('title', lang('Verify Your Email Address'))
 @section('content')
     <div class="container vh-100 py-10 login-wrapper">
         <div class="row align-items-center justify-content-center h-100">
@@ -8,16 +8,16 @@
                     <i class="text-primary font-80 far fa-envelope-circle-check"></i>
                 </div>
                 <div>
-                    <h2 class="mb-30">{{ lang('Verify Your Email Address', 'auth') }}</h2>
+                    <h2 class="mb-30">{{ lang('Verify Your Email Address') }}</h2>
                     <p class="mb-30">
-                        {{ lang('Your email address is not verified, please verify your email. If you haven\'t received the verification email, please check your spam or junk folder, or request a new verification email to be sent.', 'auth') }}
+                        {{ lang('Your email address is not verified, please verify your email. If you haven\'t received the verification email, please check your spam or junk folder, or request a new verification email to be sent.') }}
                     </p>
                     <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                         @csrf
-                        <button type="submit" class="button -primary -lg me-2">{{ lang('Resend', 'auth') }}</button>
+                        <button type="submit" class="button -primary -lg me-2">{{ lang('Resend') }}</button>
                     </form>
                     <button href="#" class="button -secondary -lg" data-bs-toggle="modal"
-                            data-bs-target="#emailModal">{{ lang('Change Email', 'auth') }}</button>
+                            data-bs-target="#emailModal">{{ lang('Change Email') }}</button>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ lang('Change Email', 'auth') }}</h5>
+                    <h5 class="modal-title">{{ lang('Change Email') }}</h5>
                     <button type="button" class="icon-group -close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="fa-regular fa-xmark"></i>
                     </button>
@@ -37,14 +37,14 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">{{ lang('Email address', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Email address') }} *</label>
                             <input type="email" name="email" id="email" class="form-control form-control-md"
-                                placeholder="{{ lang('Email address', 'forms') }}" value="{{ user_auth_info()->email }}"
+                                placeholder="{{ lang('Email address') }}" value="{{ user_auth_info()->email }}"
                                 required>
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit"
-                                class="button -primary w-100">{{ lang('Save', 'auth') }}</button>
+                                class="button -primary w-100">{{ lang('Save') }}</button>
                         </div>
                     </div>
                 </form>

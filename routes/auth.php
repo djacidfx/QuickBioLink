@@ -16,7 +16,7 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
-Route::post('email/verify/email/change', 'Auth\VerificationController@changeEmail')->name('change.email');
+Route::post('email/verify/email/change', 'Auth\VerificationController@changeEmailAddress')->name('change.email');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 
@@ -28,6 +28,6 @@ Route::middleware(['disable.registration'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('checkpoint/2fa/verify', 'Auth\CheckpointController@show2FaVerifyForm')->name('2fa.verify');
-    Route::post('checkpoint/2fa/verify', 'Auth\CheckpointController@verify2fa');
+    Route::get('2fa/verify', 'Auth\TwoFAController@showTwoFAVerifyForm')->name('2fa.verify');
+    Route::post('2fa/verify', 'Auth\TwoFAController@verifyTwoFA');
 });

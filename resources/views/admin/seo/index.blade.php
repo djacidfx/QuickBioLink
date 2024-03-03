@@ -1,13 +1,13 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('SEO Configurations'))
+@section('title', lang('SEO Configurations'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.seo.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.seo.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="alert d-flex align-items-center bg-label-info mb-3" role="alert">
         <span class="badge badge-center rounded-pill bg-info border-label-info p-3 me-2"><i class="fas fa-bell"></i></span>
         <div class="ps-1">
-            <span>{{admin_lang("Here you can setup your site's seo details for multiple languages.")}}</span>
+            <span>{{lang("Here you can setup your site's seo details for multiple languages.")}}</span>
         </div>
     </div>
     <div class="card">
@@ -16,9 +16,9 @@
                 <table id="basic_datatable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="tb-w-3x">{{ admin_lang('Language') }}</th>
-                            <th class="tb-w-20x">{{ admin_lang('Site title') }}</th>
-                            <th class="tb-w-7x">{{ admin_lang('Last Updated') }}</th>
+                            <th class="tb-w-3x">{{ lang('Language') }}</th>
+                            <th class="tb-w-20x">{{ lang('Site title') }}</th>
+                            <th class="tb-w-7x">{{ lang('Last Updated') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -30,11 +30,11 @@
                                 <td>{{ date_formating($configuration->updated_at) }}</td>
                                 <td>
                                     <div class="d-flex">
-                                        <a href="#" data-url="{{ route('admin.seo.edit', $configuration->id) }}" data-toggle="slidePanel" title="{{admin_lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon me-1"><i class="icon-feather-edit"></i></a>
-                                        <form class="d-inline" action="{{ route('admin.seo.destroy', $configuration->id) }}" method="POST" onsubmit='return confirm("{{admin_lang('Are you sure?')}}")'>
+                                        <a href="#" data-url="{{ route('admin.seo.edit', $configuration->id) }}" data-toggle="slidePanel" title="{{lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon me-1"><i class="icon-feather-edit"></i></a>
+                                        <form class="d-inline" action="{{ route('admin.seo.destroy', $configuration->id) }}" method="POST" onsubmit='return confirm("{{lang('Are you sure?')}}")'>
                                             @method('DELETE')
                                             @csrf
-                                            <button class="btn btn-icon btn-danger" title="{{admin_lang('Delete')}}" data-tippy-placement="top"><i
+                                            <button class="btn btn-icon btn-danger" title="{{lang('Delete')}}" data-tippy-placement="top"><i
                                                     class="icon-feather-trash-2"></i></button>
                                         </form>
                                     </div>

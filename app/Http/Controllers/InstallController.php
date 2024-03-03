@@ -47,8 +47,8 @@ class InstallController extends Controller
                 }
             } elseif (strtolower($type) == 'apache') {
                 foreach ($requirements[$type] as $extensions) {
-                    // Check if the function exists
-                    // Prevents from returning a false error
+
+
                     if (function_exists('apache_get_modules')) {
                         $results['extensions'][$type][$extensions] = true;
 
@@ -62,7 +62,6 @@ class InstallController extends Controller
             }
         }
 
-        // If the current php version doesn't meet the requirements
         if (version_compare(PHP_VERSION, config('install.php_version')) == -1) {
             $results['errors'] = true;
         }

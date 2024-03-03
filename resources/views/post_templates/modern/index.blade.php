@@ -44,7 +44,7 @@
                     @if ($bioLinks->count() > 0)
                         @php
                             $i = 0;
-                            $limit = subscription()->plan->settings->biolink_limit;
+                            $limit = $subscription->plan->settings->biolink_limit;
                         @endphp
                         <div class="mt-24">
                         @foreach ($bioLinks as $bioLink)
@@ -107,7 +107,7 @@
                 </div>
                 @php
                     $show = true;
-                    if(subscription($post->user)->plan->settings->hide_branding){
+                    if($subscription->plan->settings->hide_branding){
                         $show = (@$postOptions->bio_credit) ? true : false;
                     }
                 @endphp

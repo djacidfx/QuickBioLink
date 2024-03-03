@@ -9,7 +9,7 @@
                     <div class="d-flex flex-column align-items-center">
                         <h2>{{ $page->title }}</h2>
                         <ol class="breadcrumb text-grey-2">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home', 'pages') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home') }}</a></li>
                             <li class="breadcrumb-item active text-dark-1" aria-current="page">{{ $page->title }}</li>
                         </ol>
                     </div>

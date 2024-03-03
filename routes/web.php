@@ -43,20 +43,19 @@ Route::group(localize_options(), function () {
         Route::post('contact-us', 'contactSend')->name('contact')->middleware('disable.contact');
         Route::get('pricing', 'pricing')->name('pricing');
         Route::get('page/{slug}', 'page')->name('page');
+
+        if (env('APP_INSTALLED') && !settings('include_language_code')) {
+            Route::get('{lang}', 'localize')->where('lang', '^[a-z]{2}$')->name('localize');
+        }
     });
 
     Route::controller('BlogController')->middleware('disable.blog')->group(function () {
         Route::get('/blog', 'index')->name('blog.index');
         Route::get('blog/categories/{slug}', 'category')->name('blog.category');
         Route::get('blog/tags/{slug}', 'tag')->name('blog.tag');
-        Route::get('blog/articles', 'articles');
-        Route::get('blog/articles/{slug}', 'article');
-        Route::post('blog/articles/{slug}', 'comment')->name('blog.article');
+        Route::get('blog/{slug}', 'single');
+        Route::post('blog/{slug}', 'comment')->name('blog.article');
     });
-
-    if (env('APP_INSTALLED') && !settings('include_language_code')) {
-        Route::get('{lang}', 'LocaleController@localize')->where('lang', '^[a-z]{2}$')->name('localize');
-    }
 
     /* FRONTEND LOGIN REQUIRED */
     Route::group(['namespace' => 'User', 'middleware' => ['auth', 'verified', '2fa.verify']], function () {
@@ -81,12 +80,12 @@ Route::group(localize_options(), function () {
 
             Route::post('settings/change-password', 'changePassword')->name('changePassword');
 
-            Route::post('2fa/enable', 'towFactorEnable')->name('2fa.enable');
-            Route::post('2fa/disabled', 'towFactorDisable')->name('2fa.disable');
+            Route::post('2fa/enable', 'towFAEnable')->name('2fa.enable');
+            Route::post('2fa/disabled', 'towFADisable')->name('2fa.disable');
         });
 
 
-        Route::get('transactions', 'TransactionController@transactions')->name('transactions');
+        Route::get('transactions', 'TransactionController@index')->name('transactions');
         Route::get('invoice/{transaction}', 'TransactionController@invoice')->name('invoice');
 
         Route::get('subscription', 'SubscribeController@mySubscription')->name('subscription');
@@ -107,7 +106,7 @@ Route::group(localize_options(), function () {
     });
 
     /* ADMIN ROUTES */
-    Route::name('admin.')->prefix(admin_path())->namespace('Admin')->middleware(['admin', 'demo'])->group(function () {
+    Route::name('admin.')->prefix(admin_path())->namespace('Admin')->middleware(['admin', 'demo', '2fa.verify'])->group(function () {
 
         Route::redirect('/', 'admin/dashboard');
 
@@ -119,7 +118,7 @@ Route::group(localize_options(), function () {
         Route::controller('NotificationController')->group(function () {
             Route::get('/notifications', 'index')->name('notifications.index');
             Route::get('notifications/view/{id}', 'view')->name('notifications.view');
-            Route::get('notifications/readall', 'readAll')->name('notifications.readall');
+            Route::get('notifications/markasread', 'markAsRead')->name('notifications.markasread');
             Route::delete('notifications/deleteallread', 'deleteAllRead')->name('notifications.deleteallread');
         });
 
@@ -169,46 +168,38 @@ Route::group(localize_options(), function () {
 
         Route::resource('faqs', 'FaqController');
 
-        Route::controller('GatewayController')->group(function () {
-            Route::get('/gateways', 'index')->name('gateways.index');
-            Route::get('gateways/{gateway}/edit', 'edit')->name('gateways.edit');
-            Route::post('gateways/{gateway}', 'update')->name('gateways.update');
+        Route::controller('PaymentGatewayController')->group(function () {
+            Route::get('/payment-gateways', 'index')->name('gateways.index');
+            Route::get('payment-gateways/{gateway}/edit', 'edit')->name('gateways.edit');
+            Route::post('payment-gateways/{gateway}', 'update')->name('gateways.update');
         });
 
-        Route::controller('MailTemplateController')->group(function () {
-            Route::get('/mailtemplates', 'index')->name('mailtemplates.index');
-            Route::post('mailtemplates/settings/update', 'updateSettings')->name('mailtemplates.updateSettings');
-            Route::get('mailtemplates/{mailTemplate}/edit', 'edit')->name('mailtemplates.edit');
-            Route::post('mailtemplates/{mailTemplate}', 'update')->name('mailtemplates.update');
+        Route::controller('EmailTemplateController')->group(function () {
+            Route::get('/email-templates', 'index')->name('mailtemplates.index');
+            Route::get('email-templates/{mailTemplate}/edit', 'edit')->name('mailtemplates.edit');
+            Route::post('email-templates/{mailTemplate}', 'update')->name('mailtemplates.update');
         });
 
         Route::controller('LanguageController')->group(function () {
             Route::post('languages/reorder', 'reorder')->name('languages.reorder');
             Route::get('languages/translate/{code}', 'translate')->name('languages.translates');
-            Route::post('languages/translate/{code}/export', 'export')->name('languages.translates.export');
-            Route::post('languages/translate/{code}/import', 'import')->name('languages.translates.import');
             Route::post('languages/{id}/update', 'translateUpdate')->name('languages.translates.update');
-            Route::get('languages/translate/{code}/{group}', 'translate')->name('languages.translates.group');
         });
         Route::resource('languages', 'LanguageController');
 
         Route::get('settings', 'SettingsController@index')->name('settings.index');
         Route::post('settings', 'SettingsController@update')->name('settings.update');
 
-        Route::resource('seo', 'SeoController');
+        Route::resource('navigation/navbarMenu', 'NavbarMenuController');
+        Route::post('navigation/navbarMenu/nestable', 'NavbarMenuController@nestable')->name('navbarMenu.nestable');
 
-        Route::get('system-info', 'SystemInfoController@index')->name('systemInfo.index');
-        Route::post('system-info/cache', 'SystemInfoController@cache')->name('systemInfo.cache');
-
-        Route::resource('navigation/navbarMenu', 'Navigation\NavbarMenuController');
-        Route::post('navigation/navbarMenu/nestable', 'Navigation\NavbarMenuController@nestable')->name('navbarMenu.nestable');
-        Route::resource('navigation/footerMenu', 'Navigation\FooterMenuController');
-        Route::post('navigation/footerMenu/nestable', 'Navigation\FooterMenuController@nestable')->name('footerMenu.nestable');
+        Route::resource('navigation/footerMenu', 'FooterMenuController');
+        Route::post('navigation/footerMenu/nestable', 'FooterMenuController@nestable')->name('footerMenu.nestable');
 
         Route::group(['prefix' => 'blog', 'namespace' => 'Blog', 'middleware' => 'disable.blog'], function () {
-            Route::resource('articles', 'ArticleController');
-            Route::post('articles/delete', 'ArticleController@delete')->name('articles.delete');
-            Route::get('articles/categories/{lang}', 'ArticleController@getCategories');
+            Route::resource('articles', 'BlogController');
+            Route::post('articles/delete', 'BlogController@delete')->name('articles.delete');
+            Route::get('articles/categories/{lang}', 'BlogController@getCategories');
 
             Route::resource('categories', 'CategoryController');
             Route::post('categories/delete', 'CategoryController@delete')->name('categories.delete');
@@ -216,7 +207,6 @@ Route::group(localize_options(), function () {
             Route::get('comments', 'CommentController@index')->name('comments.index');
             Route::post('comments/delete', 'CommentController@delete')->name('comments.delete');
             Route::post('comments/{id}/update', 'CommentController@updateComment')->name('comments.update');
-            Route::delete('comments/{id}', 'CommentController@destroy')->name('comments.destroy');
         });
     });
 });

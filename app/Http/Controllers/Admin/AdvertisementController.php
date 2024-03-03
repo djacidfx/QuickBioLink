@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -18,7 +24,6 @@ class AdvertisementController extends Controller
             $columns = array(
                 'id',
                 'position',
-                'size',
                 'status',
                 'updated_at'
             );
@@ -43,20 +48,19 @@ class AdvertisementController extends Controller
             foreach ($advertisements as $row) {
 
                 if ($row->status){
-                    $status_badge = '<span class="badge bg-success">'.admin_lang('Enabled').'</span>';
+                    $status_badge = '<span class="badge bg-success">'.lang('Enabled').'</span>';
                 }else{
-                    $status_badge = '<span class="badge bg-danger">'.admin_lang('Disabled').'</span>';
+                    $status_badge = '<span class="badge bg-danger">'.lang('Disabled').'</span>';
                 }
 
                 $rows = array();
                 $rows[] = '<td>'.$row->id.'</td>';
                 $rows[] = '<td>'.$row->position.'</td>';
-                $rows[] = '<td>'.$row->size.'</td>';
                 $rows[] = '<td>'.$status_badge.'</td>';
                 $rows[] = '<td>'.date_formating($row->updated_at).'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="#" data-url="'.route('admin.advertisements.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="'.route('admin.advertisements.edit', $row->id).'" data-toggle="slidePanel" title="'.lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>';
                 $rows['DT_RowId'] = $row->id;
@@ -73,28 +77,35 @@ class AdvertisementController extends Controller
         }
 
         $headAd = Advertisement::where('key', 'head_code')->first();
-        return view('admin.advertisements.index', [
-            'headAd' => $headAd
-        ]);
+        return view('admin.advertisements.index', compact('headAd'));
     }
 
+    /**
+     * Display edit form
+     *
+     * @param Advertisement $advertisement
+     * @return \Illuminate\Contracts\View\View
+     */
     public function edit(Advertisement $advertisement)
     {
-        return view('admin.advertisements.edit', ['advertisement' => $advertisement]);
+        return view('admin.advertisements.edit', compact('advertisement'));
     }
 
+    /**
+     * Update a resource
+     *
+     * @param Request $request
+     * @param Advertisement $advertisement
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function update(Request $request, Advertisement $advertisement)
     {
-        if ($request->has('status') && is_null($request->code)) {
-            $result = array('success' => false, 'message' => admin_lang('Advertisement code cannot be empty'));
-            return response()->json($result, 200);
-        }
         $update = $advertisement->update([
-            'code' => $request->code,
             'status' => $request->status,
+            'code' => $request->code,
         ]);
         if ($update) {
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }

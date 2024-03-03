@@ -13,6 +13,32 @@ class Subscription extends Model
     public const STATUS_ACTIVE = 1;
     public const STATUS_CANCELLED = 0;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'user_id',
+        'plan_id',
+        'plan_settings',
+        'status',
+        'expiry_at',
+        'about_to_expire_reminder',
+        'expired_reminder',
+        'is_viewed',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'plan_settings' => 'object',
+        'expiry_at' => 'datetime',
+    ];
+
     public function scopeExpired($query)
     {
         $query->where('status', self::STATUS_ACTIVE)
@@ -22,7 +48,7 @@ class Subscription extends Model
     public function isExpired()
     {
         return $this->status == self::STATUS_ACTIVE &&
-        !$this->plan->isFree() && $this->expiry_at < Carbon::now();
+            !$this->plan->isFree() && $this->expiry_at < Carbon::now();
     }
 
     public function scopeIsAboutToExpire($query)
@@ -81,42 +107,6 @@ class Subscription extends Model
     {
         return $this->status == self::STATUS_CANCELLED;
     }
-
-    public function scopeAboutToExpireReminderNotSent($query)
-    {
-        return $query->where('about_to_expire_reminder', false);
-    }
-
-    public function scopeExpiredReminderNotSent($query)
-    {
-        return $query->where('expired_reminder', false);
-    }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'user_id',
-        'plan_id',
-        'plan_settings',
-        'status',
-        'expiry_at',
-        'about_to_expire_reminder',
-        'expired_reminder',
-        'is_viewed',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'plan_settings' => 'object',
-        'expiry_at' => 'datetime',
-    ];
 
     /**
      * Relationships

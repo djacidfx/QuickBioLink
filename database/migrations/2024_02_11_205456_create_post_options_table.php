@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('post_options', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->bigInteger('post_id');
+            $table->bigInteger('post_id')->index('post_id');
             $table->string('key')->nullable();
             $table->longText('value')->nullable();
         });

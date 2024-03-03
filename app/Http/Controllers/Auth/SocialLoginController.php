@@ -47,7 +47,7 @@ class SocialLoginController extends Controller
 
             } else {
                 if (!settings('enable_user_registration')) {
-                    quick_alert_error(lang('Registration is currently disabled.', 'auth'));
+                    quick_alert_error(lang('Registration is currently disabled.'));
                     return redirect()->route('login');
                 }
 
@@ -55,7 +55,8 @@ class SocialLoginController extends Controller
 
                 $ipInfo = user_ip_info();
 
-                $username = SlugService::createSlug(User::class, 'username', $user->getName());
+                $username = explode('@', $user->getEmail());
+                $username = SlugService::createSlug(User::class, 'username', $username[0]);
                 $username = str_replace('-','_', $username);
 
                 $new_user = User::create([
@@ -74,7 +75,7 @@ class SocialLoginController extends Controller
 
                 event(new Registered($new_user));
 
-                $title = $user->name . ' ' . admin_lang('has registered');
+                $title = $user->name . ' ' . lang('has registered');
                 $link = route('admin.users.edit', $new_user->id);
                 admin_notify($title, 'new_user', $link);
 

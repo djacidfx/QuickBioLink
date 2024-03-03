@@ -1,13 +1,6 @@
 @extends('admin.layouts.main')
 @section('title', 'Dashboard')
 @section('content')
-    @if (!$settings->smtp->status)
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            {{ admin_lang('SMTP is not enabled, set it now to be able to recover the password and use all the features that needs to send an email.') }}
-            <a href="{{ route('admin.settings.index') }}#quick_smtp">{{ admin_lang('Click Here') }}</a>
-        </div>
-    @endif
     <div class="row">
         <div class="col-sm-6 col-lg-3">
             <div class="card card-border-shadow-primary">
@@ -16,9 +9,9 @@
                         <div class="avatar me-2">
                             <span class="avatar-initial rounded bg-label-primary"><i class="fas fa-users"></i></span>
                         </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($widget['total_users']) }}</h4>
+                        <h4 class="ms-1 mb-0">{{ number_format($total_users) }}</h4>
                     </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Total Users') }}</p>
+                    <p class="mb-0 fs-6">{{ lang('Total Users') }}</p>
                 </div>
             </div>
         </div>
@@ -29,9 +22,9 @@
                         <div class="avatar me-2">
                             <span class="avatar-initial rounded bg-label-danger"><i class="fas fa-user-plus"></i></span>
                         </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($widget['current_month_users']) }}</h4>
+                        <h4 class="ms-1 mb-0">{{ number_format($current_month_users) }}</h4>
                     </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Current Month Users') }}</p>
+                    <p class="mb-0 fs-6">{{ lang('Current Month Users') }}</p>
                 </div>
             </div>
         </div>
@@ -43,9 +36,9 @@
                             <span class="avatar-initial rounded bg-label-warning"><i
                                     class="fas fa-money-bills"></i></span>
                         </div>
-                        <h4 class="ms-1 mb-0">{{ price_symbol_format($widget['total_earnings']) }}</h4>
+                        <h4 class="ms-1 mb-0">{{ price_symbol_format($total_earnings) }}</h4>
                     </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Total Earnings') }}</p>
+                    <p class="mb-0 fs-6">{{ lang('Total Earnings') }}</p>
                 </div>
             </div>
         </div>
@@ -56,9 +49,9 @@
                         <div class="avatar me-2">
                             <span class="avatar-initial rounded bg-label-info"><i class="far fa-money-bills"></i></span>
                         </div>
-                        <h4 class="ms-1 mb-0">{{ price_symbol_format($widget['current_month_earnings']) }}</h4>
+                        <h4 class="ms-1 mb-0">{{ price_symbol_format($current_month_earnings) }}</h4>
                     </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Current Month Earnings') }}</p>
+                    <p class="mb-0 fs-6">{{ lang('Current Month Earnings') }}</p>
                 </div>
             </div>
         </div>
@@ -68,7 +61,7 @@
         <div class="col-lg-8">
             <div class="quick-card card">
                 <div class="card-header">
-                    <h5>{{ admin_lang('Earnings Statistics') }}</h5>
+                    <h5>{{ lang('Earnings Statistics') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart quick-chart">
@@ -80,7 +73,7 @@
         <div class="col-lg-4">
             <div class="quick-card card">
                 <div class="card-header">
-                    <h5>{{ admin_lang('Weekly users') }}</h5>
+                    <h5>{{ lang('Weekly users') }}</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart quick-chart">
@@ -94,10 +87,10 @@
         <div class="col-md-8 col-12 mb-4">
             <div class="quick-card card mb-0 h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5>{{ admin_lang('Recent Registered') }}</h5>
+                    <h5>{{ lang('Recent Registered') }}</h5>
                     <div>
                         <a class="btn btn-sm btn-primary"
-                           href="{{ route('admin.users.index') }}">{{ admin_lang('View All') }}</a>
+                           href="{{ route('admin.users.index') }}">{{ lang('View All') }}</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -105,9 +98,9 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>{{ admin_lang('Name') }}</th>
-                                <th>{{ admin_lang('Email') }}</th>
-                                <th>{{ admin_lang('Date') }}</th>
+                                <th>{{ lang('Name') }}</th>
+                                <th>{{ lang('Email') }}</th>
+                                <th>{{ lang('Date') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -127,8 +120,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3">
-                                        @include('admin.includes.emptysmall')
+                                    <td colspan="3" class="text-center">
+                                        {{lang('No Data Found.')}}
                                     </td>
                                 </tr>
                             @endforelse
@@ -141,10 +134,10 @@
         <div class="col-md-4 col-12 mb-4">
             <div class="quick-card card mb-0 h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5>{{ admin_lang('Transactions') }}</h5>
+                    <h5>{{ lang('Transactions') }}</h5>
                     <div>
                         <a class="btn btn-sm btn-primary"
-                           href="{{ route('admin.transactions.index') }}">{{ admin_lang('View All') }}</a>
+                           href="{{ route('admin.transactions.index') }}">{{ lang('View All') }}</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -169,13 +162,13 @@
                                 <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                     <div class="me-2">
                                             @if ($transaction->type == 1)
-                                                <h6 class="mb-1">{{admin_lang('Subscribe')}}</h6>
+                                                <h6 class="mb-1">{{lang('Subscribe')}}</h6>
                                             @elseif ($transaction->type == 2)
-                                                <h6 class="mb-1">{{admin_lang('Renew')}}</h6>
+                                                <h6 class="mb-1">{{lang('Renew')}}</h6>
                                             @elseif ($transaction->type == 3)
-                                                <h6 class="mb-1">{{admin_lang('Upgrade')}}</h6>
+                                                <h6 class="mb-1">{{lang('Upgrade')}}</h6>
                                             @elseif ($transaction->type == 4)
-                                                <h6 class="mb-1">{{admin_lang('Downgrade')}}</h6>
+                                                <h6 class="mb-1">{{lang('Downgrade')}}</h6>
                                             @endif
 
                                             <small
@@ -187,7 +180,7 @@
                                 </div>
                             </li>
                         @empty
-                            @include('admin.includes.emptysmall')
+                            {{lang('No Data Found.')}}
                         @endforelse
                     </ul>
                 </div>
@@ -212,7 +205,7 @@
                 data: {
                     labels: @json($earningData['labels']),
                     datasets: [{
-                        label: @json(admin_lang('Earnings')),
+                        label: @json(lang('Earnings')),
                         data: @json($earningData['data']),
                         fill: true,
                         backgroundColor: '#d3f5d8',
@@ -287,7 +280,7 @@
                 data: {
                     labels: @json($usersData['labels']),
                     datasets: [{
-                        label: @json(admin_lang('Users')),
+                        label: @json(lang('Users')),
                         fill: true,
                         data: @json($usersData['data']),
                         backgroundColor: '#bdc4f3',

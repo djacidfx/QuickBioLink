@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('mail_templates', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lang', 3)->index('mail_templates_lang_foreign');
+            $table->string('lang', 3)->index('lang');
             $table->string('key');
             $table->string('name');
             $table->string('subject');

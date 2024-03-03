@@ -1,5 +1,5 @@
 @extends($activeTheme.'layouts.auth')
-@section('title', lang('Reset Password', 'auth'))
+@section('title', lang('Reset Password'))
 @section('content')
     <div class="container vh-100 py-10 login-wrapper">
         <div class="row align-items-center justify-content-center h-100">
@@ -11,18 +11,18 @@
                     </a>
                 </div>
                 <div class="card">
-                    <h2 class="text-center font-25 mb-30">{{ lang('Reset Password', 'auth') }}</h2>
+                    <h2 class="text-center font-25 mb-30">{{ lang('Reset Password') }}</h2>
                     <form action="{{ route('password.email') }}" method="POST">
                         @csrf
                         <div class="form-group mt-16">
-                            <label class="form-label">{{ lang('Email address', 'forms') }} *</label>
+                            <label class="form-label">{{ lang('Email address') }} *</label>
                             <input type="email" name="email" class="form-control form-control-md"
                                    value="{{ old('email') }}"
-                                   placeholder="{{ lang('Email address', 'forms') }}" required/>
+                                   placeholder="{{ lang('Email address') }}" required/>
                         </div>
                         {!! display_captcha() !!}
                         <button type="submit"
-                                class="button bg-primary text-white mt-20 w-100 rounded-pill -h-48">{{ lang('Reset', 'auth') }}</button>
+                                class="button bg-primary text-white mt-20 w-100 rounded-pill -h-48">{{ lang('Reset') }}</button>
                     </form>
                 </div>
                 <p class="text-center">&copy; <span>{{date("Y")}}</span>

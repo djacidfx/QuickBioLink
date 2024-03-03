@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogArticle;
-use App\Models\Feature;
 use App\Models\Language;
 use App\Models\MailTemplate;
-use App\Models\PlanOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Validator;
@@ -49,27 +47,27 @@ class LanguageController extends Controller
                 $rows = array();
 
                 if($row->active == 1){
-                    $status_badge = '<span class="badge bg-success">'.admin_lang('Active').'</span>';
+                    $status_badge = '<span class="badge bg-success">'.lang('Active').'</span>';
                 } else{
-                    $status_badge = '<span class="badge bg-danger">'.admin_lang('Disabled').'</span>';
+                    $status_badge = '<span class="badge bg-danger">'.lang('Disabled').'</span>';
                 }
 
                 if ($row->code != env('DEFAULT_LANGUAGE')) {
 
-                    $delete_button = '<form class="d-inline" action="'.route('admin.languages.destroy', $row->id).'" method="POST" onsubmit=\'return confirm("'.admin_lang('Are you sure?').'")\'>
+                    $delete_button = '<form class="d-inline" action="'.route('admin.languages.destroy', $row->id).'" method="POST" onsubmit=\'return confirm("'.lang('Are you sure?').'")\'>
                                     '.method_field('DELETE').'
                                     '.csrf_field().'
-                                <button class="btn btn-icon btn-danger ms-1" title="'.admin_lang('Delete').'" data-tippy-placement="top"><i class="icon-feather-trash-2"></i ></button>
+                                <button class="btn btn-icon btn-danger ms-1" title="'.lang('Delete').'" data-tippy-placement="top"><i class="icon-feather-trash-2"></i ></button>
                             </form>';
 
                 }else{
                     $delete_button = '';
                 }
 
-                $default = env('DEFAULT_LANGUAGE') == $row->code ? admin_lang('(Default)') : "";
+                $default = env('DEFAULT_LANGUAGE') == $row->code ? lang('(Default)') : "";
 
                 $rows[] = '<td><i class="icon-feather-menu quick-reorder-icon"
-                                       title="' . admin_lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
+                                       title="' . lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
                 $rows[] = '<td><img class="flag" src="'.asset('storage/flags/'.$row->flag).'" alt="'.$row->name.'" width="25" height="25">
                             '.$row->name.'
                             <small class="text-muted">'.$default.'</small>
@@ -77,9 +75,9 @@ class LanguageController extends Controller
                 $rows[] = '<td>'.$status_badge.'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                <a href="#" data-url="'.route('admin.languages.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-default btn-icon me-1" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                <a href="#" data-url="'.route('admin.languages.edit', $row->id).'" data-toggle="slidePanel" title="'.lang('Edit').'" class="btn btn-default btn-icon me-1" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 <a href="'.route('admin.languages.translates', $row->code).'"
-                            class="btn btn-icon btn-info" title="'.admin_lang('Translate').'" data-tippy-placement="top"><i class="icon-feather-globe"></i></a>
+                            class="btn btn-icon btn-info" title="'.lang('Translate').'" data-tippy-placement="top"><i class="icon-feather-globe"></i></a>
                                     '.$delete_button.'
                                 </div>
 
@@ -101,7 +99,202 @@ class LanguageController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.languages.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:150'],
+            'code' => ['required', 'string', 'max:10', 'min:2', 'unique:languages'],
+            'direction' => ['required', 'integer', 'max:2'],
+            'flag' => ['required', 'image', 'mimes:png,jpg,jpeg'],
+        ]);
+        $errors = [];
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
+                $errors[] = $error;
+            }
+            $result = array('success' => false, 'message' => implode('<br>', $errors));
+            return response()->json($result, 200);
+        }
+
+        $request->code = trim($request->code);
+
+        if (!array_key_exists($request->code, config('languages'))) {
+            $result = array('success' => false, 'message' => lang('Language code not supported'));
+            return response()->json($result, 200);
+        }
+
+        $error = false;
+
+        /* Create language file */
+        try {
+            $defaultLanguage = env('DEFAULT_LANGUAGE');
+            $langPath = base_path('lang/');
+            if (!File::exists($langPath . $request->code)) {
+
+                File::makeDirectory($langPath . $request->code);
+                $defaultFiles = File::allFiles($langPath . $defaultLanguage);
+                foreach ($defaultFiles as $file) {
+                    $newFile = $langPath . $request->code . '/' . $file->getFilename();
+                    if (!File::exists($newFile)) {
+                        File::copy($file, $newFile);
+                    }
+                }
+            }
+        } catch (\Exception$e) {
+            $error = $e->getMessage();
+        }
+
+        if (!$error) {
+            $flag = image_upload($request->file('flag'), 'storage/flags/', null, $request->code);
+            if ($flag) {
+
+                $language = Language::create([
+                    'name' => $request->name,
+                    'code' => $request->code,
+                    'direction' => $request->direction,
+                    'flag' => $flag,
+                    'position' => Language::get()->count() + 1,
+                ]);
+
+                if ($language) {
+                    if ($request->get('is_default')) {
+                        set_env('DEFAULT_LANGUAGE', $language->code);
+                    }
+
+                    /* Create mail templates for the new language */
+                    $templates = MailTemplate::where('lang', env('DEFAULT_LANGUAGE'))->get();
+                    foreach ($templates as $template) {
+                        $newTemplate = new MailTemplate();
+                        $newTemplate->key = $template->key;
+                        $newTemplate->name = $template->name;
+                        $newTemplate->subject = $template->subject;
+                        $newTemplate->body = $template->body;
+                        $newTemplate->shortcodes = $template->shortcodes;
+                        $newTemplate->status = $template->status;
+                        $newTemplate->lang = $language->code;
+                        $newTemplate->save();
+                    }
+
+                    $result = array('success' => true, 'message' => lang('Created Successfully'));
+                    return response()->json($result, 200);
+                }
+            }
+        } else {
+            quick_alert_error($error);
+            return back();
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param \App\Models\BlogArticle $article
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Language $language)
+    {
+        return view('admin.languages.edit', compact('language'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Language $language
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Language $language)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:150'],
+            'direction' => ['required', 'integer', 'max:2'],
+            'flag' => ['nullable', 'image', 'mimes:png,jpg,jpeg'],
+            'active' => ['required', 'boolean'],
+        ]);
+        $errors = [];
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
+                $errors[] = $error;
+            }
+            $result = array('success' => false, 'message' => implode('<br>', $errors));
+            return response()->json($result, 200);
+        }
+
+        if (!$request->get('is_default') || !$request->get('active')) {
+            if ($language->code == env('DEFAULT_LANGUAGE')) {
+                $result = array('success' => false, 'message' => $language->name . ' ' . lang('is the default language'));
+                return response()->json($result, 200);
+            }
+        }
+
+        if ($request->has('flag') && $request->flag != null) {
+            $flag = image_upload($request->file('flag'), 'storage/flags/', null, $language->code, $language->flag);
+        } else {
+            $flag = $language->flag;
+        }
+
+        if ($flag) {
+            $update = $language->update([
+                'name' => $request->name,
+                'direction' => $request->direction,
+                'active' => $request->active,
+                'flag' => $flag,
+            ]);
+            if ($update) {
+                if ($request->get('is_default') && $request->get('active')) {
+                    set_env('DEFAULT_LANGUAGE', $language->code);
+                }
+
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
+                return response()->json($result, 200);
+            }
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
+     *
+     * @param Language $language
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function destroy(Language $language)
+    {
+        if ($language->code == env('DEFAULT_LANGUAGE')) {
+            quick_alert_error(lang('You can not delete the default language.'));
+            return back();
+        }
+
+        /* Delete articles of this language */
+        $articles = BlogArticle::where('lang', $language->code)->get();
+        foreach ($articles as $article) {
+            remove_file('storage/blog/articles/'.$article->image);
+            $article->delete();
+        }
+
+        if (File::deleteDirectory(base_path('lang/' . $language->code))) {
+            $language->delete();
+            quick_alert_success(lang('Deleted Successfully'));
+            return back();
+        }
+    }
+
+    /**
+     * Reorder resources
      *
      * @param  \App\Models\PlanOption $planoption
      * @return \Illuminate\Http\Response
@@ -118,289 +311,86 @@ class LanguageController extends Controller
                 $count++;
             }
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             }
         }
 
-        $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+        $result = array('success' => true, 'message' => lang('Updated Successfully'));
         return response()->json($result, 200);
     }
 
-    public function create()
-    {
-        return view('admin.languages.create');
-    }
-
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:150'],
-            'flag' => ['required', 'image', 'mimes:png,jpg,jpeg'],
-            'code' => ['required', 'string', 'max:10', 'min:2', 'unique:languages'],
-            'direction' => ['required', 'integer', 'max:2'],
-        ]);
-        $errors = [];
-        if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $error) {
-                $errors[] = $error;
-            }
-            $result = array('success' => false, 'message' => implode('<br>', $errors));
-            return response()->json($result, 200);
-        }
-
-        $request->code = trim($request->code);
-
-        if (!array_key_exists($request->code, languages())) {
-            $result = array('success' => false, 'message' => admin_lang('Language code not supported'));
-            return response()->json($result, 200);
-        }
-        $createNewLanguageFiles = $this->createNewLanguageFiles($request->code);
-        if ($createNewLanguageFiles == "success") {
-            $flag = image_upload($request->file('flag'), 'storage/flags/', null, $request->code);
-            if ($flag) {
-                $stortId = Language::get()->count() + 1;
-                $language = Language::create([
-                    'name' => $request->name,
-                    'flag' => $flag,
-                    'code' => $request->code,
-                    'direction' => $request->direction,
-                    'position' => $stortId,
-                ]);
-                if ($language) {
-                    $mailTemplates = MailTemplate::where('lang', env('DEFAULT_LANGUAGE'))->get();
-                    foreach ($mailTemplates as $mailTemplate) {
-                        $newMailTemplate = new MailTemplate();
-                        $newMailTemplate->lang = $language->code;
-                        $newMailTemplate->key = $mailTemplate->key;
-                        $newMailTemplate->name = $mailTemplate->name;
-                        $newMailTemplate->subject = $mailTemplate->subject;
-                        $newMailTemplate->body = $mailTemplate->body;
-                        $newMailTemplate->shortcodes = $mailTemplate->shortcodes;
-                        $newMailTemplate->status = $mailTemplate->status;
-                        $newMailTemplate->save();
-                    }
-                    if ($request->get('is_default')) {
-                        set_env('DEFAULT_LANGUAGE', $language->code);
-                    }
-                    $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
-                    return response()->json($result, 200);
-                }
-            }
-        } else {
-            quick_alert_error($createNewLanguageFiles);
-            return back();
-        }
-    }
-
-    public function translate(Request $request, $code, $group = null)
+    /**
+     * Display translate page
+     *
+     * @param Request $request
+     * @param $code
+     * @return \Illuminate\Http\Response
+     */
+    public function translate(Request $request, $code)
     {
         $language = Language::where('code', $code)->firstOrFail();
-        $groups = array_map(function ($file) {
+
+        $lang = array_map(function ($file) {
             return pathinfo($file)['filename'];
         }, File::files(base_path('lang/' . $language->code)));
-        $active = $group ?? 'general';
-        $translates = trans($active, [], $language->code);
-        usort($groups, function ($a, $b) {
-            if (strpos($a, 'general') !== false && strpos($b, 'general') === false) {
-                return -1;
-            } else if (strpos($a, 'general') === false && strpos($b, 'general') !== false) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        $defaultLanguage = trans($active, [], env('DEFAULT_LANGUAGE'));
-        return view('admin.languages.translate', [
-            'active' => $active,
-            'groups' => $groups,
-            'translates' => $translates,
-            'language' => $language,
-            'defaultLanguage' => $defaultLanguage,
-        ]);
+
+        $translates = $defaultLanguage = [];
+        foreach ($lang as $l_file){
+            $trans = [];
+            $trans = array_merge($trans, trans($l_file, [], $language->code));
+
+            $defaultTrans = [];
+            $defaultTrans = array_merge($defaultTrans, trans($l_file, [], env('DEFAULT_LANGUAGE')));
+
+            $translates[$l_file] = $trans;
+            $defaultLanguage[$l_file] = $defaultTrans;
+        }
+
+        return view('admin.languages.translate', compact('translates', 'language', 'defaultLanguage'));
     }
 
+    /**
+     * Update translation
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function translateUpdate(Request $request, $id)
     {
         $language = Language::where('id', $id)->firstOrFail();
-        $languageGroupFile = base_path('lang/' . $language->code . '/' . $request->group . '.php');
-        if (!file_exists($languageGroupFile)) {
-            quick_alert_error(admin_lang('Language group file not exists'));
-            return back();
-        }
-        $translations = include $languageGroupFile;
-        foreach ($request->translates as $key1 => $value1) {
-            if (is_array($value1)) {
-                foreach ($value1 as $key2 => $value2) {
-                    if (!array_key_exists($key2, $value1)) {
-                        quick_alert_error(admin_lang('Translations error'));
+
+        foreach ($request->translates as $file => $trans) {
+
+            $languageGroupFile = base_path('lang/' . $language->code . '/' . $file . '.php');
+            if (!file_exists($languageGroupFile)) {
+                quick_alert_error(lang('Language file not exists'));
+                return back();
+            }
+            $translations = include $languageGroupFile;
+
+            foreach ($trans as $key1 => $value1) {
+                if (is_array($value1)) {
+                    foreach ($value1 as $key2 => $value2) {
+                        if (!array_key_exists($key2, $value1)) {
+                            quick_alert_error(lang('Language key not exists'). ' ' .$key2);
+                            return back();
+                        }
+                    }
+                } else {
+                    if (!array_key_exists($key1, $translations)) {
+                        quick_alert_error(lang('Language key not exists'). ' ' .$key1);
                         return back();
                     }
                 }
-            } else {
-                if (!array_key_exists($key1, $translations)) {
-                    quick_alert_error(admin_lang('Translations error ' . $key1));
-                    return back();
-                }
             }
+
+            $fileContent = "<?php \n return " . var_export($trans, true) . ";";
+            File::put($languageGroupFile, $fileContent);
         }
-        $fileContent = "<?php \n return " . var_export($request->translates, true) . ";";
-        File::put($languageGroupFile, $fileContent);
-        quick_alert_success(admin_lang('Updated Successfully'));
+
+        quick_alert_success(lang('Updated Successfully'));
         return back();
-    }
-
-    public function edit(Language $language)
-    {
-        return view('admin.languages.edit', ['language' => $language]);
-    }
-
-    public function update(Request $request, Language $language)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:150'],
-            'flag' => ['nullable', 'image', 'mimes:png,jpg,jpeg'],
-            'direction' => ['required', 'integer', 'max:2'],
-            'active' => ['required', 'boolean'],
-        ]);
-        $errors = [];
-        if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $error) {
-                $errors[] = $error;
-            }
-            $result = array('success' => false, 'message' => implode('<br>', $errors));
-            return response()->json($result, 200);
-        }
-        if (!$request->get('is_default') || !$request->get('active')) {
-            if ($language->code == env('DEFAULT_LANGUAGE')) {
-                $result = array('success' => false, 'message' => $language->name . ' ' . admin_lang('is the default language'));
-                return response()->json($result, 200);
-            }
-        }
-        if ($request->has('flag') && $request->flag != null) {
-            $flag = image_upload($request->file('flag'), 'storage/flags/', null, $language->code, $language->flag);
-        } else {
-            $flag = $language->flag;
-        }
-        if ($flag) {
-            $updateLanguage = $language->update([
-                'name' => $request->name,
-                'flag' => $flag,
-                'direction' => $request->direction,
-                'active' => $request->active,
-            ]);
-            if ($updateLanguage) {
-                if ($request->get('is_default') && $request->get('active')) {
-                    set_env('DEFAULT_LANGUAGE', $language->code);
-                }
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
-                return response()->json($result, 200);
-            }
-        }
-    }
-
-    public function destroy(Language $language)
-    {
-        if ($language->code == env('DEFAULT_LANGUAGE')) {
-            quick_alert_error(admin_lang('Default language cannot be deleted'));
-            return back();
-        }
-        $articles = BlogArticle::where('lang', $language->code)->get();
-        if ($articles->count() > 0) {
-            foreach ($articles as $article) {
-                remove_file('storage/blog/articles/'.$article->image);
-            }
-        }
-
-        $deleteLanguageFiles = File::deleteDirectory(base_path('lang/' . $language->code));
-        if ($deleteLanguageFiles) {
-            $language->delete();
-            quick_alert_success(admin_lang('Deleted Successfully'));
-            return back();
-        }
-    }
-
-    public function export(Request $request, $code)
-    {
-        $language = Language::where('code', $code)->firstOrFail();
-        if (!class_exists('ZipArchive')) {
-            quick_alert_error(admin_lang('ZipArchive extension is not enabled'));
-            return back();
-        }
-        $languagePath = base_path('lang/' . $language->code);
-        if (!is_dir($languagePath)) {
-            quick_alert_error(admin_lang('Language files not exists'));
-            return back();
-        }
-        $zip = new \ZipArchive;
-        $zipFile = $language->code . '_language.zip';
-        if ($zip->open($zipFile, \ZipArchive::CREATE) === true) {
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($languagePath), \RecursiveIteratorIterator::LEAVES_ONLY);
-            foreach ($files as $name => $file) {
-                if (!$file->isDir()) {
-                    $filePath = $file->getRealPath();
-                    $relativePath = substr($filePath, strlen($languagePath) + 1);
-                    $zip->addFile($filePath, $relativePath);
-                }
-            }
-            $zip->close();
-            return response()->download($zipFile)->deleteFileAfterSend(true);
-        }
-    }
-
-    public function import(Request $request, $code)
-    {
-        $language = Language::where('code', $code)->firstOrFail();
-        if (!class_exists('ZipArchive')) {
-            quick_alert_error(admin_lang('ZipArchive extension is not enabled'));
-            return back();
-        }
-        $file = $request->file('language_file');
-        if ($file->getClientOriginalExtension() != "zip") {
-            quick_alert_error(admin_lang('File type not allowed'));
-            return back();
-        }
-        $zip = new \ZipArchive;
-        $res = $zip->open($file->getRealPath());
-        if ($res === true) {
-            for ($i = 0; $i < $zip->numFiles; $i++) {
-                $entry = $zip->getNameIndex($i);
-                if (pathinfo($entry, PATHINFO_EXTENSION) != 'php') {
-                    quick_alert_error(admin_lang('Invalid language files'));
-                    return back();
-                }
-            }
-            $langPath = base_path('lang/' . $language->code);
-            remove_directory($langPath);
-            make_directory($langPath);
-            $zip->extractTo($langPath);
-            $zip->close();
-            quick_alert_success(admin_lang('Language imported successfully'));
-            return back();
-        } else {
-            quick_alert_error(admin_lang('Failed to import language'));
-            return back();
-        }
-    }
-
-    protected function createNewLanguageFiles($newLanguageCode)
-    {
-        try {
-            $defaultLanguage = env('DEFAULT_LANGUAGE');
-            $langPath = base_path('lang/');
-            if (!File::exists($langPath . $newLanguageCode)) {
-                File::makeDirectory($langPath . $newLanguageCode);
-                $defaultLanguageFiles = File::allFiles($langPath . $defaultLanguage);
-                foreach ($defaultLanguageFiles as $file) {
-                    $newFile = $langPath . $newLanguageCode . '/' . $file->getFilename();
-                    if (!File::exists($newFile)) {
-                        File::copy($file, $newFile);
-                    }
-                }
-            }
-            return "success";
-        } catch (\Exception$e) {
-            return $e->getMessage();
-        }
     }
 }

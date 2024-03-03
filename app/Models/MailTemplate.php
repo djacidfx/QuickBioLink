@@ -16,11 +16,6 @@ class MailTemplate extends Model
         'email_verification',
     ];
 
-    public function undisable()
-    {
-        return in_array($this->alias, self::UNDISABLE_TEMPLATES);
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -41,6 +36,11 @@ class MailTemplate extends Model
     protected $casts = [
         'shortcodes' => 'object',
     ];
+
+    public function undisable()
+    {
+        return in_array($this->alias, self::UNDISABLE_TEMPLATES);
+    }
 
     /**
      * Relationships

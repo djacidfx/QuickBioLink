@@ -10,27 +10,35 @@ use Str;
 
 class TransactionController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
     }
 
-    protected function user()
+    /**
+     * Display the page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function index()
     {
-        return user_auth_info();
-    }
-
-    public function transactions()
-    {
-        $transactions = Transaction::where('user_id', $this->user()->id)->whereIn('status', [2, 3])->orderbyDesc('id')->get();
+        $transactions = Transaction::where('user_id', user_auth_info()->id)->whereIn('status', [2, 3])->orderbyDesc('id')->get();
         return view($this->activeTheme.'.user.transactions', ['transactions' => $transactions]);
     }
 
+    /**
+     * Display the invoice
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function invoice(Transaction $transaction)
     {
         abort_if($transaction->isPending() || $transaction->isUnpaid() || $transaction->total == 0, 404);
 
-        if($this->user()->user_type != 'admin' && $transaction->user_id != $this->user()->id){
+        if(user_auth_info()->user_type != 'admin' && $transaction->user_id != user_auth_info()->id){
             abort(404);
         }
 

@@ -7,10 +7,14 @@ use App\Models\Testimonial;
 use Validator;
 use Illuminate\Http\Request;
 
-// use Illuminate\Support\Facades\Validator as FacadesValidator;
-
 class TestimonialController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -53,7 +57,7 @@ class TestimonialController extends Controller
                             </td>';
                 $rows[] = '<td>
                             <div class="d-flex">
-                                <button data-url=" ' . route('admin.testimonials.edit', $row->id) . '" data-toggle="slidePanel" title="' . admin_lang('Edit') . '" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></button>
+                                <button data-url=" ' . route('admin.testimonials.edit', $row->id) . '" data-toggle="slidePanel" title="' . lang('Edit') . '" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></button>
                             </div>
                             </td>';
                 $rows[] = '<td>
@@ -74,22 +78,33 @@ class TestimonialController extends Controller
             );
             return response()->json($json_data, 200);
         }
-        $admins = Testimonial::where('name', '!=');
-        return view('admin.testimonials.index', ['admins' => $admins]);
+
+        return view('admin.testimonials.index');
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('admin.testimonials.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'image' => ['image', 'mimes:png,jpg,jpeg'],
             'name' => ['required', 'string', 'max:255'],
             'designation' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string', 'max:255'],
+            'image' => ['image', 'mimes:png,jpg,jpeg'],
         ]);
         $errors = [];
         if ($validator->fails()) {
@@ -99,11 +114,13 @@ class TestimonialController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
+
         if ($request->has('image') && !empty($request->image)) {
             $uploadAvatar = image_upload($request->file('image'), 'storage/testimonials/', '110x110');
         } else {
             $uploadAvatar = 'default.png';
         }
+
         $create = Testimonial::create([
             'name' => $request->name,
             'content' => $request->content,
@@ -111,31 +128,51 @@ class TestimonialController extends Controller
             'image' => $uploadAvatar,
             'translations' => $request->translations,
         ]);
+
         if ($create) {
-            $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
+            $result = array('success' => true, 'message' => lang('Created Successfully'));
             return response()->json($result, 200);
         }
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Tax  $tax
+     * @return \Illuminate\Http\Response
+     */
     public function edit(testimonial $testimonial)
     {
-        return view('admin.testimonials.edit')->with('testimonial', $testimonial);
+        return view('admin.testimonials.edit', compact('testimonial'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tax  $tax
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, testimonial $testimonial)
     {
-        // For validation
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'designation' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string', 'max:255'],
-
+            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg'],
         ]);
 
+        $errors = [];
+        if ($validator->fails()) {
+            foreach ($validator->errors()->all() as $error) {
+                $errors[] = $error;
+            }
+            $result = array('success' => false, 'message' => implode('<br>', $errors));
+            return response()->json($result, 200);
+        }
+
         if ($request->has('image') && $request->image != null) {
-            $validator = Validator::make($request->all(), [
-                'image' => ['image', 'mimes:png,jpg,jpeg'],
-            ]);
             if ($testimonial->image == 'default.png') {
                 $uploadAvatar = image_upload($request->file('image'), 'storage/testimonials/', '110x110');
             } else {
@@ -145,33 +182,23 @@ class TestimonialController extends Controller
             $uploadAvatar = $testimonial->image;
         }
 
-        $errors = [];
-        if ($validator->fails()) {
-            foreach ($validator->errors()->all() as $error) {
-                $errors[] = $error;
-            }
-            $result = array('success' => false, 'message' => implode('<br>', $errors));
-            return response()->json($result, 200);
-        }
-
         $update = $testimonial->update([
             'name' => $request->name,
             'designation' => $request->designation,
             'content' => $request->content,
             'image' => $uploadAvatar,
             'translations' => $request->translations,
-
         ]);
         if ($update) {
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove multiple resources from storage.
      *
-     * @param  \App\Models\testimonial  $testm
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request)
@@ -184,7 +211,8 @@ class TestimonialController extends Controller
             }
         }
         Testimonial::whereIn('id', $ids)->delete();
-        $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+
+        $result = array('success' => true, 'message' => lang('Deleted Successfully'));
         return response()->json($result, 200);
     }
 }

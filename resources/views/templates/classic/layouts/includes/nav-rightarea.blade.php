@@ -28,15 +28,15 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
                 @if(user_auth_info()->user_type == 'admin')
-                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}" target="_blank"><i class="fa-regular fa-user-tie-hair mr-5"></i> {{ lang('Admin', 'account') }}</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}" target="_blank"><i class="fa-regular fa-user-tie-hair mr-5"></i> {{ lang('Admin') }}</a></li>
                     <div class="dropdown-divider"></div>
                 @endif
-                <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fa-regular fa-home mr-5"></i> {{ lang('Dashboard', 'account') }}</a></li>
-                <li><a class="dropdown-item" href="{{ route('subscription') }}"><i class="fa-regular fa-gem mr-5"></i> {{ lang('My Subscription', 'account') }}</a></li>
-                <li><a class="dropdown-item" href="{{ route('transactions') }}"><i class="fa-regular fa-receipt mr-5"></i> {{ lang('Transactions', 'account') }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="fa-regular fa-home mr-5"></i> {{ lang('Dashboard') }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('subscription') }}"><i class="fa-regular fa-gem mr-5"></i> {{ lang('My Subscription') }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('transactions') }}"><i class="fa-regular fa-receipt mr-5"></i> {{ lang('Transactions') }}</a></li>
                 <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fa-regular fa-cog mr-5"></i> {{ lang('Settings', 'account') }}</a></li>
-                <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa-regular fa-right-from-bracket mr-5"></i> {{ lang('Logout', 'auth') }}</a></li>
+                <li><a class="dropdown-item" href="{{ route('settings') }}"><i class="fa-regular fa-cog mr-5"></i> {{ lang('Settings') }}</a></li>
+                <li><a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa-regular fa-right-from-bracket mr-5"></i> {{ lang('Logout') }}</a></li>
             </ul>
         </div>
         <form id="logout-form" class="d-inline" action="{{ route('logout') }}" method="POST">
@@ -49,10 +49,10 @@
         <!--/ # When user logout or new user login signup button-->
             <div class="d-flex justify-content-center d-none d-md-flex">
                 <a href="{{ route('login') }}"
-                   class="ml-16 button -secondary text-dark-1 px-15 rounded-pill fw-semibold font-16">{{ lang('Log in', 'auth') }}
+                   class="ml-16 button -secondary text-dark-1 px-15 rounded-pill fw-semibold font-16">{{ lang('Log in') }}
                 </a>
                 <a href="{{ route('register') }}"
-                   class="ml-16 button bg-primary text-white px-15 rounded-pill fw-semibold font-16">{{ lang('Sign up', 'auth') }}
+                   class="ml-16 button bg-primary text-white px-15 rounded-pill fw-semibold font-16">{{ lang('Sign up') }}
                 </a>
             </div>
             <!--/ # When user logout or new user login signup button-->

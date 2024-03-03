@@ -11,13 +11,13 @@
                     <div class="col-lg-8 col-xxl-7 mx-auto position-relative">
                         <div>
                             <h1 class="display-1 sm-font-50 md-font-60 mb-24 fw-bold text-white">
-                                {{ lang('Biolinks in Seconds', 'dashboard')  }}
+                                {{ lang('Biolinks in Seconds')  }}
                             </h1>
-                            <p class="lead font-18 mb-24 text-light-3">{{ lang("Make everything you promote on social searchable to help your followers find exactly what they're looking for. It’s easier than you think.", 'dashboard')  }}</p>
+                            <p class="lead font-18 mb-24 text-light-3">{{ lang("Make everything you promote on social searchable to help your followers find exactly what they're looking for. It’s easier than you think.")  }}</p>
                         </div>
                         <div class="d-flex justify-content-center " data-cues="slideInDown" data-delay="600">
                             <div class="position-relative">
-                                <a href="{{ route('register') }}" class="button -primary h-48-px transform-none"><i class="fa-solid fa-stars mr-5"></i> {{ lang('Get Started', 'dashboard')  }}
+                                <a href="{{ route('register') }}" class="button -primary h-48-px transform-none"><i class="fa-solid fa-stars mr-5"></i> {{ lang('Get Started')  }}
                                 </a>
                             </div>
                         </div>
@@ -64,12 +64,12 @@
                     <div class="col-lg-7 col-xl-6 d-none d-lg-block">
                         <div class="position-relative mb-35 sm-mb-0 wow fadeInRight" data-wow-delay="300ms">
                             <div class="cta-widget item-box">
-                                <h5 class="title mb-20"><span class="text-primary fw-semibold underbrush">{{ lang('Embed', 'dashboard')  }}</span>
-                                    {{ lang('Your Favorite Apps', 'dashboard')  }}</h5>
+                                <h5 class="title mb-20"><span class="text-primary fw-semibold underbrush">{{ lang('Embed')  }}</span>
+                                    {{ lang('Your Favorite Apps')  }}</h5>
                                 <div class="d-flex  justify-content-between align-items-center bg-white py-2 px-3 border text-border-1 rounded-3 mb-16">
                                     <div class="d-flex align-items-center">
                                         <span class="pr-20 text-facebook"><i class="fa-brands fa-facebook"></i></span>
-                                        <div class="text-capitalize font-16">{{ lang('Facebook', 'dashboard')  }}</div>
+                                        <div class="text-capitalize font-16">{{ lang('Facebook')  }}</div>
                                     </div>
                                     <div class="drag-handle cursor-grab">
                                         <i class="fa-solid fa-grip-dots-vertical font-30 text-light-3"></i>
@@ -78,7 +78,7 @@
                                 <div class="d-flex  justify-content-between align-items-center bg-white py-2 px-3 border text-border-1 rounded-3 mb-16">
                                     <div class="d-flex align-items-center">
                                         <span class="pr-20 text-instagram"><i class="fa-brands fa-instagram"></i></span>
-                                        <div class="text-capitalize font-16">{{ lang('Instagram', 'dashboard')  }}</div>
+                                        <div class="text-capitalize font-16">{{ lang('Instagram')  }}</div>
                                     </div>
                                     <div class="drag-handle cursor-grab">
                                         <i class="fa-solid fa-grip-dots-vertical font-30 text-light-3"></i>
@@ -87,7 +87,7 @@
                                 <div class="d-flex  justify-content-between align-items-center bg-white py-2 px-3 border text-border-1 rounded-3 mb-16">
                                     <div class="d-flex align-items-center">
                                         <span class="pr-20 text-youtube"><i class="fa-brands fa-youtube"></i></span>
-                                        <div class="text-capitalize font-16">{{ lang('Youtube', 'dashboard')  }}</div>
+                                        <div class="text-capitalize font-16">{{ lang('Youtube')  }}</div>
                                     </div>
                                     <div class="drag-handle cursor-grab">
                                         <i class="fa-solid fa-grip-dots-vertical font-30 text-light-3"></i>
@@ -96,7 +96,7 @@
                                 <div class="d-flex  justify-content-between align-items-center bg-white py-2 px-3 border text-border-1 rounded-3">
                                     <div class="d-flex align-items-center">
                                         <span class="pr-20 text-twitter"><i class="fa-brands fa-twitter"></i></span>
-                                        <div class="text-capitalize font-16">{{ lang('Twitter', 'dashboard')  }}</div>
+                                        <div class="text-capitalize font-16">{{ lang('Twitter')  }}</div>
                                     </div>
                                     <div class="drag-handle cursor-grab">
                                         <i class="fa-solid fa-grip-dots-vertical font-30 text-light-3"></i>
@@ -104,15 +104,15 @@
                                 </div>
                             </div>
                             <div class="cta-widget item-box -style2 d-none d-lg-block">
-                                <h5 class="title mb-20 text-center">{{ lang('Manage All Links in', 'dashboard')  }} <span class="text-primary fw-semibold underbrush">{{ lang('One Place', 'dashboard')  }}</span></h5>
+                                <h5 class="title mb-20 text-center">{{ lang('Manage All Links in')  }} <span class="text-primary fw-semibold underbrush">{{ lang('One Place')  }}</span></h5>
                                 <div class="d-flex align-items-center  mb-16">
                                     <img src="{{ asset($activeThemeAssets.'assets/images/biolink-img/1.jpg') }}" alt="Image" class="size-50">
                                     <div class="ml-15">
                                         <div class="text-dark-1 font-14 fw-bold text-one-line word-break">
-                                            {{ lang('Summer 2023', 'dashboard')  }}
+                                            {{ lang('Summer 2023')  }}
                                         </div>
                                         <div class="text font-14 text-one-line word-break">
-                                            {{ lang('www.summerweb.com', 'dashboard')  }}
+                                            {{ lang('www.summerweb.com')  }}
                                         </div>
                                     </div>
                                 </div>
@@ -120,10 +120,10 @@
                                     <img src="{{ asset($activeThemeAssets.'assets/images/biolink-img/2.jpeg') }}" alt="Image" class="size-50">
                                     <div class="ml-15">
                                         <div class="text-dark-1 font-14 fw-bold text-one-line word-break">
-                                            {{ lang('Spotify List', 'dashboard')  }}
+                                            {{ lang('Spotify List')  }}
                                         </div>
                                         <div class="text font-14 text-one-line word-break">
-                                            {{ lang('www.spotify.com/mylist', 'dashboard')  }}
+                                            {{ lang('www.spotify.com/mylist')  }}
                                         </div>
                                     </div>
                                 </div>
@@ -131,10 +131,10 @@
                                     <img src="{{ asset($activeThemeAssets.'assets/images/biolink-img/3.jpeg') }}" alt="Image" class="size-50">
                                     <div class="ml-15">
                                         <div class="text-dark-1 font-14 fw-bold text-one-line word-break">
-                                            {{ lang('Follow me on Insta', 'dashboard')  }}
+                                            {{ lang('Follow me on Insta')  }}
                                         </div>
                                         <div class="text font-14 text-one-line word-break">
-                                            {{ lang('https://instagram.com/myinsta', 'dashboard')  }}
+                                            {{ lang('https://instagram.com/myinsta')  }}
                                         </div>
                                     </div>
                                 </div>
@@ -142,10 +142,10 @@
                                     <img src="{{ asset($activeThemeAssets.'assets/images/biolink-img/4.jpeg') }}" alt="Image" class="size-50">
                                     <div class="ml-15">
                                         <div class="text-dark-1 font-14 fw-bold text-one-line word-break">
-                                            {{ lang('Fund Raise', 'dashboard')  }}
+                                            {{ lang('Fund Raise')  }}
                                         </div>
                                         <div class="text font-14 text-one-line word-break">
-                                            {{ lang('www.donation.com', 'dashboard')  }}
+                                            {{ lang('www.donation.com')  }}
                                         </div>
                                     </div>
                                 </div>
@@ -163,24 +163,24 @@
                     <div class="col-md-12 col-lg-5 col-xl-5 offset-xl-1">
                         <div class="mt-100 lg-mt-0 wow fadeInLeft" data-wow-delay="300ms">
                             <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                                {{ lang('Features', 'dashboard')  }}
+                                {{ lang('Features')  }}
                             </div>
-                            <h2 class="title mb10">{{ lang('Connect to Everything', 'dashboard')  }} <br>{{ lang('You Love', 'dashboard')  }}</h2>
-                            <p class="text-dark-3 mb-25 md-mb-30"> {{ lang('Create social bio links for Instagram, YouTube, Twitter, Snapchat, Tiktok, Dribble and more.', 'dashboard')  }}</p>
+                            <h2 class="title mb10">{{ lang('Connect to Everything')  }} <br>{{ lang('You Love')  }}</h2>
+                            <p class="text-dark-3 mb-25 md-mb-30"> {{ lang('Create social bio links for Instagram, YouTube, Twitter, Snapchat, Tiktok, Dribble and more.')  }}</p>
                             <div class="list-style3">
                                 <ul>
                                     <li class="mb-20"><span
                                             class="size-20 bg-primary-l rounded-circle mr-5 d-inline-flex align-items-center justify-content-center">
-                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Easy to manage your links.', 'dashboard')  }}
+                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Easy to manage your links.')  }}
                                     </li>
 
                                     <li class="mb-20"><span
                                             class="size-20 bg-primary-l rounded-circle mr-5 d-inline-flex align-items-center justify-content-center">
-                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Create multiple bio links.', 'dashboard')  }}
+                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Create multiple bio links.')  }}
                                     </li>
                                     <li class="mb-20"><span
                                             class="size-20 bg-primary-l rounded-circle mr-5 d-inline-flex align-items-center justify-content-center">
-                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Share your link anywhere anytime.', 'dashboard')  }}
+                                            <i class="far fa-check text-primary font-12"></i></span> {{ lang('Share your link anywhere anytime.')  }}
                                     </li>
                                 </ul>
                             </div>
@@ -199,10 +199,10 @@
                     <div class="col-lg-12">
                         <div class="main-title text-center">
                             <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                                {{ lang('Use Cases', 'dashboard')  }}
+                                {{ lang('Use Cases')  }}
                             </div>
-                            <h2>{{ lang('Unmatchable features.', 'dashboard')  }}</h2>
-                            <p class="text">{{ lang('Increase engagement while collecting leads with built-in forms.', 'dashboard')  }}</p>
+                            <h2>{{ lang('Unmatchable features.')  }}</h2>
+                            <p class="text">{{ lang('Increase engagement while collecting leads with built-in forms.')  }}</p>
                         </div>
                     </div>
                 </div>
@@ -213,8 +213,8 @@
                                 <i class="fa-regular fa-screwdriver-wrench"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Create Bio Links', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('Easily create & manage all your links in one place: personal website, store, recent video or social post.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Create Bio Links')  }}</h4>
+                                <p class="text">{{ lang('Easily create & manage all your links in one place: personal website, store, recent video or social post.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -224,8 +224,8 @@
                                 <i class="fa-regular fa-user-pen"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Share', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('Share your link on any social or digital platform: Instagram, YouTube, Facebook or TikTok, in messengers or via SMS.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Share')  }}</h4>
+                                <p class="text">{{ lang('Share your link on any social or digital platform: Instagram, YouTube, Facebook or TikTok, in messengers or via SMS.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -235,8 +235,8 @@
                                 <i class="fa-solid fa-rectangle-vertical-history"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Multiple Layouts', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('Pick a theme or design your own to make sure your content pops. Your bio link does not have to be boring anymore.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Multiple Layouts')  }}</h4>
+                                <p class="text">{{ lang('Pick a theme or design your own to make sure your content pops. Your bio link does not have to be boring anymore.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -246,8 +246,8 @@
                                 <i class="fa-regular fa-palette"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Elegant And Perfect', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('With a cutting-edge interface, followers clicking on your Url will experience a great visual.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Elegant And Perfect')  }}</h4>
+                                <p class="text">{{ lang('With a cutting-edge interface, followers clicking on your Url will experience a great visual.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -257,8 +257,8 @@
                                 <i class="fa-brands fa-edge"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Web Based', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('No need to install anything, just access anytime via browser from any device.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Web Based')  }}</h4>
+                                <p class="text">{{ lang('No need to install anything, just access anytime via browser from any device.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -268,8 +268,8 @@
                                 <i class="fa-regular fa-laptop-mobile"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Fully Responsive', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('Yes, Quicklink gives you the biggest selection of visual layouts and all layouts are fully responsive so they look great on all devices.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Fully Responsive')  }}</h4>
+                                <p class="text">{{ lang('Yes, Quicklink gives you the biggest selection of visual layouts and all layouts are fully responsive so they look great on all devices.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -279,8 +279,8 @@
                                 <i class="fa-regular fa-headset"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('SEO Friendly', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('Bring more organic traffic to your website with this SEO friendly feature.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('SEO Friendly')  }}</h4>
+                                <p class="text">{{ lang('Bring more organic traffic to your website with this SEO friendly feature.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -290,8 +290,8 @@
                                 <i class="fa-regular fa-icons"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Font Awesome 6 Pro Icons', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('All the icons are font based and ready to match the quality of any HQ screen.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Font Awesome 6 Pro Icons')  }}</h4>
+                                <p class="text">{{ lang('All the icons are font based and ready to match the quality of any HQ screen.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -301,8 +301,8 @@
                                 <i class="fa-solid fa-shield-halved"></i>
                             </div>
                             <div class="details pt-16">
-                                <h4 class="title mt-16 mb-16">{{ lang('Lifetime Update', 'dashboard')  }}</h4>
-                                <p class="text">{{ lang('We keep updating our products to stay up to date with latest trends and technology.', 'dashboard')  }}</p>
+                                <h4 class="title mt-16 mb-16">{{ lang('Lifetime Update')  }}</h4>
+                                <p class="text">{{ lang('We keep updating our products to stay up to date with latest trends and technology.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -318,9 +318,9 @@
                 <div class="col-lg-5 wow fadeInRight">
                     <div class="main-title mb-30">
                         <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                            {{ lang('Update Anytime', 'dashboard')  }}
+                            {{ lang('Update Anytime')  }}
                         </div>
-                        <h2 class="title">{{ lang('Make your links work for you', 'dashboard')  }}</h2>
+                        <h2 class="title">{{ lang('Make your links work for you')  }}</h2>
                         <p></p>
                     </div>
                     <div class="position-relative">
@@ -328,24 +328,24 @@
                             <span class="flex-shrink-0 font-30 text-dark-3"><i
                                     class="fa-regular fa-badge-check"></i></span>
                             <div class="flex-grow-1 ml-20">
-                                <h4 class="mb-1">{{ lang('Connect social', 'dashboard')  }}</h4>
-                                <p class="text-dark-3 mb-0 font-14">{{ lang('Seamlessly connect your Quick bio link with the tools you', 'dashboard')  }}<br class="d-none d-lg-block"> {{ lang('already use.', 'dashboard')  }}</p>
+                                <h4 class="mb-1">{{ lang('Connect social')  }}</h4>
+                                <p class="text-dark-3 mb-0 font-14">{{ lang('Seamlessly connect your Quick bio link with the tools you')  }}<br class="d-none d-lg-block"> {{ lang('already use.')  }}</p>
                             </div>
                         </div>
                         <div class="d-flex align-items-start mb-30">
                             <span class="flex-shrink-0 font-30 text-dark-3"><i
                                     class="fa-regular fa-badge-check"></i></span>
                             <div class="flex-grow-1 ml-20">
-                                <h4 class="mb-1">{{ lang('Choose your own', 'dashboard')  }}</h4>
-                                <p class="text-dark-3 mb-0 font-14">{{ lang('Customize your Quick bio link to match your brand. Make it', 'dashboard')  }}<br class="d-none d-lg-block"> {{ lang('feel like you.', 'dashboard')  }}</p>
+                                <h4 class="mb-1">{{ lang('Choose your own')  }}</h4>
+                                <p class="text-dark-3 mb-0 font-14">{{ lang('Customize your Quick bio link to match your brand. Make it')  }}<br class="d-none d-lg-block"> {{ lang('feel like you.')  }}</p>
                             </div>
                         </div>
                         <div class="d-flex align-items-start mb-30">
                             <span class="flex-shrink-0 font-30 text-dark-3"><i
                                     class="fa-regular fa-badge-check"></i></span>
                             <div class="flex-grow-1 ml-20">
-                                <h4 class="mb-1">{{ lang('Easy to manage', 'dashboard')  }}</h4>
-                                <p class="text-dark-3 mb-0 font-14">{{ lang('Add, Manage, and update content with our quick, easy editor.', 'dashboard')  }}</p>
+                                <h4 class="mb-1">{{ lang('Easy to manage')  }}</h4>
+                                <p class="text-dark-3 mb-0 font-14">{{ lang('Add, Manage, and update content with our quick, easy editor.')  }}</p>
                             </div>
                         </div>
                     </div>
@@ -365,11 +365,11 @@
                 <div class="row gx-xl-5 gy-5">
                     <div class="col-xl-4">
                         <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                            {{ lang('Testimonials', 'dashboard')  }}
+                            {{ lang('Testimonials')  }}
                         </div>
-                        <h2 class="mt-10 mb-3">{{ lang('Our Community', 'home page') }}</h2>
-                        <p class="mb-6">{{ lang('Customer satisfaction is our major goal. See what our clients are saying about our services.', 'home page') }}</p>
-                        <a href="#" class="button -lg -primary rounded-pill font-18">{{ lang('All Testimonials', 'home page') }}</a>
+                        <h2 class="mt-10 mb-3">{{ lang('Our Community') }}</h2>
+                        <p class="mb-6">{{ lang('Customer satisfaction is our major goal. See what our clients are saying about our services.') }}</p>
+                        <a href="#" class="button -lg -primary rounded-pill font-18">{{ lang('All Testimonials') }}</a>
                     </div>
                     <!-- /column -->
                     <div class="col-xl-8">
@@ -416,15 +416,15 @@
                     <div class="col-lg-9">
                         <div class="main-title">
                             <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                                {{ lang('Blogs', 'dashboard')  }}
+                                {{ lang('Blogs')  }}
                             </div>
-                            <h2 class="title">{{ lang('Our Blog', 'home page') }}</h2>
-                            <p class="paragraph">{{ lang('blog section description', 'home page') }}</p>
+                            <h2 class="title">{{ lang('Our Blog') }}</h2>
+                            <p class="paragraph">{{ lang('blog section description') }}</p>
                         </div>
                     </div>
                     <div class="col-lg-3">
                         <div class="text-start text-lg-end mb-4">
-                            <a class="button push-right" href="{{ route('blog.index') }}">{{ lang('Browse All', 'home page') }}<i class="fal fa-arrow-right-long ml-5 push-this"></i></a>
+                            <a class="button push-right" href="{{ route('blog.index') }}">{{ lang('Browse All') }}<i class="fal fa-arrow-right-long ml-5 push-this"></i></a>
                         </div>
                     </div>
                 </div>
@@ -455,10 +455,10 @@
                     <div class="col-lg-6 m-auto wow fadeInUp" data-wow-delay="300ms">
                         <div class="main-title text-center">
                             <div class="badge bg-primary-l text-primary text-uppercase rounded-pill px-3 fw-bold font-12 py-2 mb-3">
-                                {{ lang('FAQs', 'dashboard')  }}
+                                {{ lang('FAQs')  }}
                             </div>
-                            <h2 class="title">{{ lang('Frequently Asked Questions', 'home page') }}</h2>
-                            <p class="paragraph mt10">{{ lang('faqs description', 'home page') }}</p>
+                            <h2 class="title">{{ lang('Frequently Asked Questions') }}</h2>
+                            <p class="paragraph mt10">{{ lang('faqs description') }}</p>
                         </div>
                     </div>
                 </div>
@@ -493,12 +493,12 @@
             <div class="p-5 py-100 text-center">
                 <div class="row text-center">
                     <div class="col-xl-11 col-xxl-9 mx-auto">
-                        <h2 class="text-uppercase font-16 mb-16">{{ lang('Join Our Community', 'dashboard') }}</h2>
-                        <h3 class="display-6 px-32 pb-32">{{ lang('We are trusted by over 5000+ clients. Join them now and grow your business.', 'dashboard') }}</h3>
+                        <h2 class="text-uppercase font-16 mb-16">{{ lang('Join Our Community') }}</h2>
+                        <h3 class="display-6 px-32 pb-32">{{ lang('We are trusted by over 5000+ clients. Join them now and grow your business.') }}</h3>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <span><a href="{{ route('register') }}" class="button bg-dark-1 text-white">{{ lang('Get Started', 'dashboard') }}</a></span>
+                    <span><a href="{{ route('register') }}" class="button bg-dark-1 text-white">{{ lang('Get Started') }}</a></span>
                 </div>
             </div>
         </div>

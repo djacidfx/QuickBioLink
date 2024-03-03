@@ -19,10 +19,10 @@ class DemoMode
         if (demo_mode()) {
             if ($request->isMethod('POST') || $request->isMethod('PUT') || $request->isMethod('DELETE')) {
                 if($request->expectsJson()){
-                    $result = array('success' => false, 'message' => admin_lang('Some features are disabled in the demo version'));
+                    $result = array('success' => false, 'message' => lang('These features are disabled on the demo site.'));
                     return response()->json($result, 200);
                 } else {
-                    quick_alert_error('Some features are disabled in the demo version');
+                    quick_alert_error(lang('These features are disabled on the demo site.'));
                     return back();
                 }
 

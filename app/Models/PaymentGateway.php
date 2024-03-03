@@ -9,11 +9,6 @@ class PaymentGateway extends Model
 {
     use HasFactory;
 
-    public function scopeActive($query)
-    {
-        return $query->where('status', 1);
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -36,4 +31,9 @@ class PaymentGateway extends Model
     protected $casts = [
         'credentials' => 'object'
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

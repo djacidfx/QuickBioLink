@@ -8,6 +8,11 @@ use Validator;
 
 class TemplateController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $temPaths = array_filter(glob(base_path().'/resources/views/templates/*'), 'is_dir');
@@ -21,11 +26,16 @@ class TemplateController extends Controller
         return view('admin.templates.index', compact('templates', 'extra_templates'));
     }
 
+    /**
+     * Active template
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function templatesActive(Request $request)
     {
         set_env('THEME_NAME', $request->name);
 
-        quick_alert_success(admin_lang('Updated successfully'));
+        quick_alert_success(lang('Updated successfully'));
         return back();
     }
 

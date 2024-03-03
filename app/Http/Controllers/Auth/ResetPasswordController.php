@@ -32,6 +32,9 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::USER;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
@@ -48,10 +51,9 @@ class ResetPasswordController extends Controller
     public function showResetForm(Request $request)
     {
         $token = $request->route()->parameter('token');
+        $email = $request->email;
 
-        return view($this->activeTheme.'auth.passwords.reset')->with(
-            ['token' => $token, 'email' => $request->email]
-        );
+        return view($this->activeTheme.'auth.passwords.reset', compact('token', 'email'));
     }
 
     /**

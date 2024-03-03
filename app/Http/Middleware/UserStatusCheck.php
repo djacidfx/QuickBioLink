@@ -19,7 +19,7 @@ class UserStatusCheck
     {
         if (Auth::user() && user_auth_info()->status == 0) {
             Auth::logout();
-            quick_alert_error(lang('Your account has been blocked', 'auth'));
+            quick_alert_error(lang('Your account has been blocked'));
             return redirect()->route('login');
         }
         return $next($request);

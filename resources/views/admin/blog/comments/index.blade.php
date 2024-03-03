@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Blog Comments'))
+@section('title', lang('Blog Comments'))
 @section('content')
     <div class="quick-card card">
         <div class="card-body">
@@ -7,12 +7,12 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.comments.index') }}?article_id={{ $article_id }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('Posted by') }}</th>
-                        <th>{{ admin_lang('Article') }}</th>
-                        <th>{{ admin_lang('Comment') }}</th>
-                        <th>{{ admin_lang('Status') }}</th>
-                        <th>{{ admin_lang('Posted date') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('Posted by') }}</th>
+                        <th>{{ lang('Article') }}</th>
+                        <th>{{ lang('Comment') }}</th>
+                        <th>{{ lang('Status') }}</th>
+                        <th>{{ lang('Posted date') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

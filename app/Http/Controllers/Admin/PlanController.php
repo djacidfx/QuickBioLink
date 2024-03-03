@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PaymentGateway;
 use App\Models\Plan;
 use App\Models\PlanOption;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Validator;
 
 class PlanController extends Controller
@@ -29,7 +27,6 @@ class PlanController extends Controller
                 'name',
                 'price',
                 'interval',
-                'created_at'
             );
 
             if(!empty($params['search']['value'])){
@@ -47,29 +44,28 @@ class PlanController extends Controller
 
             $totalRecords = Plan::count();
             foreach ($plans as $row) {
-                $is_featured = $row->isFeatured() ? '(' . admin_lang('Featured') . ')' : '';
+                $is_featured = $row->isFeatured() ? '<i class="fas fa-badge-check" data-tippy-placement="top" title="' . lang('Featured') . '"></i>' : '';
 
                 if($row->interval == 1){
-                    $interval_badge = '<span class="badge bg-success">'.admin_lang('Monthly').'</span>';
+                    $interval_badge = '<span class="badge bg-success">'.lang('Monthly').'</span>';
                 }else{
-                    $interval_badge = '<span class="badge bg-secondary">'.admin_lang('Yearly').'</span>';
+                    $interval_badge = '<span class="badge bg-secondary">'.lang('Yearly').'</span>';
                 }
 
                 if($row->isFree()){
-                    $isFree_badge = '<span class="badge bg-success">'.admin_lang('Free').'</span>';
+                    $isFree_badge = '<span class="badge bg-success">'.lang('Free').'</span>';
                 }else{
                     $isFree_badge = price_symbol_format($row->price);
                 }
                 $rows = array();
                 $rows[] = '<td><i class="icon-feather-menu quick-reorder-icon"
-                                       title="' . admin_lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
+                                       title="' . lang('Reorder') . '"></i> <span class="d-none">' . $row->id . '</span></td>';
                 $rows[] = '<td>'.$row->name.' '.$is_featured.'</td>';
                 $rows[] = '<td>'.$isFree_badge.'</td>';
                 $rows[] = '<td>'.$interval_badge.'</td>';
-                $rows[] = '<td>'.date_formating($row->created_at).'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="#" data-url="'.route('admin.plans.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-icon btn-default" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="'.route('admin.plans.edit', $row->id).'" data-toggle="slidePanel" title="'.lang('Edit').'" class="btn btn-icon btn-default" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>';
                 $rows[] = '<td>
@@ -103,7 +99,7 @@ class PlanController extends Controller
     public function create()
     {
         $PlanOption = PlanOption::where('active','1')->get();
-        return view('admin.plans.create', ['PlanOption' => $PlanOption]);
+        return view('admin.plans.create', compact('PlanOption'));
     }
 
     /**
@@ -114,14 +110,6 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        if (!$request->has('is_free')) {
-            $activePaymentMethod = PaymentGateway::active()->get();
-            if (count($activePaymentMethod) < 1) {
-                $result = array('success' => false, 'message' => admin_lang('No active payment method. Add your payment methods credentials before you start creating a plan.'));
-                return response()->json($result, 200);
-            }
-        }
-
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'short_description' => ['required', 'string', 'max:150'],
@@ -140,25 +128,21 @@ class PlanController extends Controller
             return response()->json($result, 200);
         }
 
-        if ($request->has('is_free') && $request->is_free != 0) {
+        if ($request->is_free) {
             $plan = Plan::free()->first();
             if ($plan) {
-                $result = array('success' => false, 'message' => admin_lang('Free plan is already exists'));
+                $result = array('success' => false, 'message' => lang('Free plan already exists'));
                 return response()->json($result, 200);
             }
             $request->price = 0;
-            $request->is_free = 1;
-        } else {
-            $request->is_free = 0;
         }
-        $request->is_featured = ($request->has('is_featured')) ? 1 : 0;
-        $request->advertisements = ($request->has('advertisements')) ? 1 : 0;
 
         $settings = array(
             'biolink_limit' => $request->biolink_limit,
             'biopage_limit' => $request->biopage_limit,
             'hide_branding' => $request->hide_branding,
         );
+
         $plan = Plan::create([
             'name' => $request->name,
             'short_description' => $request->short_description,
@@ -172,10 +156,10 @@ class PlanController extends Controller
             'is_featured' => $request->is_featured,
         ]);
         if ($plan) {
-            if ($request->has('is_featured')) {
-                Plan::where([['id', '!=', $plan->id], ['interval', $plan->interval]])->update(['is_featured' => 0]);
+            if ($request->is_featured) {
+                Plan::where([['interval', $plan->interval], ['id', '!=', $plan->id]])->update(['is_featured' => 0]);
             }
-            $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
+            $result = array('success' => true, 'message' => lang('Created Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -184,11 +168,10 @@ class PlanController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
      */
     public function show(Plan $plan)
     {
-        return abort(404);
+        abort(404);
     }
 
     /**
@@ -201,7 +184,7 @@ class PlanController extends Controller
     public function edit(Plan $plan)
     {
         $PlanOption = PlanOption::where('active','1')->get();
-        return view('admin.plans.edit', ['plan' => $plan, 'PlanOption' => $PlanOption]);
+        return view('admin.plans.edit', compact('plan', 'PlanOption'));
     }
 
     /**
@@ -229,24 +212,21 @@ class PlanController extends Controller
             return response()->json($result, 200);
         }
 
-        if ($request->has('is_free') && $request->is_free != 0) {
+        if ($request->is_free) {
             $freePlan = Plan::free()->first();
             if ($freePlan && $plan->id != $freePlan->id) {
-                $result = array('success' => false, 'message' => admin_lang('Free plan is already exists'));
+                $result = array('success' => false, 'message' => lang('Free plan already exists'));
                 return response()->json($result, 200);
             }
             $request->price = 0;
-            $request->is_free = 1;
-        } else {
-            $request->is_free = 0;
         }
-        $request->is_featured = ($request->has('is_featured')) ? 1 : 0;
-        $request->advertisements = ($request->has('advertisements')) ? 1 : 0;
+
         $settings = array(
             'biolink_limit' => $request->biolink_limit,
             'biopage_limit' => $request->biopage_limit,
             'hide_branding' => $request->hide_branding,
         );
+
         $update = $plan->update([
             'name' => $request->name,
             'short_description' => $request->short_description,
@@ -259,16 +239,17 @@ class PlanController extends Controller
             'is_featured' => $request->is_featured,
         ]);
         if ($update) {
-            if ($request->has('is_featured')) {
-                Plan::where([['id', '!=', $plan->id], ['interval', $plan->interval]])->update(['is_featured' => 0]);
+
+            if ($request->is_featured) {
+                Plan::where([['interval', $plan->interval], ['id', '!=', $plan->id]])->update(['is_featured' => 0]);
             }
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Reorder the resources
      *
      * @param  \App\Models\Plan $plan
      * @return \Illuminate\Http\Response
@@ -286,12 +267,12 @@ class PlanController extends Controller
                 $count++;
             }
             if ($update) {
-                $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+                $result = array('success' => true, 'message' => lang('Updated Successfully'));
                 return response()->json($result, 200);
             }
         }
 
-        $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+        $result = array('success' => true, 'message' => lang('Updated Successfully'));
         return response()->json($result, 200);
     }
 
@@ -299,39 +280,37 @@ class PlanController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Plan  $plan
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Plan $plan)
     {
-        if ($plan->subscriptions->count() > 0) {
-            quick_alert_error(admin_lang('Plan has subscriptions, you can delete them then delete the plan'));
-            return back();
-        }
-        if ($plan->transactions->count() > 0) {
-            quick_alert_error(admin_lang('Plan has transactions, you can delete them then delete the plan'));
-            return back();
-        }
-        $plan->delete();
-        quick_alert_success(admin_lang('Deleted successfully'));
-        return back();
+        abort(404);
     }
 
+    /**
+     * Remove the multiple resources from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         $ids = array_map('intval', $request->ids);
         $plans = Plan::whereIn('id',$ids)->get();
         foreach($plans as $plan){
+
             if ($plan->subscriptions->count() > 0) {
-                $result = array('success' => false, 'message' => admin_lang('Plan has subscriptions, you can delete them then delete the plan'));
+                $result = array('success' => false, 'message' => lang('Plan is assigned to subscriptions, delete them first.'));
                 return response()->json($result, 200);
             }
             if ($plan->transactions->count() > 0) {
-                $result = array('success' => false, 'message' => admin_lang('Plan has transactions, you can delete them then delete the plan'));
+                $result = array('success' => false, 'message' => lang('Plan is assigned to  transactions, delete them first.'));
                 return response()->json($result, 200);
             }
         }
+
         Plan::whereIn('id',$ids)->delete();
-        $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+
+        $result = array('success' => true, 'message' => lang('Deleted Successfully'));
         return response()->json($result, 200);
     }
 }

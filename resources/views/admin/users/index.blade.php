@@ -1,37 +1,10 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Users'))
+@section('title', lang('Users'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.users.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.users.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-border-shadow-primary">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                        <div class="avatar me-2">
-                            <span class="avatar-initial rounded bg-label-primary"><i class="fas fa-users"></i></span>
-                        </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($activeUsersCount) }}</h4>
-                    </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Active Users') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-border-shadow-danger">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                        <div class="avatar me-2">
-                            <span class="avatar-initial rounded bg-label-danger"><i class="fas fa-user-plus"></i></span>
-                        </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($bannedUserscount) }}</h4>
-                    </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Banned Users') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div class="quick-card card">
         <div class="card-body">
             <div class="dataTables_wrapper">
@@ -39,12 +12,11 @@
                     <thead>
                     <tr>
                         <th data-priority="1">#</th>
-                        <th data-priority="1">{{ admin_lang('User details') }}</th>
-                        <th>{{ admin_lang('Email') }}</th>
-                        <th class="no-sort">{{ admin_lang('Subscription') }}</th>
-                        <th>{{ admin_lang('Email status') }}</th>
-                        <th>{{ admin_lang('Account status') }}</th>
-                        <th>{{ admin_lang('Registered date') }}</th>
+                        <th data-priority="1">{{ lang('User details') }}</th>
+                        <th>{{ lang('Email') }}</th>
+                        <th>{{ lang('Email status') }}</th>
+                        <th>{{ lang('Account status') }}</th>
+                        <th>{{ lang('Registered date') }}</th>
                         <th class="no-sort w-px-20" data-priority="1"></th>
                         <th class="no-sort w-px-20" data-priority="1">
                             <div class="checkbox">

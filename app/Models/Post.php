@@ -11,20 +11,6 @@ class Post extends Model
     use HasFactory, Sluggable;
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title',
-            ],
-        ];
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -37,6 +23,20 @@ class Post extends Model
         'content',
         'image'
     ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+            ],
+        ];
+    }
 
     /**
      * Relationships

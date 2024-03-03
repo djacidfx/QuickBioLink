@@ -2,7 +2,7 @@
     <form class="ajax_submit_form" data-action="{{ route('admin.settings.update') }}" method="POST">
         <div class="card">
             <div class="card-header">
-                <h5>{{ admin_lang('Billing details') }}</h5>
+                <h5>{{ lang('Billing details') }}</h5>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -10,17 +10,17 @@
                         <div class="alert d-flex align-items-center bg-label-info mb-3" role="alert">
                             <span class="badge badge-center rounded-pill bg-info border-label-info p-3 me-2"><i class="fas fa-bell"></i></span>
                             <div class="ps-1">
-                                <span>{{admin_lang("These details will be used for the invoice.")}}</span>
+                                <span>{{lang("These details will be used for the invoice.")}}</span>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{admin_lang("Invoice Number Prefix")}}</label>
+                            <label class="form-label">{{lang("Invoice Number Prefix")}}</label>
                             <div>
                                 <input name="invoice_billing[invoice_number_prefix]" type="text" class="form-control" value="{{ $settings->invoice_billing->invoice_number_prefix ?? 'INV-' }}" placeholder="Ex: INV-">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{admin_lang("Name")}}</label>
+                            <label class="form-label">{{lang("Name")}}</label>
                             <div>
                                 <input name="invoice_billing[name]" type="text" class="form-control" value="{{ @$settings->invoice_billing->name }}">
                             </div>
@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("Email")}}</label>
+                                    <label class="form-label">{{lang("Email")}}</label>
                                     <div>
                                         <input name="invoice_billing[email]" type="email" class="form-control" value="{{ @$settings->invoice_billing->email }}">
                                     </div>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("Phone")}}</label>
+                                    <label class="form-label">{{lang("Phone")}}</label>
                                     <div>
                                         <input name="invoice_billing[phone]" type="tel" class="form-control" value="{{ @$settings->invoice_billing->phone }}">
                                     </div>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{admin_lang("Address")}}</label>
+                            <label class="form-label">{{lang("Address")}}</label>
                             <div>
                                 <input name="invoice_billing[address]" type="text" class="form-control" value="{{ @$settings->invoice_billing->address }}">
                             </div>
@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("City")}}</label>
+                                    <label class="form-label">{{lang("City")}}</label>
                                     <div>
                                         <input name="invoice_billing[city]" type="text" class="form-control" value="{{ @$settings->invoice_billing->city }}">
                                     </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("State/Province")}}</label>
+                                    <label class="form-label">{{lang("State/Province")}}</label>
                                     <div>
                                         <input name="invoice_billing[state]" type="text" class="form-control" value="{{ @$settings->invoice_billing->state }}">
                                     </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("ZIP Code")}}</label>
+                                    <label class="form-label">{{lang("ZIP Code")}}</label>
                                     <div>
                                         <input name="invoice_billing[zipcode]" type="text" class="form-control" value="{{ @$settings->invoice_billing->zipcode }}">
                                     </div>
@@ -76,10 +76,10 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{admin_lang("Country")}}</label>
+                            <label class="form-label">{{lang("Country")}}</label>
                             <div>
                                 <select class="form-control" name="invoice_billing[country]">
-                                    <option value="" selected disabled>{{ admin_lang('Choose') }}</option>
+                                    <option value="" selected disabled>{{ lang('Choose') }}</option>
                                     @foreach (countries() as $country)
                                         <option value="{{ $country->name }}"
                                                 @if ($country->name == @$settings->invoice_billing->country) selected @endif>
@@ -92,7 +92,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("Tax Type")}}</label>
+                                    <label class="form-label">{{lang("Tax Type")}}</label>
                                     <div>
                                         <input name="invoice_billing[tax_type]" type="text" class="form-control" value="{{ @$settings->invoice_billing->tax_type }}" placeholder="Ex: VAT">
                                     </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{admin_lang("Tax ID")}}</label>
+                                    <label class="form-label">{{lang("Tax ID")}}</label>
                                     <div>
                                         <input name="invoice_billing[tax_id]" type="text" class="form-control" value="{{ @$settings->invoice_billing->tax_id }}">
                                     </div>
@@ -112,7 +112,7 @@
             </div>
             <div class="card-footer">
                 <input type="hidden" name="billing_settings" value="1">
-                <button type="submit" class="btn btn-primary">{{ admin_lang('Save Changes') }}</button>
+                <button type="submit" class="btn btn-primary">{{ lang('Save Changes') }}</button>
             </div>
         </div>
     </form>

@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Transactions'))
+@section('title', lang('Transactions'))
 @section('content')
     <div class="quick-card card">
         <div class="card-body">
@@ -7,14 +7,14 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.transactions.index') }}">
                     <thead>
                     <tr>
-                        <th class="tb-w-2x">{{ admin_lang('#ID') }}</th>
-                        <th class="tb-w-7x">{{ admin_lang('User') }}</th>
-                        <th class="tb-w-3x">{{ admin_lang('Plan') }}</th>
-                        <th class="tb-w-3x">{{ admin_lang('Total') }}</th>
-                        <th class="tb-w-3x">{{ admin_lang('Gateway') }}</th>
-                        <th class="tb-w-3x">{{ admin_lang('Type') }}</th>
-                        <th class="tb-w-3x">{{ admin_lang('Status') }}</th>
-                        <th class="tb-w-7x">{{ admin_lang('Created at') }}</th>
+                        <th class="tb-w-2x">#</th>
+                        <th class="tb-w-3x">{{ lang('Plan') }}</th>
+                        <th class="tb-w-7x">{{ lang('User') }}</th>
+                        <th class="tb-w-3x">{{ lang('Amount') }}</th>
+                        <th class="tb-w-3x">{{ lang('Payment Method') }}</th>
+                        <th class="tb-w-3x">{{ lang('Type') }}</th>
+                        <th class="tb-w-3x">{{ lang('Status') }}</th>
+                        <th class="tb-w-7x">{{ lang('Created at') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

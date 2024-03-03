@@ -3,7 +3,7 @@
 return [
 
     /* Server Requirements */
-    'php_version' => '8.0.2',
+    'php_version' => '8.1',
 
     'extensions' => [
         'php' => [
@@ -17,7 +17,8 @@ return [
             'Ctype',
             'XML',
             'BCMath',
-            'GD'
+            'GD',
+            'iconv'
         ],
         'apache' => [
             'mod_rewrite',

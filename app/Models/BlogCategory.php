@@ -9,6 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 class BlogCategory extends Model
 {
     use HasFactory, Sluggable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'lang',
+        'name',
+        'slug',
+        'views',
+    ];
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -22,18 +35,6 @@ class BlogCategory extends Model
             ],
         ];
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $fillable = [
-        'lang',
-        'name',
-        'slug',
-        'views',
-    ];
 
     /**
      * Relationships

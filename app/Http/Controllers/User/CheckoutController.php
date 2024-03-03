@@ -15,88 +15,41 @@ use Validator;
 
 class CheckoutController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
     }
 
+    /**
+     * Display the page
+     *
+     * @param $checkout_id
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index($checkout_id)
     {
-        $transaction = Transaction::where([['checkout_id', $checkout_id], ['user_id', user_auth_info()->id]])->unpaid()->firstOrFail();
-        $paymentGateways = PaymentGateway::active()->get();
-        return view($this->activeTheme.'.user.checkout', [
-            'user' => user_auth_info(),
-            'transaction' => $transaction,
-            'paymentGateways' => $paymentGateways,
-        ]);
+        $user = user_auth_info();
+
+        $transaction = Transaction::where([
+            ['user_id', $user->id],
+            ['checkout_id', $checkout_id],
+            ['status', Transaction::STATUS_UNPAID],
+        ])->firstOrFail();
+
+        $paymentGateways = PaymentGateway::where('status', 1)->get();
+
+        return view($this->activeTheme . '.user.checkout', compact('user', 'transaction', 'paymentGateways'));
     }
 
-    public function applyCoupon(Request $request, $checkout_id)
-    {
-        $validator = Validator::make($request->all(), [
-            'coupon_code' => ['required', 'string', 'max:20'],
-        ]);
-        if ($validator->fails()) {
-            $errors = [];
-            foreach ($validator->errors()->all() as $error) {
-                $errors[] = $error;
-            }
-            quick_alert_error(implode('<br>', $errors));
-            return back()->withInput();
-        }
-        $transaction = Transaction::where([['checkout_id', $checkout_id], ['user_id', user_auth_info()->id], ['coupon_id', null], ['total', '!=', 0]])->unpaid()->firstOrFail();
-        $coupon = Coupon::validCode($request->coupon_code)->validForPlan($transaction->plan->id)->first();
-        if (!$coupon) {
-            quick_alert_error(lang('Invalid or expired coupon code', 'checkout'));
-            return back()->withInput();
-        }
-        if ($coupon->action_type != 0) {
-            if ($transaction->type != $coupon->action_type) {
-                quick_alert_error(lang('Invalid or expired coupon code', 'checkout'));
-                return back()->withInput();
-            }
-        }
-        $couponTransactionsCount = Transaction::where([['coupon_id', $coupon->id], ['user_id', user_auth_info()->id]])->whereIn('status', [0, 2])->count();
-        if ($couponTransactionsCount >= $coupon->limit) {
-            quick_alert_error(lang('You have exceeded the usage limit for this coupon', 'checkout'));
-            return back()->withInput();
-        }
-        $planPriceAfterDiscount = ($transaction->price - ($transaction->price * $coupon->percentage) / 100);
-        $taxPriceAfterDiscount = ($planPriceAfterDiscount * country_tax(user_auth_info()->address->country ?? user_ip_info()->location->country)) / 100;
-        $totalPriceAfterDiscount = ($planPriceAfterDiscount + $taxPriceAfterDiscount);
-        $detailsAfterDiscount = [
-            'price' => price_format($planPriceAfterDiscount),
-            'tax' => price_format($taxPriceAfterDiscount),
-            'total' => price_format($totalPriceAfterDiscount),
-        ];
-        $updateTransaction = $transaction->update([
-            'coupon_id' => $coupon->id,
-            'details_after_discount' => $detailsAfterDiscount,
-            'price' => $planPriceAfterDiscount,
-            'tax' => $taxPriceAfterDiscount,
-            'total' => $totalPriceAfterDiscount,
-        ]);
-        if ($updateTransaction) {
-            quick_alert_success(lang('Coupon has been applied successfully', 'checkout'));
-            return back();
-        }
-    }
-
-    public function removeCoupon(Request $request, $checkout_id)
-    {
-        $transaction = Transaction::where([['checkout_id', $checkout_id], ['user_id', user_auth_info()->id], ['coupon_id', '!=', null]])->unpaid()->firstOrFail();
-        $updateTransaction = $transaction->update([
-            'coupon_id' => null,
-            'details_after_discount' => null,
-            'price' => $transaction->details_before_discount->price,
-            'tax' => $transaction->details_before_discount->tax,
-            'total' => $transaction->details_before_discount->total,
-        ]);
-        if ($updateTransaction) {
-            return back();
-        }
-    }
-
+    /**
+     * Process the payment
+     *
+     * @param Request $request
+     * @param $checkout_id
+     */
     public function process(Request $request, $checkout_id)
     {
         $validator = Validator::make($request->all(), [
@@ -114,20 +67,29 @@ class CheckoutController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
-        $transaction = Transaction::where([['checkout_id', $checkout_id], ['user_id', user_auth_info()->id]])->unpaid()->firstOrFail();
+
+        $transaction = Transaction::where([
+            ['user_id', user_auth_info()->id],
+            ['checkout_id', $checkout_id],
+            ['status', Transaction::STATUS_UNPAID],
+        ])->firstOrFail();
+
+        /* Check coupon expiry time */
         if ($transaction->coupon_id) {
             if (!$transaction->coupon || $transaction->coupon->isExpiry()) {
-                quick_alert_error(lang('Invalid or expired coupon code', 'checkout'));
+                quick_alert_error(lang('Coupon code is expired or invalid.'));
                 return back()->withInput();
             }
         }
+
         if ($transaction->total != 0) {
-            $paymentGateway = PaymentGateway::where('id', $request->payment_method)->active()->first();
+            $paymentGateway = PaymentGateway::where('id', $request->payment_method)->where('status', 1)->first();
             if (!$paymentGateway) {
-                quick_alert_error(lang('Selected payment method is not active', 'checkout'));
+                quick_alert_error(lang('Unexpected error'));
                 return back();
             }
         }
+
         $country = Country::find($request->country);
         $address = [
             'address' => $request->address,
@@ -139,77 +101,213 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $user->update(['address' => $address]);
 
+        /* Process free subscription */
         if ($transaction->total == 0) {
-            $transaction->update(['status' => 2]);
-            $this->updateSubscription($transaction);
-            quick_alert_success(lang('Subscribed Successfully', 'checkout'));
+            $transaction->update(['status' => Transaction::STATUS_PAID]);
+            $this->processSubscription($transaction);
+            quick_alert_success(lang('Subscribed Successfully'));
             return redirect()->route('subscription');
         }
 
-        $paymentHandler = 'App\Http\Controllers\User\Gateways\\'.ucfirst($paymentGateway->key).'Controller';
+        $paymentController = 'App\Http\Controllers\User\PaymentMethods\\' . ucfirst($paymentGateway->key) . 'Controller';
 
-        $paymentData = $paymentHandler::process($transaction);
-        $paymentData = json_decode($paymentData);
-        if ($paymentData->error == true) {
-            quick_alert_error($paymentData->msg);
+        $result = $paymentController::pay($transaction);
+
+        if ($result['error'] == true) {
+            quick_alert_error($result['message']);
             return back();
         }
-        $updateTransaction = $transaction->update(['status' => 1,'billing_address' => $address]);
-        if ($updateTransaction) {
-            if (isset($paymentData->redirectUrl)) {
-                return redirect($paymentData->redirectUrl);
+
+        $update = $transaction->update(['status' => Transaction::STATUS_PENDING, 'billing_address' => $address]);
+        if ($update) {
+            if (isset($result['redirect_url'])) {
+                /* redirect to payment gateway page */
+                return redirect($result['redirect_url']);
             }
-            return view($paymentData->view, [
-                'details' => $paymentData->details,
-                'trx' => $paymentData->trx,
-            ]);
+            /* display payment gateway form */
+            $details = $result['details'];
+            $transaction = $result['transaction'];
+            return view($result['view'], compact('details', 'transaction'));
         }
     }
 
-    public static function updateSubscription($transaction)
+    /**
+     * Update Subscription data
+     *
+     * @param Transaction $transaction
+     */
+    public static function processSubscription(Transaction $transaction)
     {
-        if ($transaction->status != 2) {
-            throw new Exception(lang('Incomplete payment', 'checkout'));
-        }
-        if ($transaction->type == 1) {
+
+        /* Subscribe the user */
+        if ($transaction->type == Transaction::TYPE_SUBSCRIBE) {
             $expiry_at = ($transaction->plan->interval == 1) ? Carbon::now()->addMonth() : Carbon::now()->addYear();
+
             $subscription = new Subscription();
             $subscription->user_id = $transaction->user_id;
             $subscription->plan_id = $transaction->plan_id;
-            $subscription->expiry_at = $expiry_at;
             $subscription->plan_settings = $transaction->plan->settings;
+            $subscription->expiry_at = $expiry_at;
             $subscription->save();
         }
-        if ($transaction->type == 2) {
-            $subscription = $transaction->user->subscription;
+
+        /* Renew the subscription */
+        if ($transaction->type == Transaction::TYPE_RENEW) {
+
             if ($transaction->plan->interval == 1) {
                 if ($subscription->isExpired()) {
                     $expiry_at = Carbon::now()->addMonth();
                 } else {
+                    /* Extend the subscription if not expired */
                     $expiry_at = Carbon::parse($subscription->expiry_at)->addMonth();
                 }
             } else {
                 if ($subscription->isExpired()) {
                     $expiry_at = Carbon::now()->addYear();
                 } else {
+                    /* Extend the subscription if not expired */
                     $expiry_at = Carbon::parse($subscription->expiry_at)->addYear();
                 }
             }
-            $subscription->expiry_at = $expiry_at;
+
+            $subscription = $transaction->user->subscription;
             $subscription->plan_settings = $transaction->plan->settings;
             $subscription->about_to_expire_reminder = false;
             $subscription->expired_reminder = false;
+            $subscription->expiry_at = $expiry_at;
             $subscription->update();
         }
-        if ($transaction->type == 3 || $transaction->type == 4) {
-            $subscription = $transaction->user->subscription;
+
+        /* Upgrade or downgrade the subscription */
+        if ($transaction->type == Transaction::TYPE_UPGRADE || $transaction->type == Transaction::TYPE_DOWNGRADE) {
+
             $expiry_at = ($transaction->plan->interval == 1) ? Carbon::now()->addMonth() : Carbon::now()->addYear();
+
+            $subscription = $transaction->user->subscription;
             $subscription->plan_id = $transaction->plan_id;
-            $subscription->expiry_at = $expiry_at;
             $subscription->plan_settings = $transaction->plan->settings;
             $subscription->about_to_expire_reminder = false;
             $subscription->expired_reminder = false;
+            $subscription->expiry_at = $expiry_at;
             $subscription->update();
+        }
+    }
+
+    /**
+     * Apply coupon code
+     *
+     * @param Request $request
+     * @param $checkout_id
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function applyCoupon(Request $request, $checkout_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'coupon_code' => ['required', 'string', 'max:20'],
+        ]);
+        if ($validator->fails()) {
+            $errors = [];
+            foreach ($validator->errors()->all() as $error) {
+                $errors[] = $error;
+            }
+            quick_alert_error(implode('<br>', $errors));
+            return back()->withInput();
+        }
+
+        $transaction = Transaction::where([
+            ['user_id', user_auth_info()->id],
+            ['checkout_id', $checkout_id],
+            ['coupon_id', null],
+            ['total', '!=', 0],
+            ['status', Transaction::STATUS_UNPAID],
+        ])->firstOrFail();
+
+        $planId = $transaction->plan->id;
+
+        $coupon = Coupon::where('code', $request->coupon_code)
+            /* check coupon is not expired */
+            ->where(function ($query) {
+                $query->where('expiry_at', '>', Carbon::now());
+            })
+            /* check coupon assigned to this plan */
+            ->where(function ($query) use ($planId) {
+                $query
+                    ->where('plan_id', $planId)
+                    ->orWhereNull('plan_id');
+            })
+            ->first();
+
+        if (!$coupon) {
+            quick_alert_error(lang('Coupon code is expired or invalid.'));
+            return back()->withInput();
+        }
+
+        if ($coupon->action_type != 0) {
+            if ($transaction->type != $coupon->action_type) {
+                quick_alert_error(lang('Coupon code is expired or invalid.'));
+                return back()->withInput();
+            }
+        }
+
+        $couponUsesCount = Transaction::where([
+            ['coupon_id', $coupon->id],
+            ['user_id', user_auth_info()->id]])
+            ->whereIn('status', [Transaction::STATUS_UNPAID, Transaction::STATUS_PAID])->count();
+
+        if ($couponUsesCount >= $coupon->limit) {
+            quick_alert_error(lang('Coupon code usage limit exceeded.'));
+            return back()->withInput();
+        }
+
+        $planAfterDiscount = ($transaction->price - ($transaction->price * $coupon->percentage) / 100);
+
+        $taxAfterDiscount = ($planAfterDiscount * country_tax(user_auth_info()->address->country ?? user_ip_info()->location->country)) / 100;
+
+        $totalPrice = ($planAfterDiscount + $taxAfterDiscount);
+
+        $update = $transaction->update([
+            'coupon_id' => $coupon->id,
+            'price' => $planAfterDiscount,
+            'tax' => $taxAfterDiscount,
+            'total' => $totalPrice,
+            'details_after_discount' => [
+                'price' => price_format($planAfterDiscount),
+                'tax' => price_format($taxAfterDiscount),
+                'total' => price_format($totalPrice),
+            ],
+        ]);
+        if ($update) {
+            quick_alert_success(lang('Coupon applied successfully'));
+            return back();
+        }
+    }
+
+    /**
+     * Remove coupon code
+     *
+     * @param Request $request
+     * @param $checkout_id
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function removeCoupon(Request $request, $checkout_id)
+    {
+        $transaction = Transaction::where([
+            ['user_id', user_auth_info()->id],
+            ['checkout_id', $checkout_id],
+            ['coupon_id', '!=', null],
+            ['status', Transaction::STATUS_UNPAID],
+        ])->firstOrFail();
+
+        /* remove the coupon and reset the details */
+        $updateTransaction = $transaction->update([
+            'coupon_id' => null,
+            'details_after_discount' => null,
+            'price' => $transaction->details_before_discount->price,
+            'tax' => $transaction->details_before_discount->tax,
+            'total' => $transaction->details_before_discount->total,
+        ]);
+        if ($updateTransaction) {
+            return back();
         }
     }
 }

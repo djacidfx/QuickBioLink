@@ -28,7 +28,7 @@
                         </tr>
                         @foreach($extension as $name => $enabled)
                             <tr>
-                                <td><span class="fw-bold">{{ $name }}</span></td>
+                                <td><span>{{ $name }}</span></td>
                                 <td class="status">
                                     @if($enabled)
                                         <i class="far fa-check text-success"></i>

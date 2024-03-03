@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Subscription;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -16,14 +15,6 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $unviewedTransactions = Transaction::where('is_viewed', 0)->whereIn('status', [2, 3])->get();
-        if ($unviewedTransactions->count() > 0) {
-            foreach ($unviewedTransactions as $unviewedTransaction) {
-                $unviewedTransaction->is_viewed = true;
-                $unviewedTransaction->save();
-            }
-        }
-
         if ($request->ajax()) {
             $params = $columns = $order = $totalRecords = $data = array();
             $params = $request;
@@ -31,8 +22,8 @@ class TransactionController extends Controller
             //define index of column
             $columns = array(
                 'id',
-                'user_id',
                 'plan_id',
+                'user_id',
                 'total',
                 '',
                 'type',
@@ -64,34 +55,34 @@ class TransactionController extends Controller
                 }
 
                 if ($row->type == 1) {
-                    $transation_type_badge = '<span class="badge bg-primary">' . admin_lang('Subscribe') . '</span>';
+                    $transation_type_badge = '<span class="badge bg-primary">' . lang('Subscribe') . '</span>';
                 } elseif ($row->type == 2) {
-                    $transation_type_badge = '<span class="badge bg-success">' . admin_lang('Renew') . '</span>';
+                    $transation_type_badge = '<span class="badge bg-success">' . lang('Renew') . '</span>';
                 } elseif ($row->type == 3) {
-                    $transation_type_badge = '<span class="badge bg-info">' . admin_lang('Upgrade') . '</span>';
+                    $transation_type_badge = '<span class="badge bg-info">' . lang('Upgrade') . '</span>';
                 } elseif ($row->type == 4) {
-                    $transation_type_badge = '<span class="badge bg-warning">' . admin_lang('Downgrade') . '</span>';
+                    $transation_type_badge = '<span class="badge bg-warning">' . lang('Downgrade') . '</span>';
                 }
 
                 if ($row->status == 0) {
-                    $status_badge = '<span class="badge bg-danger">' . admin_lang('Unpaid') . '</span>';
+                    $status_badge = '<span class="badge bg-danger">' . lang('Unpaid') . '</span>';
                 } elseif ($row->status == 1) {
-                    $status_badge = '<span class="badge bg-info">' . admin_lang('Pending') . '</span>';
+                    $status_badge = '<span class="badge bg-info">' . lang('Pending') . '</span>';
                 } elseif ($row->status == 2) {
-                    $status_badge = '<span class="badge bg-success">' . admin_lang('Paid') . '</span>';
+                    $status_badge = '<span class="badge bg-success">' . lang('Paid') . '</span>';
                 } elseif ($row->status == 3) {
-                    $status_badge = '<span class="badge bg-warning">' . admin_lang('Cancelled') . '</span>';
+                    $status_badge = '<span class="badge bg-warning">' . lang('Cancelled') . '</span>';
                 }
 
                 $invoice_button = '';
                 if ($row->total > 0) {
-                    $invoice_button = '<a href="' . route('invoice', $row->id) . '" title="' . admin_lang('Invoice') . '" class="btn btn-default btn-icon ms-1" data-tippy-placement="top" target="_blank"><i class="icon-feather-paperclip"></i></a>';
+                    $invoice_button = '<a href="' . route('invoice', $row->id) . '" title="' . lang('Invoice') . '" class="btn btn-default btn-icon ms-1" data-tippy-placement="top" target="_blank"><i class="icon-feather-paperclip"></i></a>';
                 }
 
                 $rows = array();
                 $rows[] = '<td>' . $row->id . '</td>';
-                $rows[] = '<td><a class="text-body" href="'. route('admin.users.edit', $row->user->id).'">' . $row->user->name . '</a></td>';
                 $rows[] = '<td>' . $row->plan->name . '</td>';
+                $rows[] = '<td><a class="text-body" href="'. route('admin.users.edit', $row->user->id).'">' . $row->user->name . '</a></td>';
                 $rows[] = '<td>' . price_symbol_format($row->total) . '</td>';
                 $rows[] = '<td>' . $gateway_badge . '</td>';
                 $rows[] = '<td>' . $transation_type_badge . '</td>';
@@ -99,7 +90,7 @@ class TransactionController extends Controller
                 $rows[] = '<td>' . date_formating($row->created_at) . '</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                <button data-url=" ' . route('admin.transactions.edit', $row->id) . '" data-toggle="slidePanel" title="' . admin_lang('Details') . '" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-list"></i></button>
+                                <button data-url=" ' . route('admin.transactions.edit', $row->id) . '" data-toggle="slidePanel" title="' . lang('Details') . '" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-list"></i></button>
                                    '.$invoice_button.'
                                 </div>
                             </td>';
@@ -122,39 +113,16 @@ class TransactionController extends Controller
             return response()->json($json_data, 200);
         }
 
+        /* Mark transactions as viewed */
+        $unviewed = Transaction::where('is_viewed', 0)
+            ->whereIn('status', [Transaction::STATUS_PAID, Transaction::STATUS_CANCELLED])
+            ->get();
+        foreach ($unviewed as $transaction) {
+            $transaction->is_viewed = true;
+            $transaction->save();
+        }
+
         return view('admin.transactions.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return abort(404);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        return abort(404);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Transaction $transaction)
-    {
-        return abort(404);
     }
 
     /**
@@ -166,7 +134,7 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction)
     {
         abort_if($transaction->isPending() || $transaction->isUnpaid(), 404);
-        return view('admin.transactions.edit', ['transaction' => $transaction]);
+        return view('admin.transactions.edit', compact('transaction'));
     }
 
     /**
@@ -178,36 +146,30 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        if ($transaction->status != 2) {
-            quick_alert_error(admin_lang('Transaction cannot be canceled'));
+        if ($transaction->status != Transaction::STATUS_PAID) {
+            quick_alert_error(lang('Can not cancel this transaction.'));
             return back();
         }
-        $updateTransaction = $transaction->update(['status' => 3]);
-        if ($updateTransaction) {
-            quick_alert_success(admin_lang('Transaction Canceled Successfully'));
+
+        $update = $transaction->update(['status' => Transaction::STATUS_CANCELLED]);
+        if ($update) {
+            quick_alert_success(lang('Transaction Canceled'));
             return back();
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove multiple resources from storage.
      *
      * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
-    {
-        $transaction->delete();
-        quick_alert_success(admin_lang('Deleted Successfully'));
-        return back();
-    }
-
     public function delete(Request $request)
     {
         $ids = array_map('intval', $request->ids);
         $sql = Transaction::whereIn('id', $ids)->delete();
         if ($sql) {
-            $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+            $result = array('success' => true, 'message' => lang('Deleted Successfully'));
             return response()->json($result, 200);
         }
     }

@@ -6,28 +6,24 @@
 <meta name="theme-color" content="{{ $settings->colors->primary_color }}">
 @php
     $title = $__env->yieldContent('title') ? $__env->yieldContent('title') . ' - ' . @$settings->site_title : @$settings->site_title;
-    $description = $__env->yieldContent('description') ? $__env->yieldContent('description') : $SeoConfiguration->description ?? '';
-    $robots = $SeoConfiguration ? $SeoConfiguration->robots_index . ', ' . $SeoConfiguration->robots_follow_links : 'index, follow';
-    $localeAlternate = $SeoConfiguration ? $SeoConfiguration->language->code . '_' . strtoupper($SeoConfiguration->language->code) : get_lang() . '_' . strtoupper(get_lang());
+    $description = $__env->yieldContent('description') ? $__env->yieldContent('description') : @$settings->meta_description;
+
     $ogImage = $__env->yieldContent('og_image') ? $__env->yieldContent('og_image') : asset('storage/brand/'.$settings->media->social_image);
 @endphp
-<meta name="title" content="{!! $title !!}">
+<meta name="title" content="{{ $title }}">
 <meta name="description" content="{{ $description }}">
-<meta name="keywords" content="{{ $SeoConfiguration->keywords ?? '' }}">
+<meta name="keywords" content="{{ @$settings->meta_keywords }}">
 <link rel="alternate" hreflang="x-default" href="{{ url('/') }}" />
 @if(@settings('include_language_code'))
     @foreach ($languages as $language)
         <link rel="alternate" hreflang="{{ $language->code }}" href="{{ url($language->code) }}" />
     @endforeach
 @endif
-<meta name="robots" content="{{ $robots }}">
-<meta name="language" content="{{ $SeoConfiguration->language->name ?? get_lang() }}">
+<meta name="language" content="{{ get_lang() }}">
 <meta name="author" content="{{ @$settings->site_title }}">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta property="og:image" content="{{ $ogImage }}">
 <meta property="og:site_name" content="{{ @$settings->site_title }}">
-<meta property="og:locale" content="{{ $SeoConfiguration->language->code ?? get_lang() }}">
-<meta property="og:locale:alternate" content="{{ $localeAlternate }}">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $description }}">

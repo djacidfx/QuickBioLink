@@ -1,16 +1,16 @@
 @extends($activeTheme.'layouts.main')
-@section('title', lang('FAQs', 'pages'))
+@section('title', lang('FAQs'))
 @section('content')
     <section class="page-banner-area theme-gradient-3 pt-170 @if (ads('home_page_top')) mb-40 @else mb-70 @endif">
         <div class="container">
             <div class="row wow fadeInUp" data-wow-delay="300ms">
                 <div class="col-md-10 col-xl-8 mx-auto">
                     <div class="d-flex flex-column align-items-center text-center">
-                        <h2>{{ lang('FAQs', 'pages') }}</h2>
-                        <p>{{ lang('faqs description', 'pages') }}</p>
+                        <h2>{{ lang('FAQs') }}</h2>
+                        <p>{{ lang('faqs description') }}</p>
                         <ol class="breadcrumb text-grey-2">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home', 'pages') }}</a></li>
-                            <li class="breadcrumb-item active text-dark-1" aria-current="page">{{ lang('FAQs', 'pages') }}</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home') }}</a></li>
+                            <li class="breadcrumb-item active text-dark-1" aria-current="page">{{ lang('FAQs') }}</li>
                         </ol>
                     </div>
                 </div>

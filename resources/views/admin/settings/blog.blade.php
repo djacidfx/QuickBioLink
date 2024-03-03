@@ -2,28 +2,28 @@
     <form class="ajax_submit_form" data-action="{{ route('admin.settings.update') }}" method="POST">
         <div class="card">
             <div class="card-header">
-                <h5>{{ admin_lang('Blog Settings') }}</h5>
+                <h5>{{ lang('Blog Settings') }}</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="mb-3">
-                            {{quick_switch(admin_lang('Blog'), 'blog[status]', @$settings->blog->status == '1')}}
+                            {{quick_switch(lang('Blog'), 'blog[status]', @$settings->blog->status == '1')}}
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="mb-3">
-                            {{quick_switch(admin_lang('Show Blog On Home Page'), 'blog[show_on_home]', @$settings->blog->show_on_home == '1')}}
+                            {{quick_switch(lang('Show Blog On Home Page'), 'blog[show_on_home]', @$settings->blog->show_on_home == '1')}}
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="mb-3">
-                            {{ quick_switch(admin_lang('Blog Commenting'), 'blog[commenting]', @$settings->blog->commenting == '1')}}
+                            {{ quick_switch(lang('Blog Commenting'), 'blog[commenting]', @$settings->blog->commenting == '1')}}
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="mb-3">
-                            <label class="form-label" for="blog_page_limit">{{admin_lang('Number of Blogs on blog page')}}</label>
+                            <label class="form-label" for="blog_page_limit">{{lang('Number of Blogs on blog page')}}</label>
                             <input name="blog[page_limit]" id="blog_page_limit" type="number" class="form-control" value="{{$settings->blog->page_limit ?? 8}}">
                         </div>
                     </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="card-footer">
                 <input type="hidden" name="blog_settings" value="1">
-                <button type="submit" class="btn btn-primary">{{ admin_lang('Save Changes') }}</button>
+                <button type="submit" class="btn btn-primary">{{ lang('Save Changes') }}</button>
             </div>
         </div>
     </form>

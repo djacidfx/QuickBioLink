@@ -77,7 +77,7 @@ class PostController extends Controller
                 $rows[] = '<td>'.date_formating($row->created_at).'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="'.url('/').'/'.$row->slug.'" title="'.admin_lang('View').'" class="btn btn-primary btn-icon" data-tippy-placement="top" target="_blank"><i class="icon-feather-eye"></i></a>
+                                    <a href="'.url('/').'/'.$row->slug.'" title="'.lang('View').'" class="btn btn-primary btn-icon" data-tippy-placement="top" target="_blank"><i class="icon-feather-eye"></i></a>
                                 </div>
                             </td>';
                 $rows[] = '<td>
@@ -122,10 +122,20 @@ class PostController extends Controller
                 }
                 $link->delete();
             }
-            remove_file('storage/post/logo/'.$biolink->image);
+
+            if(!empty($biolink->image)) {
+                remove_file('storage/post/logo/' . $biolink->image);
+            }
+
+            $postOptions = post_options($biolink->id);
+            $coverImage = @$postOptions->cover_image;
+            if(!empty($coverImage)) {
+                remove_file('storage/post/logo/' . $coverImage);
+            }
         }
+
         Post::whereIn('id',$ids)->delete();
-        $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+        $result = array('success' => true, 'message' => lang('Deleted Successfully'));
         return response()->json($result, 200);
     }
 

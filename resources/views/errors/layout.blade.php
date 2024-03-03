@@ -18,7 +18,7 @@
             <p class="lead">
                 @yield('description')
             </p>
-            <a href="{{ url('/') }}" class="button -secondary">{{ lang('Back to home', 'errors') }}</a>
+            <a href="{{ url('/') }}" class="button -secondary">{{ lang('Back to home') }}</a>
         </div>
     </div>
 </body>

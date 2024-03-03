@@ -40,7 +40,7 @@
     @elseif(session('resent'))
         <script>
             Snackbar.show({
-                text: '{{ lang('Link has been resend Successfully', 'auth') }}',
+                text: '{{ lang('Link has been resend Successfully') }}',
                 pos: 'bottom-center',
                 showAction: false,
                 actionText: "Dismiss",

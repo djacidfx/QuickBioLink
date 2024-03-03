@@ -1,9 +1,9 @@
 @extends($activeTheme.'layouts.app')
-@section('title', lang('Dashboard', 'account'))
+@section('title', lang('Dashboard'))
 @section('content')
     <div class="d-flex justify-content-between align-items-center pb-30">
         <div class="title-head">
-            <h1 class="mb-0">{{ lang('Dashboard', 'account') }}</h1>
+            <h1 class="mb-0">{{ lang('Dashboard') }}</h1>
         </div>
     </div>
     <!-- / Dashboard Tiles-->
@@ -11,9 +11,9 @@
         <div class="d-state -style2 d-md-flex bg-light-1 rounded-3 justify-content-md-around">
             <!-- / Tiles Box-->
             <div class="d-state-box text-center fw-bold py-24">
-                <div class="badge bg-info text-white mb-16">{{ lang('My Bio Links', 'dashboard') }}</div>
+                <div class="badge bg-info text-white mb-16">{{ lang('My Bio Links') }}</div>
                 <div class="text-dark-1 font-30 md-font-24 sm-font-20 lh-1 mb-5">{{ count($posts) }}</div>
-                <p class="d-flex align-items-center justify-content-center"><i class="fa-regular fa-contact-card mr-5"></i> {{ lang('Total Bio Links', 'dashboard') }}</p>
+                <p class="d-flex align-items-center justify-content-center"><i class="fa-regular fa-contact-card mr-5"></i> {{ lang('Total Bio Links') }}</p>
             </div>
             <!-- / Tiles Box-->
             <!-- / Tiles Box Separator -->
@@ -21,7 +21,7 @@
             <!-- / Tiles Box Separator -->
             <!-- / Tiles Box-->
             <div class="d-state-box rounded-3 text-center fw-bold py-24">
-                <div class="badge bg-danger text-white mb-16">{{ lang('Membership', 'dashboard') }}</div>
+                <div class="badge bg-danger text-white mb-16">{{ lang('Membership') }}</div>
                 @if ($user->isSubscribed() && !$user->subscription->isCancelled())
                     <div class="text-dark-1 font-30 md-font-24 sm-font-20 lh-1 mb-5">{{ $user->subscription->plan->name }}</div>
                     <p class="d-flex align-items-center justify-content-center"><i class="fa-regular fa-clock mr-5"></i> {{ format_interval($user->subscription->plan->interval) }}</p>
@@ -37,9 +37,9 @@
 
     <div class="d-flex justify-content-between align-items-center pb-30">
         <div class="title-head">
-            <h1 class="mb-0">{{ lang('My Bio Pages', 'account') }}</h1>
+            <h1 class="mb-0">{{ lang('My Bio Pages') }}</h1>
         </div>
-        <a href="{{ route('biolinks.create') }}" class="button -secondary ml-auto rounded-pill">{{ lang('Add New', 'account') }} <i class="fa-regular fa-plus ml-5"></i></a>
+        <a href="{{ route('biolinks.create') }}" class="button -secondary ml-auto rounded-pill">{{ lang('Add New') }} <i class="fa-regular fa-plus ml-5"></i></a>
     </div>
     <section class="products-list">
         @if ($posts->count() > 0)
@@ -73,7 +73,7 @@
                 </div>
             @endforeach
         @else
-            @include($activeTheme.'user.empty-section')
+            {{ lang('No Biolinks available, add new.') }}
         @endif
     </section>
 @endsection

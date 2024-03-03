@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Taxes'))
+@section('title', lang('Taxes'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.taxes.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.taxes.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
         <div class="quick-card card">
@@ -10,9 +10,9 @@
                     <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.taxes.index') }}">
                         <thead>
                             <tr>
-                                <th class="no-sort">{{ admin_lang('Country') }}</th>
-                                <th class="no-sort">{{ admin_lang('Title') }}</th>
-                                <th>{{ admin_lang('Value') }}</th>
+                                <th class="no-sort">{{ lang('Country') }}</th>
+                                <th class="no-sort">{{ lang('Title') }}</th>
+                                <th>{{ lang('Value') }}</th>
                                 <th width="20" class="no-sort" data-priority="1"></th>
                                 <th width="20" class="no-sort" data-priority="1">
                                     <div class="checkbox">

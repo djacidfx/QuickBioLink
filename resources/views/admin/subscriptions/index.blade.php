@@ -1,53 +1,9 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Subscriptions'))
+@section('title', lang('Subscriptions'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.subscriptions.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.subscriptions.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-border-shadow-success">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                        <div class="avatar me-2">
-                            <span class="avatar-initial rounded bg-label-success"><i class="fas fa-users"></i></span>
-                        </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($activeSubscriptions->count()) }}</h4>
-                    </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Active Subscriptions') }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-border-shadow-danger">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                        <div class="avatar me-2">
-                            <span class="avatar-initial rounded bg-label-danger"><i class="fas fa-user-clock"></i></span>
-                        </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($expiredSubscriptions->count()) }}</h4>
-                    </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Expired Subscriptions') }}</p>
-                </div>
-            </div>
-        </div>
-        @if ($canceledSubscriptions->count() > 0)
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-border-shadow-warning">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-2 pb-1">
-                        <div class="avatar me-2">
-                            <span class="avatar-initial rounded bg-label-warning"><i
-                                    class="fas fa-user-times"></i></span>
-                        </div>
-                        <h4 class="ms-1 mb-0">{{ number_format($canceledSubscriptions->count() ) }}</h4>
-                    </div>
-                    <p class="mb-0 fs-6">{{ admin_lang('Canceled Subscriptions') }}</p>
-                </div>
-            </div>
-        </div>
-        @endif
-    </div>
 
     <div class="quick-card card">
         <div class="card-body">
@@ -55,12 +11,12 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.subscriptions.index') }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('User details') }}</th>
-                        <th>{{ admin_lang('Plan') }}</th>
-                        <th>{{ admin_lang('Subscribe at') }}</th>
-                        <th>{{ admin_lang('Expiring at') }}</th>
-                        <th>{{ admin_lang('Status') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('User details') }}</th>
+                        <th>{{ lang('Plan') }}</th>
+                        <th>{{ lang('Subscribed at') }}</th>
+                        <th>{{ lang('Expiring at') }}</th>
+                        <th>{{ lang('Status') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

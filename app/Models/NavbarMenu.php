@@ -9,11 +9,6 @@ class NavbarMenu extends Model
 {
     use HasFactory;
 
-    public function scopeByOrder($query)
-    {
-        return $query->orderBy('order', 'asc');
-    }
-
     /**
      * The table associated with the model.
      *
@@ -34,6 +29,15 @@ class NavbarMenu extends Model
         'type',
         'order',
     ];
+
+    public function scopeByOrder($query)
+    {
+        return $query->orderBy('order', 'asc');
+    }
+
+    /**
+     * Relationships
+     */
 
     public function children()
     {

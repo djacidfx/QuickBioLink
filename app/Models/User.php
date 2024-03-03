@@ -16,25 +16,6 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable, Sluggable;
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'username' => [
-                'source' => 'name',
-            ],
-        ];
-    }
-
-    public function isSubscribed()
-    {
-        return $this->subscription;
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -77,6 +58,25 @@ class User extends Authenticatable implements MustVerifyEmail
         'address' => 'object',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'username' => [
+                'source' => 'name',
+            ],
+        ];
+    }
+
+    public function isSubscribed()
+    {
+        return $this->subscription;
+    }
 
     /**
      * Decrypt the user's google_2fa secret.

@@ -1,8 +1,8 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Blog Categories').' - '.$active)
+@section('title', lang('Blog Categories').' - '.$current_language)
 @section('header_buttons')
     @include('admin.includes.language')
-    <a href="#" data-url="{{ route('admin.categories.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.categories.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="quick-card card">
@@ -11,11 +11,11 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.categories.index') }}?lang={{ $lang }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('Language') }}</th>
-                        <th>{{ admin_lang('Name') }}</th>
-                        <th>{{ admin_lang('Views') }}</th>
-                        <th>{{ admin_lang('Published date') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('Language') }}</th>
+                        <th>{{ lang('Name') }}</th>
+                        <th>{{ lang('Views') }}</th>
+                        <th>{{ lang('Published date') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

@@ -47,16 +47,6 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new admin notification
-     */
-    public function createAdminNotify($user)
-    {
-        $title = $user->name . ' ' . admin_lang('has registered');
-        $link = route('admin.users.edit', $user->id);
-        admin_notify($title, 'new_user', $link);
-    }
-
-    /**
      * Show the application registration form.
      *
      * @return \Illuminate\View\View
@@ -98,20 +88,7 @@ class RegisterController extends Controller
         $data = array_merge($request->all(), [
             'country_name' => $ipInfo->location->country,
         ]);
-        $user = $this->create($data);
-        event(new Registered($user));
-        $this->guard()->login($user);
-        return $this->registered($request, $user) ?: redirect($this->redirectPath());
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
         $user = User::create([
             'name' => $data['firstname'] . ' ' . $data['lastname'],
             'firstname' => $data['firstname'],
@@ -123,10 +100,19 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
         if ($user) {
-            $this->createAdminNotify($user);
+
+            /* Add admin notification */
+            $title = $user->name . ' ' . lang('has registered');
+            admin_notify($title, 'new_user', route('admin.users.edit', $user->id));
+
             update_user_logs($user);
         }
-        return $user;
+
+        event(new Registered($user));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 
 }

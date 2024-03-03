@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlogArticle;
-use App\Models\BlogCategory;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
@@ -35,17 +33,17 @@ class SubscriptionController extends Controller
                 'status'
             );
 
-            if(!empty($params['search']['value'])){
+            if (!empty($params['search']['value'])) {
                 $q = $params['search']['value'];
                 $subscription = Subscription::with(['user', 'plan'])
                     ->where('id', 'like', '%' . $q . '%')
                     ->OrWhere('user_id', 'like', '%' . $q . '%')
-                    ->orderBy($columns[$params['order'][0]['column']],$params['order'][0]['dir'])
+                    ->orderBy($columns[$params['order'][0]['column']], $params['order'][0]['dir'])
                     ->limit($params['length'])->offset($params['start'])
                     ->get();
-            }else{
+            } else {
                 $subscription = Subscription::with(['user', 'plan'])
-                    ->orderBy($columns[$params['order'][0]['column']],$params['order'][0]['dir'])
+                    ->orderBy($columns[$params['order'][0]['column']], $params['order'][0]['dir'])
                     ->limit($params['length'])->offset($params['start'])
                     ->get();
 
@@ -53,42 +51,42 @@ class SubscriptionController extends Controller
 
             $totalRecords = Subscription::count();
             foreach ($subscription as $row) {
-                if($row->isExpired()){
-                    $status_badge = '<span class="badge bg-danger">'.admin_lang('Expired').'</span>';
-                }elseif($row->isCancelled()){
-                    $status_badge = '<span class="badge bg-warning">'.admin_lang('Canceled').'</span>';
+                if ($row->isExpired()) {
+                    $status_badge = '<span class="badge bg-danger">' . lang('Expired') . '</span>';
+                } elseif ($row->isCancelled()) {
+                    $status_badge = '<span class="badge bg-warning">' . lang('Canceled') . '</span>';
                 } else {
-                    $status_badge = '<span class="badge bg-success">'.admin_lang('Active').'</span>';
+                    $status_badge = '<span class="badge bg-success">' . lang('Active') . '</span>';
                 }
                 $rows = array();
-                $rows[] = '<td>'.$row->id.'</td>';
+                $rows[] = '<td>' . $row->id . '</td>';
                 $rows[] = '<td>
                                 <div class="quick-user-box">
                                 <div class="quick-user-box">
                                     <a class="quick-user-avatar"
-                                        href="'.route('admin.users.edit', $row->user->id).'">
-                                        <img src="'.asset('storage/avatars/users/'.$row->user->avatar).'" alt="User" />
+                                        href="' . route('admin.users.edit', $row->user->id) . '">
+                                        <img src="' . asset('storage/avatars/users/' . $row->user->avatar) . '" alt="User" />
                                     </a>
                                     <div>
                                         <a class="text-body fw-bold"
-                                            href="'.route('admin.users.edit', $row->user->id).'">'.$row->user->name.'</a>
-                                        <p class="text-muted mb-0">'.$row->user->email.'</p>
+                                            href="' . route('admin.users.edit', $row->user->id) . '">' . $row->user->name . '</a>
+                                        <p class="text-muted mb-0">' . $row->user->email . '</p>
                                     </div>
                                 </div>
                             </td>';
-                $rows[] = '<td>'.$row->plan->name.'</td>';
-                $rows[] = '<td>'.date_formating($row->created_at).'</td>';
-                $rows[] = '<td>'.date_formating($row->expiry_at).'</td>';
-                $rows[] = '<td>'.$status_badge.'</td>';
+                $rows[] = '<td>' . $row->plan->name . '</td>';
+                $rows[] = '<td>' . date_formating($row->created_at) . '</td>';
+                $rows[] = '<td>' . date_formating($row->expiry_at) . '</td>';
+                $rows[] = '<td>' . $status_badge . '</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="#" data-url="'.route('admin.subscriptions.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="' . route('admin.subscriptions.edit', $row->id) . '" data-toggle="slidePanel" title="' . lang('Edit') . '" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>';
                 $rows[] = '<td>
                                 <div class="checkbox">
-                                <input type="checkbox" id="check_'.$row->id.'" value="'.$row->id.'" class="quick-check">
-                                <label for="check_'.$row->id.'"><span class="checkbox-icon"></span></label>
+                                <input type="checkbox" id="check_' . $row->id . '" value="' . $row->id . '" class="quick-check">
+                                <label for="check_' . $row->id . '"><span class="checkbox-icon"></span></label>
                             </div>
                            </td>';
                 $rows['DT_RowId'] = $row->id;
@@ -96,33 +94,22 @@ class SubscriptionController extends Controller
             }
 
             $json_data = array(
-                "draw"            => intval( $params['draw'] ),
-                "recordsTotal"    => intval( $totalRecords ),
+                "draw" => intval($params['draw']),
+                "recordsTotal" => intval($totalRecords),
                 "recordsFiltered" => intval($totalRecords),
-                "data"            => $data   // total data array
+                "data" => $data   // total data array
             );
             return response()->json($json_data, 200);
         }
 
-        $unviewedSubscriptions = Subscription::where('is_viewed', 0)->get();
-        if ($unviewedSubscriptions->count() > 0) {
-            foreach ($unviewedSubscriptions as $unviewedSubscription) {
-                $unviewedSubscription->is_viewed = true;
-                $unviewedSubscription->save();
-            }
+        /* Mark subscriptions as viewed */
+        $unviewed = Subscription::where('is_viewed', 0)->get();
+        foreach ($unviewed as $subscription) {
+            $subscription->is_viewed = true;
+            $subscription->save();
         }
-        $users = User::where('status', 1)->with('subscription')->get();
-        $plans = Plan::all();
-        $activeSubscriptions = Subscription::active()->with(['user', 'plan'])->get();
-        $expiredSubscriptions = Subscription::expired()->with(['user', 'plan'])->get();
-        $canceledSubscriptions = Subscription::cancelled()->with(['user', 'plan'])->get();
-        return view('admin.subscriptions.index', [
-            'users' => $users,
-            'plans' => $plans,
-            'activeSubscriptions' => $activeSubscriptions,
-            'expiredSubscriptions' => $expiredSubscriptions,
-            'canceledSubscriptions' => $canceledSubscriptions,
-        ]);
+
+        return view('admin.subscriptions.index');
     }
 
     /**
@@ -134,13 +121,13 @@ class SubscriptionController extends Controller
     {
         $users = User::where('status', 1)->get();
         $plans = Plan::all();
-        return view('admin.subscriptions.create', ['users' => $users, 'plans' => $plans]);
+        return view('admin.subscriptions.create', compact('users', 'plans'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -161,27 +148,27 @@ class SubscriptionController extends Controller
 
         $user = User::where('id', $request->user)->with('subscription')->firstOrFail();
         if ($user->isSubscribed()) {
-            $result = array('success' => false, 'message' => admin_lang('User already subscribed'));
+            $result = array('success' => false, 'message' => lang('User is already subscribed.'));
             return response()->json($result, 200);
         }
-        $plan = Plan::find($request->plan);
-        if (is_null($plan)) {
-            $result = array('success' => false, 'message' => admin_lang('Plan not exists'));
-            return response()->json($result, 200);
-        }
+
+        $plan = Plan::where('id', $request->plan)->firstOrFail();
+
         if ($plan->interval == 1) {
             $expiry_at = Carbon::now()->addMonth();
         } else {
             $expiry_at = Carbon::now()->addYear();
         }
-        $createSubscription = Subscription::create([
+
+        $create = Subscription::create([
             'user_id' => $user->id,
             'plan_id' => $plan->id,
+            'plan_settings' => $plan->settings,
             'expiry_at' => $expiry_at,
             'is_viewed' => 1,
         ]);
-        if ($createSubscription) {
-            $result = array('success' => true, 'message' => admin_lang('Added Successfully'));
+        if ($create) {
+            $result = array('success' => true, 'message' => lang('Added Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -189,31 +176,30 @@ class SubscriptionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Subscription $subscription
      */
     public function show(Subscription $subscription)
     {
-        return abort(404);
+        abort(404);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Subscription  $subscription
+     * @param \App\Models\Subscription $subscription
      * @return \Illuminate\Http\Response
      */
     public function edit(Subscription $subscription)
     {
         $plans = Plan::all();
-        return view('admin.subscriptions.edit', ['subscription' => $subscription, 'plans' => $plans]);
+        return view('admin.subscriptions.edit', compact('subscription', 'plans'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Subscription  $subscription
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Subscription $subscription
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Subscription $subscription)
@@ -231,16 +217,17 @@ class SubscriptionController extends Controller
             return response()->json($result, 200);
         }
 
-        $plan = Plan::findOrFail($request->plan);
+        $plan = Plan::where('id', $request->plan)->firstOrFail();
         $expiry_at = Carbon::parse($request->expiry_at);
-        $updateSubscription = $subscription->update([
+
+        $update = $subscription->update([
             'plan_id' => $plan->id,
-            'expiry_at' => $expiry_at,
             'status' => $request->status,
             'plan_settings' => $plan->settings,
+            'expiry_at' => $expiry_at,
         ]);
-        if ($updateSubscription) {
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+        if ($update) {
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -248,22 +235,25 @@ class SubscriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Subscription  $subscription
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Subscription $subscription
      */
     public function destroy(Subscription $subscription)
     {
-        $subscription->delete();
-        quick_alert_success(admin_lang('Deleted successfully'));
-        return back();
+        abort(404);
     }
 
+    /**
+     * Remove the multiple resources from storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public function delete(Request $request)
     {
         $ids = array_map('intval', $request->ids);
-        $sql = Subscription::whereIn('id',$ids)->delete();
-        if($sql){
-            $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+        $sql = Subscription::whereIn('id', $ids)->delete();
+        if ($sql) {
+            $result = array('success' => true, 'message' => lang('Deleted Successfully'));
             return response()->json($result, 200);
         }
     }

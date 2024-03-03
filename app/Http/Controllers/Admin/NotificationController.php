@@ -7,13 +7,26 @@ use App\Models\AdminNotification;
 
 class NotificationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $notifications = AdminNotification::orderbyDesc('id');
+        $notifications = AdminNotification::orderbyDesc('id')->get();
         $unreadNotificationsCount = AdminNotification::where('status', 0)->get()->count();
-        return view('admin.notifications.index', ['notifications' => $notifications, 'unreadNotificationsCount' => $unreadNotificationsCount]);
+
+        return view('admin.notifications.index', compact('notifications', 'unreadNotificationsCount'));
     }
 
+
+    /**
+     * Redirect to the notification link
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function view($id)
     {
         $notification = AdminNotification::where('id', unhashid($id))->firstOrFail();
@@ -23,31 +36,27 @@ class NotificationController extends Controller
         }
     }
 
-    public function readAll()
+    /**
+     * Mark all notifications as read
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function markAsRead()
     {
-        $notifications = AdminNotification::where('status', 0)->get();
-        if ($notifications->count() == 0) {
-            quick_alert_error(admin_lang('No unread notifications available'));
-            return back();
-        }
-        foreach ($notifications as $notification) {
-            $notification->update(['status' => 1]);
-        }
-        quick_alert_success(admin_lang('All notifications has been read successfully'));
+        AdminNotification::where('status', 0)->update(['status' => 1]);
+        quick_alert_success(lang('All notifications marked as read'));
         return back();
     }
 
+    /**
+     * Delete all read notifications
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteAllRead()
     {
-        $notifications = AdminNotification::where('status', 1)->get();
-        if ($notifications->count() == 0) {
-            quick_alert_error(admin_lang('No read notifications available'));
-            return back();
-        }
-        foreach ($notifications as $notification) {
-            $notification->delete();
-        }
-        quick_alert_success(admin_lang('Deleted Successfully'));
+        AdminNotification::where('status', 1)->delete();
+        quick_alert_success(lang('Deleted Successfully'));
         return back();
     }
 }

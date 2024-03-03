@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('post_links', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('post_id');
+            $table->integer('post_id')->index('post_id');
             $table->string('type', 32)->nullable();
             $table->longText('settings')->nullable();
             $table->boolean('active')->default(true)->comment('	0:Disabled 1:Active	');

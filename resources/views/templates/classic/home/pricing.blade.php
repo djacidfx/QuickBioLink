@@ -1,15 +1,15 @@
 @extends($activeTheme.'layouts.main')
-@section('title', lang('Pricing', 'pages'))
+@section('title', lang('Pricing'))
 @section('content')
     <section class="page-banner-area theme-gradient-3 pt-170 @if (ads('home_page_top')) mb-40 @else mb-70 @endif ">
         <div class="container">
             <div class="row wow fadeInUp" data-wow-delay="300ms">
                 <div class="col-md-10 col-xl-8 mx-auto">
                     <div class="d-flex flex-column align-items-center">
-                        <h2>{{ lang('Pricing', 'pages') }}</h2>
+                        <h2>{{ lang('Pricing') }}</h2>
                         <ol class="breadcrumb text-grey-2">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home', 'pages') }}</a></li>
-                            <li class="breadcrumb-item active text-dark-1" aria-current="page">{{ lang('Pricing', 'pages') }}</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ lang('Home') }}</a></li>
+                            <li class="breadcrumb-item active text-dark-1" aria-current="page">{{ lang('Pricing') }}</li>
                         </ol>
                     </div>
                 </div>
@@ -22,21 +22,21 @@
             <div class="row">
                 <div class="col-lg-6 m-auto wow fadeInUp" data-wow-delay="300ms">
                     <div class="main-title text-center">
-                        <h2 class="title">{{ lang('Membership Plans', 'pages') }}</h2>
-                        <p class="paragraph mt10">{{ lang('Memberships are a great way to build recurring revenue, create engagement, and build deep and meaningful relationships with your fans. Start earning monthly/yearly upfront payments doing what you love!', 'pages') }}</p>
+                        <h2 class="title">{{ lang('Membership Plans') }}</h2>
+                        <p class="paragraph mt10">{{ lang('Memberships are a great way to build recurring revenue, create engagement, and build deep and meaningful relationships with your fans. Start earning monthly/yearly upfront payments doing what you love!') }}</p>
                     </div>
                 </div>
             </div>
             <div class="pricing-table wrapper">
                 @if ($yearlyPlans->count() > 0)
                     <div class="d-flex flex-wrap align-items-center justify-content-center">
-                        <p class="mb-0 pe-3">{{ lang('Monthly', 'plans') }}</p>
+                        <p class="mb-0 pe-3">{{ lang('Monthly') }}</p>
                         <div class="pricing-switchers">
                             <div class="pricing-switcher pricing-switcher-active"></div>
                             <div class="pricing-switcher"></div>
                             <div class="switcher-button bg-primary"></div>
                         </div>
-                        <p class="mb-0 ps-3">{{ lang('Yearly', 'plans') }}</p>
+                        <p class="mb-0 ps-3">{{ lang('Yearly') }}</p>
                     </div>
                 @endif
 
@@ -61,14 +61,14 @@
                                             </div>
                                             <div class="pricing-table-price mt-16 mb-16">
                                                 @if ($plan->isFree())
-                                                    <span class="price-number">{{ lang('Free', 'plans') }}</span>
+                                                    <span class="price-number">{{ lang('Free') }}</span>
                                                 @else
                                                     <span class="price-number">{{ price_symbol_format($plan->price) }}</span>
                                                     <span class="badge">{{ format_interval($plan->interval) }}</span>
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="pricing-table-details mb-16">{{ lang('Get the following deal without any risk and fees.', 'plans') }}</div>
+                                        <div class="pricing-table-details mb-16">{{ lang('Get the following deal without any risk and fees.') }}</div>
                                         <div class="pricing-table-features">
                                             <ul class="list-unstyled">
                                                 <li class="exist">
@@ -76,7 +76,7 @@
                                                     <span>{!! str_replace(
                                                         '{bio_pages_limit}',
                                                         '<strong>' . number_format($plan->settings->biopage_limit) . '</strong>',
-                                                        lang('Bio pages limit {bio_pages_limit}', 'plans'),
+                                                        lang('Bio pages limit {bio_pages_limit}'),
                                                     ) !!}</span>
                                                 </li>
                                                 <li class="exist">
@@ -84,9 +84,9 @@
                                                     <span>{!! str_replace(
                                                         '{bio_link_limit}',
                                                         '<strong>' . number_format($plan->settings->biolink_limit) . '</strong>',
-                                                        lang('Add link limit {bio_link_limit}', 'plans'),
+                                                        lang('Add link limit {bio_link_limit}'),
                                                     ) !!}</span>
-                                                    <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Per Bio link pages', 'plans') }}"></i>
+                                                    <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Per Bio link pages') }}"></i>
                                                 </li>
                                                 <li class="exist">
                                                     @if ($plan->settings->hide_branding)
@@ -94,14 +94,14 @@
                                                     @else
                                                         <i class="fa-regular fa-close mr-10 text-danger"></i>
                                                     @endif
-                                                    <span>{{ lang('Hide branding', 'plans') }}</span>
-                                                    <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Ability to remove the branding from the Bio link pages', 'plans') }}"></i>
+                                                    <span>{{ lang('Hide branding') }}</span>
+                                                    <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Ability to remove the branding from the Bio link pages') }}"></i>
                                                 </li>
 
                                                 @if (!$plan->advertisements)
                                                     <li class="exist">
                                                         <i class="fa-regular fa-check mr-10"></i>
-                                                        <span>{{ lang('No Advertisements', 'plans') }}</span>
+                                                        <span>{{ lang('No Advertisements') }}</span>
                                                     </li>
                                                 @endif
                                                 @if ($plan->custom_features)
@@ -151,14 +151,14 @@
                                                 </div>
                                                 <div class="pricing-table-price mt-16 mb-16">
                                                     @if ($plan->isFree())
-                                                        <span class="price-number">{{ lang('Free', 'plans') }}</span>
+                                                        <span class="price-number">{{ lang('Free') }}</span>
                                                     @else
                                                         <span class="price-number">{{ price_symbol_format($plan->price) }}</span>
                                                         <span class="badge">{{ format_interval($plan->interval) }}</span>
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="pricing-table-details mb-16">Get the following deal without any risk and fees.</div>
+                                            <div class="pricing-table-details mb-16">{{ lang('Get the following deal without any risk and fees.') }}</div>
                                             <div class="pricing-table-features">
                                                 <ul class="list-unstyled">
                                                     <li class="exist">
@@ -166,7 +166,7 @@
                                                         <span>{!! str_replace(
                                                         '{bio_pages_limit}',
                                                         '<strong>' . number_format($plan->settings->biopage_limit) . '</strong>',
-                                                        lang('Bio pages limit {bio_pages_limit}', 'plans'),
+                                                        lang('Bio pages limit {bio_pages_limit}'),
                                                     ) !!}</span>
                                                     </li>
                                                     <li class="exist">
@@ -174,9 +174,9 @@
                                                         <span>{!! str_replace(
                                                         '{bio_link_limit}',
                                                         '<strong>' . number_format($plan->settings->biolink_limit) . '</strong>',
-                                                        lang('Add link limit {bio_link_limit}', 'plans'),
+                                                        lang('Add link limit {bio_link_limit}'),
                                                     ) !!}</span>
-                                                        <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Per Bio link pages', 'plans') }}"></i>
+                                                        <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Per Bio link pages') }}"></i>
                                                     </li>
                                                     <li class="exist">
                                                         @if ($plan->settings->hide_branding)
@@ -184,13 +184,13 @@
                                                         @else
                                                             <i class="fa-regular fa-close mr-10 text-danger"></i>
                                                         @endif
-                                                        <span>{{ lang('Hide branding', 'plans') }}</span>
-                                                        <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Ability to remove the branding from the Bio link pages', 'plans') }}"></i>
+                                                        <span>{{ lang('Hide branding') }}</span>
+                                                        <i class="fa-regular fa-info-circle" data-bs-toggle="tooltip" title="{{ lang('Ability to remove the branding from the Bio link pages') }}"></i>
                                                     </li>
                                                     @if (!$plan->advertisements)
                                                         <li class="exist">
                                                             <i class="fa-regular fa-check mr-10 text-success"></i>
-                                                            <span>{{ lang('No Advertisements', 'plans') }}</span>
+                                                            <span>{{ lang('No Advertisements') }}</span>
                                                         </li>
                                                     @endif
                                                     @if ($plan->custom_features)

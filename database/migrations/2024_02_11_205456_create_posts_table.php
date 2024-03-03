@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('user_id')->index('user_id');
             $table->boolean('status')->default(true);
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('title');
             $table->text('content');
             $table->string('image');

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->index('subscriptions_user_id_foreign');
+            $table->unsignedBigInteger('user_id')->index('user_id');
             $table->string('plan_id', 16);
             $table->text('plan_settings');
             $table->boolean('status')->default(true)->comment('1:Active 0:cancelled');

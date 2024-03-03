@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Coupons'))
+@section('title', lang('Coupons'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.coupons.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.coupons.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="quick-card card">
@@ -10,13 +10,11 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.coupons.index') }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('Coupon') }}</th>
-                        <th>{{ admin_lang('Percentage') }}</th>
-                        <th>{{ admin_lang('Limit') }}</th>
-                        <th>{{ admin_lang('Plan') }}</th>
-                        <th>{{ admin_lang('Action type') }}</th>
-                        <th>{{ admin_lang('expiry date') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('Coupon') }}</th>
+                        <th>{{ lang('Percentage') }}</th>
+                        <th>{{ lang('Limit') }}</th>
+                        <th>{{ lang('expiry date') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

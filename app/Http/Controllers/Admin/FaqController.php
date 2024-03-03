@@ -18,9 +18,12 @@ class FaqController extends Controller
     public function index(Request $request)
     {
         if ($request->has('lang')) {
+
             $language = Language::where('code', $request->lang)->firstOrFail();
+
             $faqs = Faq::where('lang', $language->code)->get();
-            return view('admin.faqs.index', ['faqs' => $faqs, 'active' => $language->name]);
+            $current_language = $language->name;
+            return view('admin.faqs.index', compact('faqs', 'current_language'));
         } else {
             return redirect(url()->current() . '?lang=' . env('DEFAULT_LANGUAGE'));
         }
@@ -45,9 +48,9 @@ class FaqController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'lang' => ['required', 'string', 'max:3', 'exists:languages,code'],
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
+            'lang' => ['required', 'string', 'max:3', 'exists:languages,code'],
         ]);
         $errors = [];
         if ($validator->fails()) {
@@ -57,13 +60,14 @@ class FaqController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
-        $create = Faq::create([
-            'lang' => $request->lang,
+
+        $faq = Faq::create([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->content,
+            'lang' => $request->lang,
         ]);
-        if ($create) {
-            $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
+        if ($faq) {
+            $result = array('success' => true, 'message' => lang('Created Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -72,11 +76,10 @@ class FaqController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Faq  $faq
-     * @return \Illuminate\Http\Response
      */
     public function show(Faq $faq)
     {
-        return abort(404);
+        abort(404);
     }
 
     /**
@@ -87,7 +90,7 @@ class FaqController extends Controller
      */
     public function edit(Faq $faq)
     {
-        return view('admin.faqs.edit', ['faq' => $faq]);
+        return view('admin.faqs.edit', compact('faq'));
     }
 
     /**
@@ -100,9 +103,9 @@ class FaqController extends Controller
     public function update(Request $request, Faq $faq)
     {
         $validator = Validator::make($request->all(), [
-            'lang' => ['required', 'string', 'max:3', 'exists:languages,code'],
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
+            'lang' => ['required', 'string', 'max:3', 'exists:languages,code'],
         ]);
         $errors = [];
         if ($validator->fails()) {
@@ -112,13 +115,14 @@ class FaqController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
+
         $update = $faq->update([
-            'lang' => $request->lang,
             'title' => $request->title,
             'content' => $request->content,
+            'lang' => $request->lang,
         ]);
         if ($update) {
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -132,7 +136,7 @@ class FaqController extends Controller
     public function destroy(Faq $faq)
     {
         $faq->delete();
-        quick_alert_success(admin_lang('Deleted Successfully'));
+        quick_alert_success(lang('Deleted Successfully'));
         return back();
     }
 }

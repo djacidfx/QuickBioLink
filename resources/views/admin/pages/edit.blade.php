@@ -2,13 +2,13 @@
     <header class="slidePanel-header">
         <div class="slidePanel-overlay-panel">
             <div class="slidePanel-heading">
-                <h2>{{ admin_lang('Edit Page') }}</h2>
+                <h2>{{ lang('Edit Page') }}</h2>
             </div>
             <div class="slidePanel-actions">
-                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{ admin_lang('Save') }}">
+                <button id="post_sidePanel_data" class="btn btn-icon btn-primary" title="{{ lang('Save') }}">
                     <i class="icon-feather-check"></i>
                 </button>
-                <button class="btn btn-default btn-icon slidePanel-close" title="{{ admin_lang('Close') }}">
+                <button class="btn btn-default btn-icon slidePanel-close" title="{{ lang('Close') }}">
                     <i class="icon-feather-x"></i>
                 </button>
             </div>
@@ -19,19 +19,19 @@
             @csrf
             @method('PUT')
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Title') }} *</label>
+                <label class="form-label">{{ lang('Title') }} *</label>
                 <input type="text" name="title" class="form-control" required
                        value="{{ $page->title }}" />
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Slug') }}</label>
+                <label class="form-label">{{ lang('Slug') }}</label>
                 <input type="text" name="slug" class="form-control"
                        value="{{ $page->slug }}" />
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Language') }} *</label>
+                <label class="form-label">{{ lang('Language') }} *</label>
                 <select name="lang" class="form-select" required>
-                    <option value="" selected disabled>{{ admin_lang('Choose') }}</option>
+                    <option value="" selected disabled>{{ lang('Choose') }}</option>
                     @foreach ($adminLanguages as $adminLanguage)
                         <option value="{{ $adminLanguage->code }}"
                                 @if ($page->lang == $adminLanguage->code) selected @endif>
@@ -40,11 +40,11 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Short description') }} *</label>
+                <label class="form-label">{{ lang('Short description') }} *</label>
                 <textarea name="short_description" rows="3" class="form-control" required>{{ $page->short_description }}</textarea>
             </div>
             <div class="mb-3">
-                <label class="form-label">{{ admin_lang('Content') }} *</label>
+                <label class="form-label">{{ lang('Content') }} *</label>
                 <textarea name="content" rows="10" class="form-control tiny-editor">{{ $page->content }}</textarea>
             </div>
         </form>

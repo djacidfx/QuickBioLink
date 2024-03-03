@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('blog_articles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lang', 3)->index('blog_articles_lang_foreign');
-            $table->unsignedBigInteger('user_id')->index('blog_articles_user_id_foreign');
-            $table->unsignedBigInteger('category_id')->index('blog_articles_category_id_foreign');
+            $table->string('lang', 3)->index('lang');
+            $table->unsignedBigInteger('user_id')->index('user_id');
+            $table->unsignedBigInteger('category_id')->index('category_id');
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('image');

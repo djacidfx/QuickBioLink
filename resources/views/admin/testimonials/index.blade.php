@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Testimonials'))
+@section('title', lang('Testimonials'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.testimonials.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.testimonials.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="quick-card card">
@@ -10,8 +10,8 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.testimonials.index') }}">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('Name') }}</th>
-                        <th>{{ admin_lang('Content') }}</th>
+                        <th>{{ lang('Name') }}</th>
+                        <th>{{ lang('Content') }}</th>
 
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">

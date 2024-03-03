@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('blog_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lang', 3)->index('blog_categories_lang_foreign');
+            $table->string('lang', 3)->index('lang');
             $table->string('name');
             $table->string('slug')->unique();
             $table->bigInteger('views')->default(0);

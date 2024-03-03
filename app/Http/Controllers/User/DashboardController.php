@@ -8,19 +8,24 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
     }
 
-    protected function user()
-    {
-        return user_auth_info();
-    }
-
+    /**
+     * Display the page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
-        $posts = Post::where('user_id', user_auth_info()->id)->get();
-        return view($this->activeTheme.'.user.dashboard', ['user' => $this->user(), 'posts' => $posts]);
+        $user = user_auth_info();
+        $posts = Post::where('user_id', $user->id)->get();
+
+        return view($this->activeTheme.'.user.dashboard', compact('user', 'posts'));
     }
 }

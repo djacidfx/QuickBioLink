@@ -2,12 +2,12 @@
     <form method="post" class="ajax_submit_form" data-action="{{ route('admin.settings.update') }}" data-ajax-sidepanel="true">
         <div class="quick-card card">
             <div class="card-header">
-                <h5>{{ admin_lang('Colors') }}</h5>
+                <h5>{{ lang('Colors') }}</h5>
             </div>
             <div class="card-body">
                 <div class="row g-3 mb-2">
                     <div class="col-lg-6">
-                        <label class="form-label">{{ admin_lang('Primary Color') }} *</label>
+                        <label class="form-label">{{ lang('Primary Color') }} *</label>
                         <input type="color" name="colors[primary_color]" class="form-control form-control-lg"
                                value="{{ $settings->colors->primary_color }}" required>
                     </div>
@@ -15,7 +15,7 @@
             </div>
             <div class="card-footer">
                 <input type="hidden" name="colors_setting" value="1">
-                <button name="submit" type="submit" class="btn btn-primary">{{ admin_lang('Save Changes') }}</button>
+                <button name="submit" type="submit" class="btn btn-primary">{{ lang('Save Changes') }}</button>
             </div>
         </div>
     </form>

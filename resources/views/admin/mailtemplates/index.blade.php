@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Mail Templates').' - '.$active)
+@section('title', lang('Mail Templates').' - '.$current_language)
 @section('header_buttons')
     @include('admin.includes.language')
 @endsection
@@ -10,10 +10,10 @@
                 <table id="basic_datatable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>{{ admin_lang('Language') }}</th>
-                            <th>{{ admin_lang('Name') }}</th>
-                            <th>{{ admin_lang('Subject') }}</th>
-                            <th>{{ admin_lang('Status') }}</th>
+                            <th>{{ lang('Language') }}</th>
+                            <th>{{ lang('Name') }}</th>
+                            <th>{{ lang('Subject') }}</th>
+                            <th>{{ lang('Status') }}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -25,14 +25,14 @@
                             <td>{{ $mailTemplate->subject }}</td>
                             <td>
                                 @if ($mailTemplate->status)
-                                    <span class="badge bg-success">{{ admin_lang('Active') }}</span>
+                                    <span class="badge bg-success">{{ lang('Active') }}</span>
                                 @else
-                                    <span class="badge bg-danger">{{ admin_lang('Disabled') }}</span>
+                                    <span class="badge bg-danger">{{ lang('Disabled') }}</span>
                                 @endif
                             </td>
                             <td>
                                 <div class="d-flex">
-                                    <a href="#" data-url="{{ route('admin.mailtemplates.edit', $mailTemplate->id) }}" data-toggle="slidePanel" title="{{admin_lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon me-1"><i class="icon-feather-edit"></i></a>
+                                    <a href="#" data-url="{{ route('admin.mailtemplates.edit', $mailTemplate->id) }}" data-toggle="slidePanel" title="{{lang('Edit')}}" data-tippy-placement="top" class="btn btn-default btn-icon me-1"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>
                         </tr>

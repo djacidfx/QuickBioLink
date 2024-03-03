@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('checkout_id')->unique();
-            $table->unsignedBigInteger('user_id')->index('transactions_user_id_foreign');
-            $table->unsignedBigInteger('plan_id')->index('transactions_plan_id_foreign');
-            $table->unsignedBigInteger('coupon_id')->nullable()->index('transactions_coupon_id_foreign');
+            $table->unsignedBigInteger('user_id')->index('user_id');
+            $table->unsignedBigInteger('plan_id')->index('plan_id');
+            $table->unsignedBigInteger('coupon_id')->nullable()->index('coupon_id');
             $table->longText('billing_address')->nullable();
             $table->longText('details_before_discount')->nullable();
             $table->longText('details_after_discount')->nullable();

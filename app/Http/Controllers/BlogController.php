@@ -13,95 +13,136 @@ use Validator;
 
 class BlogController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
     }
 
+    /**
+     * Display the page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $page_limit = settings('blog')->page_limit ?? 8;
+
         if (request()->has('search')) {
-            $q = request('search');
-            $blogArticles = BlogArticle::where([['title', 'like', '%' . $q . '%'], ['lang', get_lang()]])
-                ->OrWhere([['slug', 'like', '%' . $q . '%'], ['lang', get_lang()]])
-                ->OrWhere([['content', 'like', '%' . $q . '%'], ['lang', get_lang()]])
-                ->OrWhere([['short_description', 'like', '%' . $q . '%'], ['lang', get_lang()]])
-                ->OrWhere([['tags', 'like', '%' . $q . '%'], ['lang', get_lang()]])
+            $quary = request('search');
+            $blogs = BlogArticle::where([['title', 'like', '%' . $quary . '%'], ['lang', get_lang()]])
+                ->OrWhere([['content', 'like', '%' . $quary . '%'], ['lang', get_lang()]])
+                ->OrWhere([['short_description', 'like', '%' . $quary . '%'], ['lang', get_lang()]])
+                ->OrWhere([['tags', 'like', '%' . $quary . '%'], ['lang', get_lang()]])
                 ->orderbyDesc('id')
                 ->paginate($page_limit);
-            $blogArticles->appends(['search' => $q]);
+
+            $blogs->appends(['search' => $quary]);
         } else {
-            $blogArticles = BlogArticle::where('lang', get_lang())->orderbyDesc('id')->paginate($page_limit);
+            $blogs = BlogArticle::where('lang', get_lang())->orderbyDesc('id')->paginate($page_limit);
         }
-        return view($this->activeTheme.'.blog.index', ['blogArticles' => $blogArticles]);
+
+        return view($this->activeTheme . '.blog.index', compact('blogs'));
     }
 
+    /**
+     * Display single blog page
+     *
+     * @param $slug
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function single($slug)
+    {
+        $blog = BlogArticle::where([['lang', get_lang()], ['slug', $slug]])->with(['user', 'blogCategory'])->first();
+        if ($blog) {
+            $next_record = BlogArticle::where('id', '>', $blog->id)->orderBy('id')->first();
+            $previous_record = BlogArticle::where('id', '<', $blog->id)->orderBy('id', 'desc')->first();
+
+            $blog->increment('views');
+
+            $blogComments = BlogComment::where([['article_id', $blog->id], ['status', 1]])->get();
+
+            $blog->tags = explode(',', $blog->tags);
+
+            return view($this->activeTheme . '.blog.single', compact(
+                'blog',
+                'blogComments',
+                'next_record',
+                'previous_record',
+            ));
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * Display the tag page
+     *
+     * @param $slug
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function tag($slug)
+    {
+        $page_limit = settings('blog')->page_limit ?? 8;
+        $tag = BlogCategory::where([['tags', 'like', '%' . $slug . '%'], ['lang', get_lang()]])->first();
+        if ($tag) {
+            $blogs = BlogArticle::where([['tags', 'like', '%' . $slug . '%'], ['lang', get_lang()]])
+                ->orderbyDesc('id')
+                ->paginate($page_limit);
+            $blogTag = $slug;
+
+            return view($this->activeTheme . '.blog.tag', compact(
+                'blogTag',
+                'blogs'
+            ));
+        } else {
+            abort(404);
+        }
+    }
+
+    /**
+     * Display the category page
+     *
+     * @param $slug
+     * @return \Illuminate\Contracts\View\View
+     */
     public function category($slug)
     {
         $page_limit = settings('blog')->page_limit ?? 8;
         $blogCategory = BlogCategory::where([['lang', get_lang()], ['slug', $slug]])->first();
         if ($blogCategory) {
             $blogCategory->increment('views');
-            $blogArticles = BlogArticle::where('category_id', $blogCategory->id)->orderbyDesc('id')->paginate($page_limit);
-            return view($this->activeTheme.'.blog.category', [
-                'blogCategory' => $blogCategory,
-                'blogArticles' => $blogArticles,
-            ]);
+
+            $blogs = BlogArticle::where('category_id', $blogCategory->id)->orderbyDesc('id')->paginate($page_limit);
+
+            return view($this->activeTheme . '.blog.category', compact(
+                'blogCategory',
+                'blogs'
+            ));
         } else {
-            return redirect()->route('blog.index');
+            abort(404);
         }
     }
 
-    public function tag($slug)
-    {
-        $page_limit = settings('blog')->page_limit ?? 8;
-        $blogArticles = BlogArticle::where([['tags', 'like', '%' . $slug . '%'], ['lang', get_lang()]])
-            ->orderbyDesc('id')
-            ->paginate($page_limit);
-            return view($this->activeTheme.'.blog.tag', [
-                'blogTag' => $slug,
-                'blogArticles' => $blogArticles,
-            ]);
-    }
-
-    public function articles()
-    {
-        $blogArticles = BlogArticle::where('lang', get_lang())->orderbyDesc('id')->paginate(9);
-        return view($this->activeTheme.'.blog.articles', ['blogArticles' => $blogArticles]);
-    }
-
-    public function article($slug)
-    {
-        $blogArticle = BlogArticle::where([['lang', get_lang()], ['slug', $slug]])->with(['user', 'blogCategory'])->first();
-        if ($blogArticle) {
-            $next_record = BlogArticle::where('id', '>', $blogArticle->id)->orderBy('id')->first();
-            $previous_record = BlogArticle::where('id', '<', $blogArticle->id)->orderBy('id','desc')->first();
-
-            $blogArticle->increment('views');
-            $blogArticleComments = BlogComment::where([['article_id', $blogArticle->id], ['status', 1]])->get();
-
-            $blogArticle->tags = explode(',', $blogArticle->tags);
-
-            return view($this->activeTheme.'.blog.article', [
-                'blogArticle' => $blogArticle,
-                'blogArticleComments' => $blogArticleComments,
-                'next_record' => $next_record,
-                'previous_record' => $previous_record,
-            ]);
-        } else {
-            return redirect()->route('blog.index');
-        }
-    }
-
+    /**
+     * Handle comment
+     *
+     * @param Request $request
+     * @param $slug
+     * @return \Illuminate\Contracts\View\View
+     */
     public function comment(Request $request, $slug)
     {
         if (!Auth::check()) {
-            quick_alert_error(lang('Login is required to post comments', 'blog'));
+            quick_alert_error(lang('Please login to post a comment.'));
             return back();
         }
-        if(@settings('blog')->commenting) {
-            $blogArticle = BlogArticle::where('slug', $slug)->with('user')->firstOrFail();
+
+        /* Check if comment enabled */
+        if (@settings('blog')->commenting) {
+
             $validator = Validator::make($request->all(), [
                     'comment' => ['required', 'string'],
                 ] + ReCaptchaValidation::validate());
@@ -113,20 +154,26 @@ class BlogController extends Controller
                 quick_alert_error(implode('<br>', $errors));
                 return back()->withInput();
             }
+
+            $blog = BlogArticle::where('slug', $slug)->with('user')->firstOrFail();
+
             $comment = BlogComment::create([
+                'article_id' => $blog->id,
                 'user_id' => user_auth_info()->id,
-                'article_id' => $blogArticle->id,
                 'comment' => $request->comment,
             ]);
+
             if ($comment) {
-                $title = admin_lang('New comment waiting review');
-                $link = route('admin.comments.index');
-                admin_notify($title, 'new_comment', $link);
-                quick_alert_success(lang('Your comment is under review it will be published soon', 'blog'));
+
+                /* add admin notification */
+                $title = lang('New comment waiting for review');
+                admin_notify($title, 'new_comment', route('admin.comments.index'));
+
+                quick_alert_success(lang('Comment is posted, wait for the reviewer to approve.'));
                 return back();
             }
         } else {
-            quick_alert_error(lang('Commenting is disabled.', 'blog'));
+            quick_alert_error(lang('Unexpected error'));
             return back();
         }
     }

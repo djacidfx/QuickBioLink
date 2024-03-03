@@ -1,8 +1,8 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Pages') .' - '.$active)
+@section('title', lang('Pages') .' - '.$current_language)
 @section('header_buttons')
     @include('admin.includes.language')
-    <a href="#" data-url="{{ route('admin.pages.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.pages.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="card">
@@ -11,11 +11,11 @@
             <table id="basic_datatable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>{{ admin_lang('#') }}</th>
-                    <th>{{ admin_lang('Language') }}</th>
-                    <th>{{ admin_lang('Page Name') }}</th>
-                    <th>{{ admin_lang('Views') }}</th>
-                    <th>{{ admin_lang('Created date') }}</th>
+                    <th>#</th>
+                    <th>{{ lang('Language') }}</th>
+                    <th>{{ lang('Page Name') }}</th>
+                    <th>{{ lang('Views') }}</th>
+                    <th>{{ lang('Created date') }}</th>
                     <th width="20" class="no-sort"></th>
                 </tr>
             </thead>
@@ -29,14 +29,14 @@
                                 {{ $page->title }} <i class="far fa-square-up-right"></i>
                             </a>
                         </td>
-                        <td><span class="badge bg-dark">{{ $page->views }}</span></td>
+                        <td>{{ $page->views }}</td>
                         <td>{{ date_formating($page->created_at) }}</td>
                         <td>
                             <div class="d-flex">
-                                <a href="#" data-url="{{ route('admin.pages.edit', $page->id) }}" data-toggle="slidePanel" title="{{ admin_lang('Edit') }}" class="btn btn-default btn-icon me-2" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-                                <form action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" onsubmit='return confirm("{{admin_lang('Are you sure?')}}")'>
+                                <a href="#" data-url="{{ route('admin.pages.edit', $page->id) }}" data-toggle="slidePanel" title="{{ lang('Edit') }}" class="btn btn-default btn-icon me-2" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                <form action="{{ route('admin.pages.destroy', $page->id) }}" method="POST" onsubmit='return confirm("{{lang('Are you sure?')}}")'>
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-icon btn-danger" title="{{ admin_lang('Delete') }}" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></button>
+                                    <button class="btn btn-icon btn-danger" title="{{ lang('Delete') }}" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></button>
                                 </form>
                             </div>
                         </td>

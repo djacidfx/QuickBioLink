@@ -11,20 +11,20 @@
             </a>
         </div>
         <ul class="navbar-nav flex-row align-items-center ms-auto">
-            <li class="nav-item me-3 me-xl-0"><a class="nav-link" href="{{ url('/') }}" title="{{ admin_lang('Frontend') }}" data-tippy-placement="top" target="_blank"><i class="icon-feather-external-link fs-5"></i></a></li>
-            <li class="nav-item me-3 me-xl-0"><a class="nav-link" href="#" onclick="toggleFullScreen()" title="{{ admin_lang('Full Screen') }}" data-tippy-placement="top"><i class="icon-feather-maximize fs-5"></i></a></li>
+            <li class="nav-item me-3 me-xl-0"><a class="nav-link" href="{{ url('/') }}" title="{{ lang('Frontend') }}" data-tippy-placement="top" target="_blank"><i class="icon-feather-external-link fs-5"></i></a></li>
+            <li class="nav-item me-3 me-xl-0"><a class="nav-link" href="#" onclick="toggleFullScreen()" title="{{ lang('Full Screen') }}" data-tippy-placement="top"><i class="icon-feather-maximize fs-5"></i></a></li>
             <!-- Notification -->
             <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" title="{{ admin_lang('Notifications') }}" data-tippy-placement="top">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" title="{{ lang('Notifications') }}" data-tippy-placement="top">
                     <i class="icon-feather-bell fs-5"></i>
                     <span class="badge bg-danger rounded-pill badge-notifications">{{ $unreadAdminNotifications }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end py-0">
                     <li class="dropdown-menu-header border-bottom">
                         <div class="dropdown-header d-flex align-items-center py-3">
-                            <h6 class="mb-0 me-auto">{{ admin_lang('Notifications') }} ({{ $unreadAdminNotificationsAll }})</h6>
+                            <h6 class="mb-0 me-auto">{{ lang('Notifications') }} ({{ $unreadAdminNotificationsAll }})</h6>
                             @if ($unreadAdminNotifications)
-                                <a href="{{ route('admin.notifications.readall') }}" title="{{ admin_lang('Mark All as Read') }}" data-tippy-placement="top" class="text-body"><i class="far fa-envelope-open fs-5"></i></a>
+                                <a href="{{ route('admin.notifications.markasread') }}" title="{{ lang('Mark All as Read') }}" data-tippy-placement="top" class="text-body"><i class="far fa-envelope-open fs-5"></i></a>
                             @endif
                         </div>
                     </li>
@@ -90,13 +90,13 @@
                                 </li>
                             @empty
                                 <li class="list-group-item list-group-item-action dropdown-notifications-item">
-                                    <small class="text-muted mb-0">{{ admin_lang('No notifications found') }}</small>
+                                    <small class="text-muted mb-0">{{ lang('No notifications found') }}</small>
                                 </li>
                             @endforelse
                         </ul>
                     </li>
                     <li class="dropdown-menu-footer border-top p-3">
-                        <a href="{{ route('admin.notifications.index') }}" class="btn btn-primary w-100">{{ admin_lang('View all notifications') }}</a>
+                        <a href="{{ route('admin.notifications.index') }}" class="btn btn-primary w-100">{{ lang('View all notifications') }}</a>
                     </li>
                 </ul>
             </li>

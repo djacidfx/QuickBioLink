@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lang')->index('pages_lang_foreign');
+            $table->string('lang')->index('lang');
             $table->string('title');
-            $table->string('slug')->unique('pages_page_slug_unique');
+            $table->string('slug')->unique('slug');
             $table->text('content');
             $table->string('short_description', 200);
             $table->bigInteger('views')->default(0);

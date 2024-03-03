@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('lang', 3)->index('faqs_lang_foreign');
+            $table->string('lang', 3)->index('lang');
             $table->string('title');
             $table->text('content');
             $table->timestamps();

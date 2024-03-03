@@ -1,5 +1,5 @@
 @extends('errors.layout')
-@section('title', lang('Page Not Found', 'errors'))
+@section('title', lang('Page Not Found'))
 @section('code', '404')
-@section('message', lang('Page Not Found', 'errors'))
-@section('description', lang('The page you are looking for has not been found on our server.', 'errors'))
+@section('message', lang('Page Not Found'))
+@section('description', lang('The page you are looking for has not been found on our server.'))

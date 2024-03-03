@@ -9,6 +9,36 @@ class Plan extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'position',
+        'short_description',
+        'translations',
+        'interval',
+        'price',
+        'settings',
+        'advertisements',
+        'custom_features',
+        'is_free',
+        'is_featured',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'translations' => 'object',
+        'settings' => 'object',
+        'custom_features' => 'object',
+    ];
+
     public function scopeMonthly($query)
     {
         $query->where('interval', 1);
@@ -40,34 +70,8 @@ class Plan extends Model
     }
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
+     * Relationships
      */
-    protected $fillable = [
-        'name',
-        'position',
-        'short_description',
-        'translations',
-        'interval',
-        'price',
-        'settings',
-        'advertisements',
-        'custom_features',
-        'is_free',
-        'is_featured',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'translations' => 'object',
-        'settings' => 'object',
-        'custom_features' => 'object',
-    ];
 
     public function subscriptions()
     {

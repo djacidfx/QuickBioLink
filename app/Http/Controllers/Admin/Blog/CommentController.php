@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Admin\Blog;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlogArticle;
-use App\Models\BlogCategory;
 use App\Models\BlogComment;
-use App\Models\Language;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -62,17 +65,17 @@ class CommentController extends Controller
                 if ($row->user){
                     $user_detail = '<a href="'.route('admin.users.edit', $row->user->id).'" class="text-body">'.$row->user->firstname . ' ' . $row->user->lastname.'</a>';
                 } else{
-                    $user_detail = '<span>'.admin_lang('Anonymous').'</span>';
+                    $user_detail = '<span>'.lang('Anonymous').'</span>';
                 }
 
                 $approve_button = '';
                 if ($row->status){
-                    $status_badge = '<span class="badge bg-success">'.admin_lang('Approved').'</span>';
+                    $status_badge = '<span class="badge bg-success">'.lang('Approved').'</span>';
                 } else{
-                    $status_badge = '<span class="badge bg-warning text-dark">'.admin_lang('Pending').'</span>';
+                    $status_badge = '<span class="badge bg-warning text-dark">'.lang('Pending').'</span>';
                     $approve_button = '<form class="d-inline" action = "'.route('admin.comments.update', $row->id).'" method = "POST">
                                     '.csrf_field().'
-                                <button class="btn btn-icon btn-primary me-1" title="'.admin_lang('Approve').'" data-tippy-placement="top"><i class="icon-feather-check"></i ></button>
+                                <button class="btn btn-icon btn-primary me-1" title="'.lang('Approve').'" data-tippy-placement="top"><i class="icon-feather-check"></i ></button>
                             </form>';
                 }
 
@@ -86,10 +89,10 @@ class CommentController extends Controller
                 $rows[] = '<td>
                                 <div class="d-flex">
                                     '.$approve_button.'
-                                    <form class="d-inline" action="'.route('admin.comments.destroy', $row->id).'" method="POST" onsubmit=\'return confirm("'.admin_lang('Are you sure?').'")\'>
+                                    <form class="d-inline" action="'.route('admin.comments.destroy', $row->id).'" method="POST" onsubmit=\'return confirm("'.lang('Are you sure?').'")\'>
                                         '.method_field('DELETE').'
                                         '.csrf_field().'
-                                    <button class="btn btn-icon btn-danger" title="'.admin_lang('Delete').'" data-tippy-placement="top"><i class="icon-feather-trash-2"></i ></button>
+                                    <button class="btn btn-icon btn-danger" title="'.lang('Delete').'" data-tippy-placement="top"><i class="icon-feather-trash-2"></i ></button>
                                 </form>
                                 </div>
                             </td>';
@@ -117,35 +120,31 @@ class CommentController extends Controller
         } else {
             $article_id = '';
         }
-        return view('admin.blog.comments.index', ['article_id' => $article_id]);
+        return view('admin.blog.comments.index', compact('article_id'));
     }
 
+    /**
+     * Update Comment
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateComment(Request $request, $id)
     {
         $comment = BlogComment::find($id);
-        if (!$comment) {
-            quick_alert_error(admin_lang('Comment not exists'));
-            return back();
-        }
-
-        if ($comment->status) {
-            quick_alert_info(admin_lang('Comment already approved'));
-            return back();
-        }
 
         $comment->update(['status' => true]);
-        quick_alert_success(admin_lang('Approved Successfully'));
+        quick_alert_success(lang('Approved Successfully'));
         return back();
     }
 
-    public function destroy($id)
-    {
-        $comment = BlogComment::findOrFail($id);
-        $comment->delete();
-        quick_alert_success(admin_lang('Deleted Successfully'));
-        return back();
-    }
-
+    /**
+     * Delete multiple comments
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         $ids = array_map('intval', $request->ids);
@@ -153,7 +152,7 @@ class CommentController extends Controller
             BlogComment::findOrFail($id);
         }
         BlogComment::whereIn('id',$ids)->delete();
-        $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+        $result = array('success' => true, 'message' => lang('Deleted Successfully'));
         return response()->json($result, 200);
     }
 }

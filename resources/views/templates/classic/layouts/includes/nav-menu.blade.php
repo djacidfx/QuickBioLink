@@ -37,12 +37,12 @@
         <!--/ # When user logout or new user login signup button-->
         <li class="nav-item d-block d-sm-none">
             <a href="{{ route('login') }}" class="nav-link">
-                {{ lang('Log in', 'auth') }}
+                {{ lang('Log in') }}
             </a>
         </li>
         <li class="nav-item d-block d-sm-none">
             <a href="{{ route('register') }}" class="nav-link">
-                {{ lang('Sign up', 'auth') }}
+                {{ lang('Sign up') }}
             </a>
         </li>
         <!--/ # When user logout or new user login signup button-->

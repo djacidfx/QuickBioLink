@@ -21,7 +21,7 @@ class Settings extends Model
     ];
 
     /**
-     * Get settings by key
+     * Get settings
      */
     public static function selectSettings($key)
     {
@@ -33,7 +33,7 @@ class Settings extends Model
     }
 
     /**
-     * Update settings from table.
+     * Update settings
      */
     public static function updateSettings($key, $value)
     {

@@ -58,12 +58,12 @@ class CategoryController extends Controller
                 $rows[] = '<td>'.$row->id.'</td>';
                 $rows[] = '<td>'.$row->language->code.'</td>';
                 $rows[] = '<td>'.$row->name.'</td>';
-                $rows[] = '<td><span class="badge bg-dark">'.$row->views.'</span></td>';
+                $rows[] = '<td>'.$row->views.'</td>';
                 $rows[] = '<td>'.date_formating($row->created_at).'</td>';
                 $rows[] = '<td>
                                 <div class="d-flex">
-                                    <a href="'.route('blog.category', $row->slug).'" target="_blank" title="'.admin_lang('View').'" class="btn btn-default btn-icon me-1" data-tippy-placement="top"><i class="icon-feather-eye"></i></a>
-                                    <a href="#" data-url="'.route('admin.categories.edit', $row->id).'" data-toggle="slidePanel" title="'.admin_lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                    <a href="'.route('blog.category', $row->slug).'" target="_blank" title="'.lang('View').'" class="btn btn-default btn-icon me-1" data-tippy-placement="top"><i class="icon-feather-eye"></i></a>
+                                    <a href="#" data-url="'.route('admin.categories.edit', $row->id).'" data-toggle="slidePanel" title="'.lang('Edit').'" class="btn btn-default btn-icon" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
                                 </div>
                             </td>';
                 $rows[] = '<td>
@@ -87,10 +87,10 @@ class CategoryController extends Controller
 
         if ($request->has('lang')) {
             $language = Language::where('code', $request->lang)->firstOrFail();
-            return view('admin.blog.categories.index', [
-                'active' => $language->name,
-                'lang' => $request->lang
-            ]);
+
+            $current_language = $language->name;
+            $lang = $request->lang;
+            return view('admin.blog.categories.index', compact('current_language', 'lang'));
         } else {
             return redirect(url()->current() . '?lang=' . env('DEFAULT_LANGUAGE'));
         }
@@ -127,20 +127,19 @@ class CategoryController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
-        $lang = Language::where('code', $request->lang)->first();
-        if ($lang == null) {
-            $result = array('success' => false, 'message' => admin_lang('Language not exists'));
-            return response()->json($result, 200);
-        }
+
+        $lang = Language::where('code', $request->lang)->firstOrFail();
+
         $create = BlogCategory::create([
-            'lang' => $lang->code,
             'name' => $request->name,
             'slug' => !empty($request->slug)
                 ? $request->slug
                 : SlugService::createSlug(BlogCategory::class, 'slug', $request->name),
+            'lang' => $lang->code,
         ]);
+
         if ($create) {
-            $result = array('success' => true, 'message' => admin_lang('Created Successfully'));
+            $result = array('success' => true, 'message' => lang('Created Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -149,11 +148,10 @@ class CategoryController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\BlogCategory  $category
-     * @return \Illuminate\Http\Response
      */
     public function show(BlogCategory $category)
     {
-        return abort(404);
+        abort(404);
     }
 
     /**
@@ -164,7 +162,7 @@ class CategoryController extends Controller
      */
     public function edit(BlogCategory $category)
     {
-        return view('admin.blog.categories.edit', ['category' => $category]);
+        return view('admin.blog.categories.edit', compact('category'));
     }
 
     /**
@@ -189,11 +187,9 @@ class CategoryController extends Controller
             $result = array('success' => false, 'message' => implode('<br>', $errors));
             return response()->json($result, 200);
         }
-        $lang = Language::where('code', $request->lang)->first();
-        if ($lang == null) {
-            $result = array('success' => false, 'message' => admin_lang('Language not exists'));
-            return response()->json($result, 200);
-        }
+
+        $lang = Language::where('code', $request->lang)->firstOrFail();
+
         $updateCategory = $category->update([
             'lang' => $lang->code,
             'name' => $request->name,
@@ -201,12 +197,11 @@ class CategoryController extends Controller
         ]);
         if ($updateCategory) {
             $articles = BlogArticle::where('category_id', $category->id)->get();
-            if ($articles->count() > 0) {
-                foreach ($articles as $article) {
-                    $article->update(['lang' => $category->lang]);
-                }
+            foreach ($articles as $article) {
+                $article->update(['lang' => $category->lang]);
             }
-            $result = array('success' => true, 'message' => admin_lang('Updated Successfully'));
+
+            $result = array('success' => true, 'message' => lang('Updated Successfully'));
             return response()->json($result, 200);
         }
     }
@@ -215,23 +210,14 @@ class CategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\BlogCategory  $category
-     * @return \Illuminate\Http\Response
      */
     public function destroy(BlogCategory $category)
     {
-        $articles = BlogArticle::where('category_id', $category->id)->get();
-        if ($articles->count() >= 1) {
-            foreach ($articles as $article) {
-                remove_file('storage/blog/articles/'.$article->image);
-            }
-        }
-        $category->delete();
-        quick_alert_success(admin_lang('Deleted Successfully'));
-        return back();
+        abort(404);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the multiple resources from storage.
      *
      * @return \Illuminate\Http\Response
      */
@@ -242,11 +228,12 @@ class CategoryController extends Controller
         if ($articles->count() >= 1) {
             foreach ($articles as $article) {
                 remove_file('storage/blog/articles/'.$article->image);
+                $article->delete();
             }
         }
         $sql = BlogCategory::whereIn('id',$ids)->delete();
         if($sql){
-            $result = array('success' => true, 'message' => admin_lang('Deleted Successfully'));
+            $result = array('success' => true, 'message' => lang('Deleted Successfully'));
             return response()->json($result, 200);
         }
     }

@@ -34,18 +34,24 @@ class QuickCron extends Command
     public function handle()
     {
         /* Delete unpaid transactions */
-        $transactions = Transaction::where('created_at', '<=', Carbon::now()->subHour())->whereIn('status', [0, 1])->get();
-        if ($transactions->count() > 0) {
-            foreach ($transactions as $transaction) {
-                $transaction->delete();
-            }
+        $transactions = Transaction::where('created_at', '<=', Carbon::now()->subHours(3))
+            ->whereIn('status', [Transaction::STATUS_UNPAID, Transaction::STATUS_PENDING])
+            ->get();
+
+        foreach ($transactions as $transaction) {
+            $transaction->delete();
         }
+
 
         /* Send notification on membership expire */
         if (email_template('subscription_expired')->status) {
-            $subscriptions = Subscription::where('expiry_at', '<=', Carbon::now()->subDays(settings('subscription')->expired_reminder))
+            $subscriptions = Subscription::where('expired_reminder', false)
+                ->where('expiry_at', '<=', Carbon::now()->subDays(settings('subscription')->expired_reminder))
                 ->where('status', Subscription::STATUS_ACTIVE)
-                ->notFree()->expiredReminderNotSent()->get();
+                ->where('expired_reminder', false)
+                ->notFree()
+                ->get();
+
             if ($subscriptions->count() > 0) {
                 foreach ($subscriptions as $subscription) {
                     $subscription->user->notify(new SubscriptionExpiredNotification($subscription));
@@ -56,7 +62,12 @@ class QuickCron extends Command
 
         /* Send notification on membership expiring soon */
         if (email_template('subscription_about_expired')->status) {
-            $subscriptions = Subscription::notFree()->isAboutToExpire()->aboutToExpireReminderNotSent()->get();
+            $subscriptions = Subscription::isAboutToExpire()
+                ->notFree()
+                ->where('about_to_expire_reminder', false)
+                ->notFree()
+                ->get();
+
             if ($subscriptions->count() > 0) {
                 foreach ($subscriptions as $subscription) {
                     $subscription->user->notify(new SubscriptionAboutToExpiredNotification($subscription));
@@ -67,12 +78,17 @@ class QuickCron extends Command
 
         /* Delete expired memberships */
         $days = settings('subscription')->delete_expired;
-        $subscriptions = Subscription::where([['expiry_at', '<', Carbon::now()->subDays($days)], ['status', Subscription::STATUS_ACTIVE]])->notFree()->get();
+        $subscriptions = Subscription::where([['expiry_at', '<', Carbon::now()->subDays($days)], ['status', Subscription::STATUS_ACTIVE]])
+            ->notFree()
+            ->get();
+
         if ($subscriptions->count() > 0) {
             foreach ($subscriptions as $subscription) {
                 $subscription->user->notify(new SubscriptionDeletedNotification($subscription));
                 $subscription->delete();
             }
         }
+
+        return 0;
     }
 }

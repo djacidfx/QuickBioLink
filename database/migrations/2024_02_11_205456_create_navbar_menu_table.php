@@ -18,8 +18,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name', 100);
             $table->text('link');
-            $table->string('lang', 3)->index('navbar_menu_lang_foreign');
-            $table->unsignedBigInteger('parent_id')->nullable()->index('navbar_menu_parent_id_foreign');
+            $table->string('lang', 3)->index('lang');
+            $table->unsignedBigInteger('parent_id')->nullable()->index('parent_id');
             $table->string('type', 100)->nullable();
             $table->bigInteger('order')->default(0);
             $table->timestamps();

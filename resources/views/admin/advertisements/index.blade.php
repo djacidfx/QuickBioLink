@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Advertisements'))
+@section('title', lang('Advertisements'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.advertisements.edit', $headAd->id) }}" data-toggle="slidePanel" class="btn btn-primary"><i class="icon-feather-code me-2"></i> {{ admin_lang('Head Code') }}</a>
+    <a href="#" data-url="{{ route('admin.advertisements.edit', $headAd->id) }}" data-toggle="slidePanel" class="btn btn-primary"><i class="icon-feather-code me-2"></i> {{ lang('Head Code') }}</a>
 @endsection
 @section('content')
     <div class="quick-card card">
@@ -10,11 +10,10 @@
                 <table class="table table-striped" id="ajax_datatable" data-jsonfile="{{ route('admin.advertisements.index') }}" data-order-dir="asc">
                     <thead>
                     <tr>
-                        <th>{{ admin_lang('#') }}</th>
-                        <th>{{ admin_lang('Position') }}</th>
-                        <th>{{ admin_lang('Size') }}</th>
-                        <th>{{ admin_lang('Status') }}</th>
-                        <th>{{ admin_lang('Last update') }}</th>
+                        <th>#</th>
+                        <th>{{ lang('Position') }}</th>
+                        <th>{{ lang('Status') }}</th>
+                        <th>{{ lang('Last update') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                     </tr>
                     </thead>

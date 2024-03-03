@@ -13,35 +13,46 @@ use Session;
 
 class SettingsController extends Controller
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->activeTheme = active_theme();
     }
 
-    protected function user()
-    {
-        return user_auth_info();
-    }
-
+    /**
+     * Display the page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $QR_Image = null;
-        if (!$this->user()->google2fa_status) {
+        if (!user_auth_info()->google2fa_status) {
             $google2fa = app('pragmarx.google2fa');
             $secretKey = encrypt($google2fa->generateSecretKey());
-            User::where('id', $this->user()->id)->update(['google2fa_secret' => $secretKey]);
-            $QR_Image = $google2fa->getQRCodeInline(settings('site_title'), $this->user()->email, $this->user()->google2fa_secret);
+
+            User::where('id', user_auth_info()->id)->update(['google2fa_secret' => $secretKey]);
+
+            $QR_Image = $google2fa->getQRCodeInline(settings('site_title'), user_auth_info()->email, user_auth_info()->google2fa_secret);
         }
-        return view($this->activeTheme.'.user.settings', ['user' => $this->user(), 'QR_Image' => $QR_Image]);
+        return view($this->activeTheme.'.user.settings', ['user' => user_auth_info(), 'QR_Image' => $QR_Image]);
     }
 
+    /**
+     * Edit user details
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function editProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:2048'],
             'firstname' => ['required', 'string', 'max:50'],
             'lastname' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email,' . $this->user()->id],
+            'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email,' . user_auth_info()->id],
             'address' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:150'],
             'state' => ['required', 'string', 'max:150'],
@@ -56,42 +67,49 @@ class SettingsController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
-        $verify = (settings('enable_email_verification') && $this->user()->email != $request->email) ? 1 : 0;
-        $country = Country::find($request->country);
-        $address = [
-            'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip' => $request->zip,
-            'country' => $country->name,
-        ];
+
         if ($request->has('avatar')) {
-            if ($this->user()->avatar == 'default.png') {
+            if (user_auth_info()->avatar == 'default.png') {
                 $avatar = image_upload($request->file('avatar'), 'storage/avatars/users/', '150x150');
             } else {
-                $avatar = image_upload($request->file('avatar'), 'storage/avatars/users/', '150x150', null, $this->user()->avatar);
+                $avatar = image_upload($request->file('avatar'), 'storage/avatars/users/', '150x150', null, user_auth_info()->avatar);
             }
         } else {
-            $avatar = $this->user()->avatar;
+            $avatar = user_auth_info()->avatar;
         }
-        $updateUser = $this->user()->update([
+
+        $country = Country::find($request->country);
+
+        $updateUser = user_auth_info()->update([
             'name' => $request->firstname . ' ' . $request->lastname,
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
-            'address' => $address,
             'avatar' => $avatar,
+            'address' => [
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zip' => $request->zip,
+                'country' => $country->name,
+            ],
         ]);
         if ($updateUser) {
-            if ($verify) {
-                $this->user()->forceFill(['email_verified_at' => null])->save();
-                $this->user()->sendEmailVerificationNotification();
+            if (settings('enable_email_verification') && user_auth_info()->email != $request->email) {
+                user_auth_info()->forceFill(['email_verified_at' => null])->save();
+                user_auth_info()->sendEmailVerificationNotification();
             }
-            quick_alert_success(lang('Account details has been updated successfully', 'account'));
+            quick_alert_success(lang('User details updated successfully'));
             return back();
         }
     }
 
+    /**
+     * Edit user password
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -107,24 +125,31 @@ class SettingsController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
-        if (!(Hash::check($request->get('current-password'), $this->user()->password))) {
-            quick_alert_error(lang('Your current password does not matches with the password you provided', 'passwords'));
+
+        if (!(Hash::check($request->get('current-password'), user_auth_info()->password))) {
+            quick_alert_error(lang('Current password is incorrect.'));
             return back();
         }
         if (strcmp($request->get('current-password'), $request->get('new-password')) == 0) {
-            quick_alert_error(lang('New Password cannot be same as your current password. Please choose a different password', 'passwords'));
+            quick_alert_error(lang('New password and old password can not be same.'));
             return back();
         }
-        $update = $this->user()->update([
+        $update = user_auth_info()->update([
             'password' => bcrypt($request->get('new-password')),
         ]);
         if ($update) {
-            quick_alert_success(lang('Account password has been changed successfully', 'account'));
+            quick_alert_success(lang('Password changed successfully'));
             return back();
         }
     }
 
-    public function towFactorEnable(Request $request)
+    /**
+     * Enable 2fa
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function towFAEnable(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'otp_code' => ['required', 'numeric'],
@@ -137,22 +162,31 @@ class SettingsController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
+
         $google2fa = app('pragmarx.google2fa');
-        $valid = $google2fa->verifyKey($this->user()->google2fa_secret, $request->otp_code);
-        if ($valid == false) {
-            quick_alert_error(lang('Invalid OTP code', 'account'));
+        $valid = $google2fa->verifyGoogle2FA(user_auth_info()->google2fa_secret, $request->otp_code);
+
+        if (!$valid) {
+            quick_alert_error(lang('Invalid 2FA OTP Code'));
             return back();
         }
-        $update2FaStatus = User::where('id', $this->user()->id)->update(['google2fa_status' => true]);
-        if ($update2FaStatus) {
-            Session::put('2fa', $this->user()->id);
-            quick_alert_success(lang('2FA Authentication has been enabled successfully', 'account'));
+
+        $update = User::where('id', user_auth_info()->id)->update(['google2fa_status' => true]);
+        if ($update) {
+            Session::put('2fa', user_auth_info()->id);
+            quick_alert_success(lang('2FA Authentication enabled successfully'));
             return back();
         }
 
     }
 
-    public function towFactorDisable(Request $request)
+    /**
+     * Disable 2fa
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
+    public function towFADisable(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'otp_code' => ['required', 'numeric'],
@@ -165,18 +199,20 @@ class SettingsController extends Controller
             quick_alert_error(implode('<br>', $errors));
             return back();
         }
+
         $google2fa = app('pragmarx.google2fa');
-        $valid = $google2fa->verifyKey($this->user()->google2fa_secret, $request->otp_code);
-        if ($valid == false) {
-            quick_alert_error(lang('Invalid OTP code', 'account'));
+        $valid = $google2fa->verifyGoogle2FA(user_auth_info()->google2fa_secret, $request->otp_code);
+        if (!$valid) {
+            quick_alert_error(lang('Invalid 2FA OTP Code'));
             return back();
         }
-        $update2FaStatus = User::where('id', $this->user()->id)->update(['google2fa_status' => false]);
-        if ($update2FaStatus) {
+
+        $update = User::where('id', user_auth_info()->id)->update(['google2fa_status' => false]);
+        if ($update) {
             if ($request->session()->has('2fa')) {
                 Session::forget('2fa');
             }
-            quick_alert_success(lang('2FA Authentication has been disabled successfully', 'account'));
+            quick_alert_success(lang('2FA Authentication disabled successfully'));
             return back();
         }
     }

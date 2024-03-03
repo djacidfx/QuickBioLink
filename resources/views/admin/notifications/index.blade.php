@@ -1,12 +1,12 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Notifications (' . $unreadNotificationsCount . ')'))
+@section('title', lang('Notifications (' . $unreadNotificationsCount . ')'))
 @section('header_buttons')
-    <a class="btn btn-outline-primary ms-2" href="{{ route('admin.notifications.readall') }}">{{ admin_lang('Mark All as Read') }}</a>
+    <a class="btn btn-outline-primary ms-2" href="{{ route('admin.notifications.markasread') }}">{{ lang('Mark All as Read') }}</a>
     <form class="d-inline ms-2" action="{{ route('admin.notifications.deleteallread') }}"
-          method="POST" onsubmit='return confirm("{{admin_lang('Are you sure?')}}")'>
+          method="POST" onsubmit='return confirm("{{lang('Are you sure?')}}")'>
         @csrf
         @method('DELETE')
-        <button class="btn btn-icon btn-danger" title="{{ admin_lang('Delete All Read') }}" data-tippy-placement="top">
+        <button class="btn btn-icon btn-danger" title="{{ lang('Delete All Read') }}" data-tippy-placement="top">
             <i class="icon-feather-trash-2"></i>
         </button>
     </form>
@@ -18,9 +18,9 @@
                 <table id="basic_datatable" class="table table-striped">
                     <thead>
                     <tr>
-                        <th class="w-px-50">{{ admin_lang('Type') }}</th>
-                        <th>{{ admin_lang('Title') }}</th>
-                        <th>{{ admin_lang('Created') }}</th>
+                        <th class="w-px-50">{{ lang('Type') }}</th>
+                        <th>{{ lang('Title') }}</th>
+                        <th>{{ lang('Created') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -62,8 +62,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3">
-                                @include('admin.includes.empty')
+                            <td colspan="3" class="text-center">
+                                {{lang('No Data Found.')}}
                             </td>
                         </tr>
                     @endforelse

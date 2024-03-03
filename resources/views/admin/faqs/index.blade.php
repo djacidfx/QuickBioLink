@@ -1,8 +1,8 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('FAQs') . ' - '.$active)
+@section('title', lang('FAQs') . ' - '.$current_language)
 @section('header_buttons')
     @include('admin.includes.language')
-    <a href="#" data-url="{{ route('admin.faqs.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.faqs.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="card">
@@ -12,9 +12,9 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{{ admin_lang('Language') }}</th>
-                    <th>{{ admin_lang('Title') }}</th>
-                    <th>{{ admin_lang('Published date') }}</th>
+                    <th>{{ lang('Language') }}</th>
+                    <th>{{ lang('Title') }}</th>
+                    <th>{{ lang('Published date') }}</th>
                     <th width="20" class="no-sort"></th>
                 </tr>
             </thead>
@@ -27,10 +27,10 @@
                         <td>{{ date_formating($faq->created_at) }}</td>
                         <td>
                             <div class="d-flex">
-                                <a href="#" data-url="{{ route('admin.faqs.edit', $faq->id) }}" data-toggle="slidePanel" title="{{ admin_lang('Edit') }}" class="btn btn-default btn-icon me-2" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-                                <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" onsubmit='return confirm("{{admin_lang('Are you sure?')}}")'>
+                                <a href="#" data-url="{{ route('admin.faqs.edit', $faq->id) }}" data-toggle="slidePanel" title="{{ lang('Edit') }}" class="btn btn-default btn-icon me-2" data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
+                                <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" onsubmit='return confirm("{{lang('Are you sure?')}}")'>
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-icon btn-danger" title="{{ admin_lang('Delete') }}" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></button>
+                                    <button class="btn btn-icon btn-danger" title="{{ lang('Delete') }}" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></button>
                                 </form>
                             </div>
                         </td>

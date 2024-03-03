@@ -4,13 +4,13 @@
 
         <div class="quick-card card">
             <div class="card-header">
-                <h5>{{ admin_lang('Logo & Favicon') }}</h5>
+                <h5>{{ lang('Logo & Favicon') }}</h5>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">{{ admin_lang('Dark Logo') }}</label>
+                            <label class="form-label">{{ lang('Dark Logo') }}</label>
                             <div class="mb-3">
                                 <div class="quick-imgview bg-light">
                                     <img id="dark_logo_img"
@@ -19,17 +19,17 @@
                             </div>
                             <label for="dark_logo" class="btn btn-primary w-100 mb-2" tabindex="0">
                                 <i class="fas fa-upload me-2"></i>
-                                {{ admin_lang('Upload New Image') }}
+                                {{ lang('Upload New Image') }}
                                 <input name="media[dark_logo]" type="file" id="dark_logo" hidden
                                        onchange="readURL(this,'dark_logo_img')"
                                        accept=".jpg, .jpeg, .png">
                             </label>
-                            <small class="text-muted">{{ admin_lang('Allowed JPG, JPEG or PNG.') }}</small>
+                            <small class="text-muted">{{ lang('Allowed JPG, JPEG or PNG.') }}</small>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">{{ admin_lang('Light Logo') }}</label>
+                            <label class="form-label">{{ lang('Light Logo') }}</label>
                             <div class="mb-3">
                                 <div class="quick-imgview bg-dark">
                                     <img id="light_logo_img"
@@ -38,17 +38,17 @@
                             </div>
                             <label for="light_logo" class="btn btn-primary w-100 mb-2" tabindex="0">
                                 <i class="fas fa-upload me-2"></i>
-                                {{ admin_lang('Upload New Image') }}
+                                {{ lang('Upload New Image') }}
                                 <input name="media[light_logo]" type="file" id="light_logo" hidden
                                        onchange="readURL(this,'light_logo_img')"
                                        accept=".jpg, .jpeg, .png">
                             </label>
-                            <small class="text-muted">{{ admin_lang('Allowed JPG, JPEG or PNG.') }}</small>
+                            <small class="text-muted">{{ lang('Allowed JPG, JPEG or PNG.') }}</small>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">{{ admin_lang('Admin Logo') }}</label>
+                            <label class="form-label">{{ lang('Admin Logo') }}</label>
                             <div class="mb-3">
                                 <div class="quick-imgview bg-light">
                                     <img id="admin_logo_img"
@@ -57,17 +57,17 @@
                             </div>
                             <label for="admin_logo" class="btn btn-primary w-100 mb-2" tabindex="0">
                                 <i class="fas fa-upload me-2"></i>
-                                {{ admin_lang('Upload New Image') }}
+                                {{ lang('Upload New Image') }}
                                 <input name="media[admin_logo]" type="file" id="admin_logo" hidden
                                        onchange="readURL(this,'admin_logo_img')"
                                        accept=".jpg, .jpeg, .png">
                             </label>
-                            <small class="text-muted">{{ admin_lang('Allowed JPG, JPEG or PNG.') }}</small>
+                            <small class="text-muted">{{ lang('Allowed JPG, JPEG or PNG.') }}</small>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">{{ admin_lang('Favicon') }}</label>
+                            <label class="form-label">{{ lang('Favicon') }}</label>
                             <div class="mb-3">
                                 <div class="quick-imgview bg-light">
                                     <img id="favicon_img"
@@ -76,17 +76,17 @@
                             </div>
                             <label for="favicon" class="btn btn-primary w-100 mb-2" tabindex="0">
                                 <i class="fas fa-upload me-2"></i>
-                                {{ admin_lang('Upload New Image') }}
+                                {{ lang('Upload New Image') }}
                                 <input name="media[favicon]" type="file" id="favicon" hidden
                                        onchange="readURL(this,'favicon_img')"
                                        accept=".jpg, .jpeg, .png">
                             </label>
-                            <small class="text-muted">{{ admin_lang('Allowed JPG, JPEG or PNG.') }}</small>
+                            <small class="text-muted">{{ lang('Allowed JPG, JPEG or PNG.') }}</small>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label class="form-label">{{ admin_lang('Social Image') }}</label>
+                            <label class="form-label">{{ lang('Social Image') }}</label>
                             <div class="mb-3">
                                 <div class="quick-img-card bg-light">
                                     <img id="social_image_img"
@@ -96,13 +96,13 @@
                             </div>
                             <label for="social_image" class="btn btn-primary w-100 mb-2" tabindex="0">
                                 <i class="fas fa-upload me-2"></i>
-                                {{ admin_lang('Upload New Image') }}
+                                {{ lang('Upload New Image') }}
                                 <input name="media[social_image]" type="file" id="social_image" hidden
                                        onchange="readURL(this,'social_image_img')"
                                        accept="image/jpg, image/jpeg">
                             </label>
                             <small class="text-muted">
-                                {{ admin_lang('Allowed JPG or JPEG.') }} <strong>600x315px.</strong>
+                                {{ lang('Allowed JPG or JPEG.') }} <strong>600x315px.</strong>
                             </small>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
             </div>
             <div class="card-footer">
                 <input type="hidden" name="logo_setting" value="1">
-                <button name="submit" type="submit" class="btn btn-primary">{{ admin_lang('Save Changes') }}</button>
+                <button name="submit" type="submit" class="btn btn-primary">{{ lang('Save Changes') }}</button>
             </div>
         </div>
     </form>

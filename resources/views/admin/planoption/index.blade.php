@@ -1,7 +1,7 @@
 @extends('admin.layouts.main')
-@section('title', admin_lang('Plan Options'))
+@section('title', lang('Plan Options'))
 @section('header_buttons')
-    <a href="#" data-url="{{ route('admin.planoption.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ admin_lang('Add New') }}</a>
+    <a href="#" data-url="{{ route('admin.planoption.create') }}" data-toggle="slidePanel" class="btn btn-primary ms-2"><i class="icon-feather-plus me-2"></i> {{ lang('Add New') }}</a>
 @endsection
 @section('content')
     <div class="quick-card card">
@@ -11,8 +11,8 @@
                     <thead>
                     <tr>
                         <th width="20"></th>
-                        <th>{{ admin_lang('Name') }}</th>
-                        <th>{{ admin_lang('Status') }}</th>
+                        <th>{{ lang('Name') }}</th>
+                        <th>{{ lang('Status') }}</th>
                         <th width="20" class="no-sort" data-priority="1"></th>
                         <th width="20" class="no-sort" data-priority="1">
                             <div class="checkbox">

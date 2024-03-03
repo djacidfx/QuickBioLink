@@ -10,27 +10,6 @@ class Coupon extends Model
 {
     use HasFactory;
 
-    public function scopeValidCode($query, $code)
-    {
-        return $query->where('code', $code)
-            ->where(function ($query) {
-                $query->where('expiry_at', '>', Carbon::now());
-            });
-    }
-
-    public function scopeValidForPlan($query, $planId)
-    {
-        return $query->where(function ($query) use ($planId) {
-            $query->where('plan_id', $planId)
-                ->orWhereNull('plan_id');
-        });
-    }
-
-    public function isExpiry()
-    {
-        return Carbon::parse($this->expiry_at)->isPast();
-    }
-
     /**
      * The attributes that are mass assignable.
      *
@@ -54,6 +33,14 @@ class Coupon extends Model
         'expiry_at' => 'datetime',
     ];
 
+    public function isExpiry()
+    {
+        return Carbon::parse($this->expiry_at)->isPast();
+    }
+
+    /*
+     * Relationships
+     */
     public function plan()
     {
         return $this->belongsTo(Plan::class);

@@ -37,6 +37,7 @@ class LoginController extends Controller
 
     /**
      * Where to redirect users after login.
+     * @return string
      */
     public function redirectTo() {
         if (user_auth_info()->user_type == 'admin') {
@@ -83,7 +84,7 @@ class LoginController extends Controller
     {
         if (user_auth_info()->status == 0) {
             Auth::logout();
-            quick_alert_error(lang('Your account has been blocked', 'auth'));
+            quick_alert_error(lang('Your account is blocked'));
             return redirect()->route('login');
         }
         update_user_logs($user);

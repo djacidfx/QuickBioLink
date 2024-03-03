@@ -11,20 +11,6 @@ class BlogArticle extends Model
     use HasFactory, Sluggable;
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title',
-            ],
-        ];
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
@@ -41,6 +27,20 @@ class BlogArticle extends Model
         'tags',
         'views',
     ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+            ],
+        ];
+    }
 
     /**
      * Relationships
